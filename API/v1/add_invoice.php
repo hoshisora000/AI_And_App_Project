@@ -40,11 +40,12 @@ if ($link->connect_error) {
     wh_log("Connection failed: " . $link->connect_error);
 }
 
-//$sql1 = "SELECT IF( EXISTS( SELECT * FROM member_invoice WHERE invoice_number='" . $invoice_number . "'), 1, 0)";
+//-------------檢查發票號碼是否重複-------------//
 $sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `invoice_number` = '" . $invoice_number ."'";
 $result1 = mysqli_query($link,$sql1);
 $row = mysqli_num_rows($result1) ;
 if ($row==0) { 
+    //--------上傳資料到資料庫--------//
     $sql = "INSERT INTO `member_invoice` (`uid`, `invoice_number`, `date`, `time`, `money`) VALUES ('" . $uid . "', '" . $invoice_number . "', '" . $date . "', '" . $time . "', '" . $money . "') ";
     try {
         $result = $link->query($sql);
