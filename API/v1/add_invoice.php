@@ -41,6 +41,8 @@ if ($link->connect_error) {
 }
 
 //-------------檢查發票號碼是否重複-------------//
+
+// 檢查發票號碼是否已存在於資料庫中
 $sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `invoice_number` = '" . $invoice_number ."'";
 $result1 = mysqli_query($link,$sql1);
 $row = mysqli_num_rows($result1) ;
@@ -50,7 +52,7 @@ if ($row==0) {
     try {
         $result = $link->query($sql);
         if ($_POST["uid"] != "") {
-            //回傳結果
+            // 回傳成功的訊息
             $dataarray = array(
                 "uid" => $uid,
                 "invoice_number" => $invoice_number
@@ -58,8 +60,8 @@ if ($row==0) {
             $message = returnmsg($dataarray, "0", "Success");
 
         } else {
+            // 回傳錯誤的訊息
             $dataarray = [];
-            
             $message = returnmsg($dataarray, "404", "Error");
         }
         mysqli_close($link); // 關閉資料庫連結
@@ -77,20 +79,26 @@ if ($row==0) {
     echo json_encode($message);
 
 }
+
+// -------------其他函式定義--------------//
+
+// 產生回傳訊息的函式
 function returnmsg($dataarray, $re_code, $re_msg)
 {
 
-    $messageArr["data"] = $dataarray;
+    $messageArr["data"] = $dataarray; // 設定回傳訊息的資料部分為查詢結果的陣列
     $messageArr["status"] = array();
-    $today = date('Y-m-dH:i:s(p)');
+    $today = date('Y-m-dH:i:s(p)'); // 取得當前日期和時間
     $datetime = array(
         "code" => $re_code,
         "message" => $re_msg,
         "datetime" => $today
     );
-    $messageArr["status"] = $datetime;
-    return $messageArr;
+    $messageArr["status"] = $datetime; // 設定回傳訊息的狀態部分為包含相關資訊的陣列
+    return $messageArr; // 回傳完整的訊息陣列
 }
+
+// 記錄錯誤訊息的函式
 function wh_log($log_msg)
 {
 
@@ -99,7 +107,7 @@ function wh_log($log_msg)
     $log_msg = '[' . $log_time . '] ' . $log_msg;
 
     if (!file_exists($log_filename)) {
-        // create directory/folder uploads.
+        // 建立資料夾
         mkdir($log_filename, 0777, true); // mkdir(pathname[, mode[, recursive[, context]]])
     }
     $log_file_data = $log_filename . '/log_' . date('m-d-H-i-s') . '.log';
