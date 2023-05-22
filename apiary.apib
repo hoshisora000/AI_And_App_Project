@@ -7,12 +7,10 @@ HOST: https://hoshisora000.lionfree.net/api
 如需閱讀，請參閱: https://aiappproject.docs.apiary.io/
 
 # 允許的HTTPs請求方式:
-<pre>
-PUT     : 創建資源 
-POST    : 更新資源
-GET     : 獲取單一資源或資源列表
-DELETE  : 刪除資源
-</pre>
+ - POST    : 更新資源
+ - GET     : 獲取單一資源或資源列表
+ - DELETE  : 刪除資源(先保留)
+
 
 # 常見伺服器回應的描述:
 - 200 `OK` - 請求成功（某些API呼叫可能返回201）。
@@ -27,7 +25,7 @@ DELETE  : 刪除資源
 
 ## 新增發票 [/add_invoice.php]
 
-### 上傳發票[POST]
+### 上傳發票資料[POST]
 
 接收發票存入資料庫
 
@@ -67,7 +65,7 @@ DELETE  : 刪除資源
         
 
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
 
@@ -77,101 +75,65 @@ DELETE  : 刪除資源
                 "invoice_number": "ZZ12345678"
             },
             "status": {
-                "code": "0",
+                "code": "201",
                 "message": "Success",
                 "datetime": "2023-05-2200:50:38(+08:00)"
             }
         }
 
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
     + Body
 
         {
-            "error": "Invalid request data"
+            "data": [],
+            "status": {
+                "code": "404",
+                "message": "重複的發票號碼",
+                "datetime": "2023-05-2210:54:37(+08:00)"
+            }
         }
 
 
 
+## 查詢發票 [/query_invoice.php]
 
-### 新增會員發票 [POST]
+### 查詢會員發票 [GET]
 
+- Parameters
 
-
+  - uid: (string, required) - 使用者ID
 
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "data": [
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "AA54578621",
+                    "date": "2023-05-21",
+                    "time": "14:24:00",
+                    "money": "777"
+                },
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "NQ1234569",
+                    "date": "2023-05-12",
+                    "time": "21:31:00",
+                    "money": "100"
+                }
+            ],
+            "status": {
+                "amount": 2,
+                "code": "0",
+                "message": "Success",
+                "datetime": "2023-05-2211:23:24(+08:00)"
             }
-        ]
+        }
 
 + Response 400 (application/json)
 
     [
             
     ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
-    + Headers
-
-            Location: /questions/2
-
-    + Body
-
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
