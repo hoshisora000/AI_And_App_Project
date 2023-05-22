@@ -4,8 +4,9 @@ header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 js
 //-------------接收資料-----------------//
 if ($_GET["uid"] != "") {
     $uid = $_GET["uid"];
-} else {
-    $uid = ""; //不能接受這種內容，需做錯誤回傳(待補)
+} else { //不接受沒有資料的內容
+    $accept = false;
+    $error_msg = "uid資料為空"; //錯誤訊息 
 }
 
 //-------------存取資料庫--------------//

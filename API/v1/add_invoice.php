@@ -54,8 +54,9 @@ if($accept){
     //-------------檢查發票號碼是否重複-------------//
 
     // 檢查發票號碼是否已存在於資料庫中
-    $sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `invoice_number` = '" . $invoice_number ."'";
+    $sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `uid`= '" . $uid ."'AND `invoice_number` = '" . $invoice_number ."'";
     $result1 = mysqli_query($link,$sql1);
+    echo $sql1;
     $row = mysqli_num_rows($result1) ;
     if ($row==0) { 
         //--------上傳資料到資料庫--------//
