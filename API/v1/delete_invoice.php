@@ -1,7 +1,7 @@
 <?php
-header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 json 編碼 utf-8
+header('Content-Type: multipart/form-data; charset=UTF-8'); //設定資料類型 json 編碼 utf-8
 
-
+$accept = true; //如果接收資料格式正確才接收
 //----------接收資料並檢查送進來的資料是否有問題--------------------//
 if ($_POST["uid"] != "") {
     $uid = $_POST["uid"];
@@ -15,37 +15,44 @@ if ($_POST["invoice_number"] != "") {
     $accept = false;
     $error_msg = "invoice_number資料為空"; //錯誤訊息
 }
+echo $_POST["uid"];
+echo $accept;
 
-//-------------存取資料庫--------------//
-$severname = "192.168.2.200"; //SQL位置
-$username = "hoshiso1_system"; //帳號
-$password = "system123456"; //密碼
-$dbname = "hoshiso1_project"; //SQL名稱
-$link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
+if($accept){
+    //-------------存取資料庫--------------//
+    $severname = "192.168.2.200"; //SQL位置
+    $username = "hoshiso1_system"; //帳號
+    $password = "system123456"; //密碼
+    $dbname = "hoshiso1_project"; //SQL名稱
+    $link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
 
-if ($link->connect_error) {
-    wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
-}
-$sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `uid` = '" . $uid ."'";
-$result=$link->query($sql1); // 執行 SQL 查詢
-$messageArr = array();
-$dataarray = array();
-$amount = $result->num_rows; // 取得查詢結果的列數
-
-if($result->num_rows > 0){ // 若查詢結果有資料
-    while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
-        $dataarray[]=$row; // 將資料加入陣列中         
+    if ($link->connect_error) {
+        wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
+        $dataarray = [];
+        $message = returnmsg($dataarray, "500", "內部伺服器錯誤"); //回傳錯誤代碼500，錯誤訊息:內部伺服器錯誤。
+        http_response_code(200);
+        echo json_encode($message);
+        exit();
     }
+    $sql1 = "DELETE FROM `member_invoice` WHERE `uid`= '" . $uid ."'AND `invoice_number` = '" . $invoice_number ."'";
+    echo $sql1;
+    $result=$link->query($sql1); // 執行 SQL 查詢
+    $messageArr = array();
+    $dataarray = array();
+    $amount = $result->num_rows; // 取得查詢結果的列數
+    echo $result;
+    $dataarray = [];
+    $link->close(); // 關閉資料庫連結
+
+
+    $message = returnmsg($dataarray, "0", "Success",$amount); // 呼叫 returnmsg 函式，回傳訊息
+    http_response_code(200); // 設定 HTTP 狀態碼為 200
+    echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
+
+    $messageArr["status"]=array();
+}else{
+    echo "error";
 }
-$link->close(); // 關閉資料庫連結
-
-
-$message = returnmsg($dataarray, "0", "Success",$amount); // 呼叫 returnmsg 函式，回傳訊息
-http_response_code(200); // 設定 HTTP 狀態碼為 200
-echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
-
-$messageArr["status"]=array();
-
 // -------------其他函式定義--------------//
 
 // 產生回傳訊息的函式
