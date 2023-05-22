@@ -9,18 +9,17 @@ HOST: https://hoshisora000.lionfree.net/api
 # 允許的HTTPs請求方式:
  - POST    : 更新資源
  - GET     : 獲取單一資源或資源列表
- - DELETE  : 刪除資源(先保留)
+ - DELETE  : 刪除資源
 
 
-# 常見伺服器回應的描述:
+# 伺服器回應的描述:
 - 200 `OK` - 請求成功（某些API呼叫可能返回201）。
 - 201 `Created` - 請求成功並且創建了一個資源。
-- 204 `No Content` - 請求成功，但沒有要返回的內容（即回應是空的）。
 - 400 `Bad Request` - 無法理解請求或缺少必要的參數。
-- 401 `Unauthorized` - 認證失敗或使用者沒有執行所要求操作的權限。
 - 403 `Forbidden` - 拒絕訪問。
 - 404 `Not Found` - 找不到資源。
-- 405 `Method Not Allowed` - 所要求的方法不支援該資源。
+- 500 `Internal Server Error` - 內部伺服器錯誤
+- 501 `Not Implemented` - 伺服器目前不支援此功能(錯誤訊息存於error_log)
 
 
 ## 新增發票 [/add_invoice.php]
@@ -63,9 +62,6 @@ HOST: https://hoshisora000.lionfree.net/api
         32
         --{boundary value}--
 
-        
-
-
 + Response 200 (application/json)
 
     + Body
@@ -82,6 +78,19 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
++ Response 400 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏/資料格式錯誤",
+                "datetime": "2023-05-2213:36:15(+08:00)"
+            }
+        }
+
 + Response 404 (application/json)
 
     + Body
@@ -95,6 +104,18 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
++ Response 500 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
 
 
 ## 查詢發票 [/query_invoice.php]
@@ -140,3 +161,73 @@ HOST: https://hoshisora000.lionfree.net/api
     [
             
     ]
+    
+    
+
+## 刪除發票 [/delete_invoice.php]
+
+### 上傳發票資料[POST]
+
+刪除資料庫中指定的發票。
+
+
+
+
+- Parameters
+    - uid: "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6" (string, required) - 使用者ID
+    - invoice: "ZZ12345678" (string, required) - 發票號碼
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "data": {
+                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                "invoice_number": "ZZ12345678"
+            },
+            "status": {
+                "code": "201",
+                "message": "Success",
+                "datetime": "2023-05-2200:50:38(+08:00)"
+            }
+        }
+
++ Response 400 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏/資料格式錯誤",
+                "datetime": "2023-05-2213:36:15(+08:00)"
+            }
+        }
+
++ Response 404 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "404",
+                "message": "重複的發票號碼",
+                "datetime": "2023-05-2210:54:37(+08:00)"
+            }
+        }
+
++ Response 500 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }

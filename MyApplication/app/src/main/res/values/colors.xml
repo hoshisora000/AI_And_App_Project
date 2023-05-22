@@ -7,4 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="HunyadiYellow">#F6BD60</color>
+    <color name="Linen">#F7EDE2</color>
+    <color name="TeaRose">#F5CAC3</color>
+    <color name="CambridgeBlue">#84A59D</color>
+    <color name="LightCoral">#F28482</color>
+    <color name="DarkSlateGray">#354F52</color>
+    <color name="DavyGray">#494850</color>
+
+
 </resources>

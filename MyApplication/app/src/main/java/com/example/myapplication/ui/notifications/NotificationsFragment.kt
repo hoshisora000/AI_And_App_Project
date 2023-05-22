@@ -23,18 +23,37 @@ import java.io.IOException
 
 class NotificationsFragment : Fragment() {
 
+    private val client = OkHttpClient()
+    private val url = "https://hoshisora000.lionfree.net/api/add_invoice.php"
+    private var user_id = ""
+
     private var _binding: FragmentNotificationsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        user_id = homeViewModel.USER_ID
+
+        bt_click(root) //按下按鈕
+
+        return root
+    }
 
     //接收creat表單之資料並上傳新增資料
     private val requestDataLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == AppCompatActivity.RESULT_OK){
             val data = it.data
 
-            val client = OkHttpClient()
-            val url = "https://hoshisora000.lionfree.net/api/add_invoice.php"
-
             val formBody = FormBody.Builder()
-                .add("uid", "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6")
+                .add("uid", user_id)
                 .add("invoice_number", ""+data?.getStringExtra("data_en")+data?.getStringExtra("data_int"))
                 .add("date", ""+data?.getStringExtra("data_day"))
                 .add("time", ""+data?.getStringExtra("data_time")+":00")
@@ -62,29 +81,10 @@ class NotificationsFragment : Fragment() {
         }
     }
 
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
-        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        bt_click(root) //按下按鈕
-
-        return root
-    }
-
     private fun bt_click(root:View){
         val bt_creat = root.findViewById<Button>(R.id.bt_create)
         val bt_create_ai = root.findViewById<Button>(R.id.bt_create_ai)
         val bt_create_qr = root.findViewById<Button>(R.id.bt_create_qr)
-
 
         val bundle_creat = Bundle()
         val intent_creat = Intent(requireActivity(),create::class.java)
