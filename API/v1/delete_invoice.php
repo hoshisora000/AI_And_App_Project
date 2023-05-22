@@ -1,12 +1,19 @@
 <?php
 header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 json 編碼 utf-8
 
+
 //----------接收資料並檢查送進來的資料是否有問題--------------------//
-if ($_GET["uid"] != "") {
-    $uid = $_GET["uid"];
+if ($_POST["uid"] != "") {
+    $uid = $_POST["uid"];
 } else { //不接受沒有資料的內容
     $accept = false;
-    $error_msg = "uid資料為空"; //錯誤訊息 
+    $error_msg = "uid資料為空"; //錯誤訊息
+}
+if ($_POST["invoice_number"] != "") {
+    $invoice_number = $_POST["invoice_number"];
+} else { //不接受沒有資料的內容
+    $accept = false;
+    $error_msg = "invoice_number資料為空"; //錯誤訊息
 }
 
 //-------------存取資料庫--------------//
