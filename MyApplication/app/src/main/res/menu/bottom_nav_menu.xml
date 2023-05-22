@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/baseline_manage_accounts_24"
+        android:title="會員" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="發票" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="新增" />
+
+</menu>
