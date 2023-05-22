@@ -110,7 +110,7 @@ function returnmsg($dataarray, $re_code, $re_msg)
 
     $messageArr["data"] = $dataarray; // 設定回傳訊息的資料部分為查詢結果的陣列
     $messageArr["status"] = array();
-    $today = date('Y-m-dH:i:s(p)'); // 取得當前日期和時間
+    $today = date('Y-m-d-H:i:s(p)'); // 取得當前日期和時間
     $datetime = array(
         "code" => $re_code,
         "message" => $re_msg,
