@@ -12,6 +12,7 @@ import com.example.myapplication.R
 import android.widget.LinearLayout
 import java.io.IOException
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.example.myapplication.ui.home.HomeFragment
 import com.example.myapplication.ui.home.HomeViewModel
 import com.google.gson.Gson
@@ -24,19 +25,21 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val client = OkHttpClient()
-    private var url = ""
+    private var url = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="
+    private var user_id = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //取得UID
-        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-        url = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+homeViewModel.USER_ID
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        //取得UID
+        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        user_id = homeViewModel.USER_ID
+        url += user_id
 
         val linearLayout = root.findViewById<LinearLayout>(R.id.linearLayout)
 
@@ -122,7 +125,8 @@ class DashboardFragment : Fragment() {
                             ).apply {
                                 setMargins(0, 0, 0, dpToPx(10))
                             }
-                            button.setBackgroundResource(android.R.color.holo_blue_dark)
+                            button.setBackgroundResource(R.color.LightCoral)
+                            button.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
 
                             //設定按鈕監聽行為
                             button.setOnClickListener {
