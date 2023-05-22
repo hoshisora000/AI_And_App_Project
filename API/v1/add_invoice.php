@@ -2,36 +2,43 @@
 header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 json 編碼 utf-8
 date_default_timezone_set("Asia/Taipei"); //設定時間時區
 
-$accept = true;
-//-------------接收資料-----------------//
+$accept = true; //如果接收資料格式正確才接收
+$date_pattern = "/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"; //使用正規表示法檢查日期格式
+$time_pattern = "/^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/"; //使用正規表示法檢查時間格式
+$error_msg = ""; //記錄錯誤訊息
+
+//----------接收資料並檢查送進來的資料是否有問題--------------------//
 if ($_POST["uid"] != "") {
     $uid = $_POST["uid"];
-} else {
-    $uid = ""; //不能接受這種內容，需做錯誤回傳(待補)
+} else { //不接受沒有資料的內容
     $accept = false;
+    $error_msg = "uid資料為空"; //錯誤訊息
 }
 if ($_POST["invoice_number"] != "") {
     $invoice_number = $_POST["invoice_number"];
-} else {
-    $invoice_number = ""; //不能接受這種內容，需做錯誤回傳(待補)
+} else { //不接受沒有資料的內容
+    $accept = false;
+    $error_msg = "invoice_number資料為空"; //錯誤訊息
 }
-if ($_POST["date"] != "") {
+if ($_POST["date"] != "" && preg_match($date_pattern,$_POST["date"])) {
     $date = $_POST["date"];
-} else {
-    $date = ""; //不能接受這種內容，需做錯誤回傳(待補)
+} else { //不接受沒有資料的內容或格式錯誤
+    $accept = false;
+    $error_msg = "date資料為空或格式錯誤，輸入資料為:" . $_POST["date"]; //錯誤訊息
 }
-if ($_POST["time"] != "") {
+if ($_POST["time"] != "" && preg_match($time_pattern,$_POST["time"])) {
     $time = $_POST["time"];
-} else {
-    $time = ""; //不能接受這種內容，需做錯誤回傳(待補)
+} else { //不接受沒有資料的內容或格式錯誤
+    $accept = false;
+    $error_msg = "time資料為空或格式錯誤，輸入資料為:" . $_POST["time"]; //錯誤訊息
 }
 if ($_POST["money"] != "") {
-    $money = $_POST["money"];
-} else {
-    $money = ""; //不能接受這種內容，需做錯誤回傳(待補)
+    $money = $_POST["money"]; 
+} else { //不接受沒有資料的內容ㄋ
+    $accept = false;
+    $error_msg = "money資料為空"; //錯誤訊息
 }
 
-//----------檢查送進來的資料是否有問題--------------------//
 if($accept){
     //-------------存取資料庫--------------//
     $severname = "192.168.2.200"; //SQL位置
@@ -72,13 +79,15 @@ if($accept){
             http_response_code(200);
             echo json_encode($message);
         } catch (Exception $e) {
-            echo 'Message: ' . $e->getMessage();
-            echo "\n";
-            echo $sql;
+            wh_log('Message: ' . $e->getMessage() . "\n當前使用SQL語法:" . $sql); //將錯誤訊息通過呼叫函式的方式寫入error_log
+            $dataarray = [];
+            $message = returnmsg($dataarray, "500", "內部伺服器錯誤"); //回傳錯誤代碼500，錯誤訊息:內部伺服器錯誤。
+            http_response_code(200);
+            echo json_encode($message);
         }
     }else{            
         $dataarray = [];
-        $message = returnmsg($dataarray, "404", "重複的發票號碼");
+        $message = returnmsg($dataarray, "404", "重複的發票號碼"); //回傳錯誤代碼404，錯誤訊息:重複的發票號碼。
         http_response_code(200);
         echo json_encode($message);
 
@@ -87,7 +96,7 @@ if($accept){
 
 }else{ //對於資料POST不完整的處理
     $dataarray = [];
-    $message = returnmsg($dataarray, "400", "資料不全");
+    $message = returnmsg($dataarray, "400", "資料有缺漏或資料格式錯誤(" . $error_msg .")"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
     http_response_code(200);
     echo json_encode($message);
 }
