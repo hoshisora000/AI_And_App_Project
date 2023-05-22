@@ -1,87 +1,141 @@
 FORMAT: 1A
-HOST: https://polls.apiblueprint.org/
+HOST: https://hoshisora000.lionfree.net/api
 
 # ai&app_project
 
 期末專題用，API說明文件
 如需閱讀，請參閱: https://aiappproject.docs.apiary.io/
 
-## 新增發票 [/questions]
+# 允許的HTTPs請求方式:
+ - POST    : 更新資源
+ - GET     : 獲取單一資源或資源列表
+ - DELETE  : 刪除資源(先保留)
 
-### 新增會員發票 [POST]
+
+# 常見伺服器回應的描述:
+- 200 `OK` - 請求成功（某些API呼叫可能返回201）。
+- 201 `Created` - 請求成功並且創建了一個資源。
+- 204 `No Content` - 請求成功，但沒有要返回的內容（即回應是空的）。
+- 400 `Bad Request` - 無法理解請求或缺少必要的參數。
+- 401 `Unauthorized` - 認證失敗或使用者沒有執行所要求操作的權限。
+- 403 `Forbidden` - 拒絕訪問。
+- 404 `Not Found` - 找不到資源。
+- 405 `Method Not Allowed` - 所要求的方法不支援該資源。
+
+
+## 新增發票 [/add_invoice.php]
+
+### 上傳發票資料[POST]
+
+接收發票資料並存入資料庫。
+
++ Request (multipart/form-data; boundary={boundary value})
+
+    + Attributes
+        + uid (string, required) - 使用者ID
+        + invoice_number (string, required) - 發票號碼
+        + date (string, required) - 發票日期
+        + time (string, required) - 發票時間
+        + money (string, required) - 發票金額    
+
+    + Body
+
+        --{boundary value}
+        Content-Disposition: form-data; name="uid"
+        
+        O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6
+        --{boundary value}
+        Content-Disposition: form-data; name="invoice_number"
+        
+        ZZ12345678
+        --{boundary value}
+        Content-Disposition: form-data; name="date"
+        
+        2023-05-21
+        --{boundary value}
+        Content-Disposition: form-data; name="time"
+        
+        21:26:55
+        --{boundary value}
+        Content-Disposition: form-data; name="money"
+        
+        32
+        --{boundary value}--
+
+        
+
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+    + Body
+
+        {
+            "data": {
+                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                "invoice_number": "ZZ12345678"
+            },
+            "status": {
+                "code": "201",
+                "message": "Success",
+                "datetime": "2023-05-2200:50:38(+08:00)"
             }
-        ]
+        }
+
++ Response 404 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "404",
+                "message": "重複的發票號碼",
+                "datetime": "2023-05-2210:54:37(+08:00)"
+            }
+        }
+
+
+
+## 查詢發票 [/query_invoice.php]
+
+### 查詢會員發票 [GET]
+
+提供查詢使用者所有的發票。
+
+- Parameters
+
+  - uid: (string, required) - 使用者ID
+
+
++ Response 200 (application/json)
+
+        {
+            "data": [
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "AA54578621",
+                    "date": "2023-05-21",
+                    "time": "14:24:00",
+                    "money": "777"
+                },
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "NQ1234569",
+                    "date": "2023-05-12",
+                    "time": "21:31:00",
+                    "money": "100"
+                }
+            ],
+            "status": {
+                "amount": 2,
+                "code": "0",
+                "message": "Success",
+                "datetime": "2023-05-2211:23:24(+08:00)"
+            }
+        }
 
 + Response 400 (application/json)
 
     [
             
     ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
-    + Headers
-
-            Location: /questions/2
-
-    + Body
-
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
