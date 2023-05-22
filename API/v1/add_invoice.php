@@ -9,7 +9,6 @@ if ($_POST["uid"] != "") {
 } else {
     $uid = ""; //不能接受這種內容，需做錯誤回傳(待補)
     $accept = false;
-    
 }
 if ($_POST["invoice_number"] != "") {
     $invoice_number = $_POST["invoice_number"];
@@ -85,40 +84,45 @@ if($accept){
 
     }
 
-    // -------------其他函式定義--------------//
 
-    // 產生回傳訊息的函式
-    function returnmsg($dataarray, $re_code, $re_msg)
-    {
-
-        $messageArr["data"] = $dataarray; // 設定回傳訊息的資料部分為查詢結果的陣列
-        $messageArr["status"] = array();
-        $today = date('Y-m-dH:i:s(p)'); // 取得當前日期和時間
-        $datetime = array(
-            "code" => $re_code,
-            "message" => $re_msg,
-            "datetime" => $today
-        );
-        $messageArr["status"] = $datetime; // 設定回傳訊息的狀態部分為包含相關資訊的陣列
-        return $messageArr; // 回傳完整的訊息陣列
-    }
-
-    // 記錄錯誤訊息的函式
-    function wh_log($log_msg)
-    {
-
-        $log_time = date('Y-m-d H:i:s');
-        $log_filename = "error_log";
-        $log_msg = '[' . $log_time . '] ' . $log_msg;
-
-        if (!file_exists($log_filename)) {
-            // 建立資料夾
-            mkdir($log_filename, 0777, true); // mkdir(pathname[, mode[, recursive[, context]]])
-        }
-        $log_file_data = $log_filename . '/log_' . date('m-d-H-i-s') . '.log';
-        file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
-    }
 }else{ //對於資料POST不完整的處理
+    $dataarray = [];
+    $message = returnmsg($dataarray, "400", "資料不全");
+    http_response_code(200);
+    echo json_encode($message);
+}
 
+
+// -------------其他函式定義--------------//
+// 產生回傳訊息的函式
+function returnmsg($dataarray, $re_code, $re_msg)
+{
+
+    $messageArr["data"] = $dataarray; // 設定回傳訊息的資料部分為查詢結果的陣列
+    $messageArr["status"] = array();
+    $today = date('Y-m-dH:i:s(p)'); // 取得當前日期和時間
+    $datetime = array(
+        "code" => $re_code,
+        "message" => $re_msg,
+        "datetime" => $today
+    );
+    $messageArr["status"] = $datetime; // 設定回傳訊息的狀態部分為包含相關資訊的陣列
+    return $messageArr; // 回傳完整的訊息陣列
+}
+
+// 記錄錯誤訊息的函式
+function wh_log($log_msg)
+{
+
+    $log_time = date('Y-m-d H:i:s');
+    $log_filename = "error_log";
+    $log_msg = '[' . $log_time . '] ' . $log_msg;
+
+    if (!file_exists($log_filename)) {
+        // 建立資料夾
+        mkdir($log_filename, 0777, true); // mkdir(pathname[, mode[, recursive[, context]]])
+    }
+    $log_file_data = $log_filename . '/log_' . date('m-d-H-i-s') . '.log';
+    file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
 }
 ?>
