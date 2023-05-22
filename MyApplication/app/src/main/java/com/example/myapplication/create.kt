@@ -27,6 +27,7 @@ class create : AppCompatActivity() {
         val text4 = findViewById<EditText>(R.id.editTextTextPersonName5)
         val text5 = findViewById<EditText>(R.id.editTextTextPersonName4)
 
+        //回傳表單資料
         but.setOnClickListener {
             bundle!!.putString("data_en",text1.text.toString())
             bundle.putString("data_int",text2.text.toString())
@@ -38,6 +39,7 @@ class create : AppCompatActivity() {
             finish()
         }
 
+        //連接DatePicker
         text3.setOnClickListener {
             val cal = Calendar.getInstance()
             val year = cal.get(Calendar.YEAR)
@@ -54,6 +56,8 @@ class create : AppCompatActivity() {
                 },year,month,day)
             datePickerDialog.show()
         }
+
+        //連接TimePicker
         text4.setOnClickListener {
             val cal = Calendar.getInstance()
             val hour = cal.get(Calendar.HOUR_OF_DAY)
