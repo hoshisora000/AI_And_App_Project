@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.create
 import com.example.myapplication.databinding.FragmentNotificationsBinding
+import com.example.myapplication.ui.home.HomeViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.*
@@ -24,12 +25,14 @@ class NotificationsFragment : Fragment() {
 
     private var _binding: FragmentNotificationsBinding? = null
 
+    //接收creat表單之資料並上傳新增資料
     private val requestDataLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == AppCompatActivity.RESULT_OK){
             val data = it.data
-            //showToast(""+data?.getStringExtra("data_en"))
 
             val client = OkHttpClient()
+            val url = "https://hoshisora000.lionfree.net/api/add_invoice.php"
+
             val formBody = FormBody.Builder()
                 .add("uid", "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6")
                 .add("invoice_number", ""+data?.getStringExtra("data_en")+data?.getStringExtra("data_int"))
@@ -38,7 +41,6 @@ class NotificationsFragment : Fragment() {
                 .add("money",""+data?.getStringExtra("data_coast"))
                 .build()
 
-            val url = "https://hoshisora000.lionfree.net/api/add_invoice.php"
             val request = Request.Builder()
                 .url(url)
                 .post(formBody)
@@ -52,7 +54,6 @@ class NotificationsFragment : Fragment() {
                     if (response.isSuccessful) {
                         val responseBody = response.body?.string()
                         println(responseBody)
-                        //findViewById<TextView>(R.id.TextView).text = responseBody
                     } else {
                         println("Request failed")
                     }
@@ -60,8 +61,7 @@ class NotificationsFragment : Fragment() {
             })
         }
     }
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -69,24 +69,40 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        bt_click(root)
+        bt_click(root) //按下按鈕
 
         return root
     }
 
     private fun bt_click(root:View){
         val bt_creat = root.findViewById<Button>(R.id.bt_create)
+        val bt_create_ai = root.findViewById<Button>(R.id.bt_create_ai)
+        val bt_create_qr = root.findViewById<Button>(R.id.bt_create_qr)
+
+
         val bundle_creat = Bundle()
         val intent_creat = Intent(requireActivity(),create::class.java)
+
+        //手動更新按鈕 開啟creat表單並要求回傳質
         bt_creat.setOnClickListener {
             intent_creat.putExtras(bundle_creat)
             requestDataLauncher.launch(intent_creat)
+        }
+
+        //傳統發票掃描按鈕
+        bt_create_ai.setOnClickListener {
+
+        }
+
+        //電子發票掃描按鈕
+        bt_create_qr.setOnClickListener {
+
         }
     }
 
