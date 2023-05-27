@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.myapplication.ui.home.HomeFragment
 import com.example.myapplication.ui.home.HomeViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.*
@@ -25,8 +27,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val client = OkHttpClient()
-    private var url = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="
-    private var user_id = ""
+    private var url = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+Firebase.auth.currentUser?.uid.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,15 +37,16 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //取得UID
-        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-        user_id = homeViewModel.USER_ID
-        url += user_id
-
         val linearLayout = root.findViewById<LinearLayout>(R.id.linearLayout)
 
         //動態更新發票
-        re_btn(linearLayout,root)
+        if(Firebase.auth.currentUser != null){
+            re_btn(linearLayout,root)
+            _binding!!.btReData.visibility = View.VISIBLE
+        }else{
+            _binding!!.btReData.visibility = View.GONE
+        }
+
 
         //更新按鈕
         val btn = root.findViewById<Button>(R.id.bt_re_data)

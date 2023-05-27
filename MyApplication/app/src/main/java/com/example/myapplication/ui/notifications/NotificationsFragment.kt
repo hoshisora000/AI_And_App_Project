@@ -16,6 +16,8 @@ import com.example.myapplication.R
 import com.example.myapplication.create
 import com.example.myapplication.databinding.FragmentNotificationsBinding
 import com.example.myapplication.ui.home.HomeViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.*
@@ -39,8 +41,7 @@ class NotificationsFragment : Fragment() {
         val root: View = binding.root
 
         val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
-        val homeViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-        user_id = homeViewModel.USER_ID
+        user_id = Firebase.auth.currentUser?.uid.toString()
 
         bt_click(root) //按下按鈕
 
@@ -91,8 +92,12 @@ class NotificationsFragment : Fragment() {
 
         //手動更新按鈕 開啟creat表單並要求回傳質
         bt_creat.setOnClickListener {
-            intent_creat.putExtras(bundle_creat)
-            requestDataLauncher.launch(intent_creat)
+            if(Firebase.auth.currentUser != null){
+                intent_creat.putExtras(bundle_creat)
+                requestDataLauncher.launch(intent_creat)
+            }else{
+                showToast("請先登入帳號")
+            }
         }
 
         //傳統發票掃描按鈕
