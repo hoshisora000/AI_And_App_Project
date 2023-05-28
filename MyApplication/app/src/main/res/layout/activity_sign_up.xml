@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:text="- 帳號註冊 -"
             android:textSize="30dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/editTextTextEmailAddress_signup"
@@ -39,6 +40,16 @@
             android:layout_marginBottom="8dp"
             android:ems="12"
             android:hint="Password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword_signup_reenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:ems="12"
+            android:hint="Reenter Password"
             android:inputType="textPassword" />
 
         <Button
