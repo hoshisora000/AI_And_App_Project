@@ -237,7 +237,7 @@ HOST: https://hoshisora000.lionfree.net/api
 
 ### 查詢會員資料 [GET]
 
-提供查詢使用者所有的發票。
+查詢會員資料。
 
 - Parameters
 
@@ -272,7 +272,7 @@ HOST: https://hoshisora000.lionfree.net/api
 
 ### 新增會員資料[POST]
 
-接收發票資料並存入資料庫。<br>
+新增會員資料。<br>
 <b>form-data須注意相關格式(值前面務必空一行)</b>
 
 + Request (multipart/form-data; boundary={boundary value})
@@ -353,12 +353,12 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
         
-        
+
 ## 修改會員資料 [/update_member_inf.php]
 
-### 修改會員資料 [GET]
+### 修改會員資料 [POST]
 
-提供查詢使用者所有的發票。
+修改會員資料。
 
 + Attributes
     
@@ -366,6 +366,40 @@ HOST: https://hoshisora000.lionfree.net/api
     + nickname (string, required) - 暱稱
     + mobile_barcode (string, required) - 手機條碼   
 
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
+                "nickname": "OwO",
+                "mobile_barcode": "7777777"
+            },
+            "status": {
+                "amount": null,
+                "code": "0",
+                "message": "Success",
+                "datetime": "2023-05-2914:34:12(+08:00)"
+            }
+        }
+
++ Response 400 (application/json)
+
+    [
+            
+    ] 
+
+        
+## 中獎發票查詢 [/check_winning.php]
+
+### 中獎發票查詢 [GET]
+
+查詢中獎發票。
+
+- Parameters
+
+  - period: "1120102" (string, required) - 發票期數
+  - invoice_number: "AB12345678" (string, required) - 發票號碼
 
 + Response 200 (application/json)
 
