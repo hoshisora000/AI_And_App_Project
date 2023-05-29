@@ -19,12 +19,7 @@ if ($_POST["nickname"] != "") {
     $accept = false;
     $error_msg = "nickname資料為空"; //錯誤訊息
 }
-if ($_POST["mobile_barcode"] != "") {
-    $mobile_barcode = $_POST["mobile_barcode"]; 
-} else { //不接受沒有資料的內容ㄋ
-    $accept = false;
-    $error_msg = "mobile_barcode資料為空"; //錯誤訊息
-}
+
 
 if($accept){
     //-------------存取資料庫--------------//
