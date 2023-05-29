@@ -38,7 +38,6 @@ if($accept){
     // 檢查發票號碼是否已存在於資料庫中
     $sql1 = "SELECT * FROM `member` WHERE `uid`= '" . $uid ."'";
     $result1 = mysqli_query($link,$sql1);
-    echo $sql1;
     $row = mysqli_num_rows($result1) ;
     if ($row==0) { 
         //--------上傳資料到資料庫--------//
