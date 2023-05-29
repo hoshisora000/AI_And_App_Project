@@ -27,7 +27,8 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val client = OkHttpClient()
-    private var url = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+Firebase.auth.currentUser?.uid.toString()
+    private var url_query_invoice = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+Firebase.auth.currentUser?.uid.toString()
+    private var url_delete_invoice = "https://hoshisora000.lionfree.net/api/delete_invoice.php"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +62,7 @@ class DashboardFragment : Fragment() {
     //取得資料庫的發票資料 並動態生成發票按鈕
     private fun re_btn(linearLayout:LinearLayout,root:View){
         val request = Request.Builder()
-            .url(url)
+            .url(url_query_invoice)
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -135,7 +136,44 @@ class DashboardFragment : Fragment() {
                                 AlertDialog.Builder(requireContext())
                                     .setTitle(""+en+"-"+num)
                                     .setMessage("購買日期:"+day+"\n購買時間:"+time+"\n購買金額:"+coast)
-                                    .show()
+                                    .setPositiveButton("刪除"){ dialog,which->
+                                        AlertDialog.Builder(requireContext())
+                                            .setTitle("警告")
+                                            .setMessage("確定要刪除發票資料嗎？")
+                                            .setPositiveButton("確定") { dialog, which ->
+                                                val formBody = FormBody.Builder()
+                                                    .add("uid",Firebase.auth.currentUser?.uid.toString())
+                                                    .add("invoice_number",""+en+num)
+                                                    .build()
+
+                                                val request = Request.Builder()
+                                                    .url(url_delete_invoice)
+                                                    .post(formBody)
+                                                    .build()
+
+                                                client.newCall(request).enqueue(object : Callback {
+                                                    override fun onFailure(call: Call, e: IOException) {
+                                                        e.printStackTrace()
+                                                    }
+                                                    override fun onResponse(call: Call, response: Response) {
+                                                        if (response.isSuccessful) {
+                                                            requireActivity().runOnUiThread {
+                                                                button.visibility = View.GONE
+                                                            }
+                                                            val responseBody = response.body?.string()
+                                                            println(responseBody)
+                                                        } else {
+                                                            println("Request failed")
+                                                        }
+
+                                                    }
+                                                })
+                                            }
+                                            .setNegativeButton("取消") { dialog, which ->
+
+                                            }
+                                            .show()
+                                    }.show()
                             }
                             linearLayout.addView(button)
                         }
