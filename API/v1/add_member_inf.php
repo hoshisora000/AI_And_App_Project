@@ -3,8 +3,7 @@ header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 js
 date_default_timezone_set("Asia/Taipei"); //設定時間時區
 
 $accept = true; //如果接收資料格式正確才接收
-$date_pattern = "/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"; //使用正規表示法檢查日期格式
-$time_pattern = "/^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/"; //使用正規表示法檢查時間格式
+
 $error_msg = ""; //記錄錯誤訊息
 
 //----------接收資料並檢查送進來的資料是否有問題-------------------//
@@ -14,29 +13,17 @@ if ($_POST["uid"] != "") {
     $accept = false;
     $error_msg = "uid資料為空"; //錯誤訊息
 }
-if ($_POST["invoice_number"] != "") {
-    $invoice_number = $_POST["invoice_number"];
+if ($_POST["nickname"] != "") {
+    $nickname = $_POST["nickname"];
 } else { //不接受沒有資料的內容
     $accept = false;
-    $error_msg = "invoice_number資料為空"; //錯誤訊息
+    $error_msg = "nickname資料為空"; //錯誤訊息
 }
-if ($_POST["date"] != "" && preg_match($date_pattern,$_POST["date"])) {
-    $date = $_POST["date"];
-} else { //不接受沒有資料的內容或格式錯誤
-    $accept = false;
-    $error_msg = "date資料為空或格式錯誤，輸入資料為:" . $_POST["date"]; //錯誤訊息
-}
-if ($_POST["time"] != "" && preg_match($time_pattern,$_POST["time"])) {
-    $time = $_POST["time"];
-} else { //不接受沒有資料的內容或格式錯誤
-    $accept = false;
-    $error_msg = "time資料為空或格式錯誤，輸入資料為:" . $_POST["time"]; //錯誤訊息
-}
-if ($_POST["money"] != "") {
-    $money = $_POST["money"]; 
+if ($_POST["mobile_barcode"] != "") {
+    $mobile_barcode = $_POST["mobile_barcode"]; 
 } else { //不接受沒有資料的內容ㄋ
     $accept = false;
-    $error_msg = "money資料為空"; //錯誤訊息
+    $error_msg = "mobile_barcode資料為空"; //錯誤訊息
 }
 
 if($accept){
@@ -54,20 +41,20 @@ if($accept){
     //-------------檢查發票號碼是否重複-------------//
 
     // 檢查發票號碼是否已存在於資料庫中
-    $sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `uid`= '" . $uid ."'AND `invoice_number` = '" . $invoice_number ."'";
+    $sql1 = "SELECT * FROM `member` WHERE `uid`= '" . $uid ."'";
     $result1 = mysqli_query($link,$sql1);
-
+    echo $sql1;
     $row = mysqli_num_rows($result1) ;
     if ($row==0) { 
         //--------上傳資料到資料庫--------//
-        $sql = "INSERT INTO `member_invoice` (`uid`, `invoice_number`, `date`, `time`, `money`) VALUES ('" . $uid . "', '" . $invoice_number . "', '" . $date . "', '" . $time . "', '" . $money . "') ";
+        $sql = "INSERT INTO `member`(`uid`, `nickname`, `mobile_barcode`) VALUES ('" . $uid . "', '" . $nickname . "','" . $mobile_barcode . "') ";
+        echo $sql;
         try {
             $result = $link->query($sql);
             if ($_POST["uid"] != "") {
                 // 回傳成功的訊息
                 $dataarray = array(
                     "uid" => $uid,
-                    "invoice_number" => $invoice_number
                 );
                 $message = returnmsg($dataarray, "201", "Success");
 
@@ -88,7 +75,7 @@ if($accept){
         }
     }else{            
         $dataarray = [];
-        $message = returnmsg($dataarray, "404", "重複的發票號碼"); //回傳錯誤代碼404，錯誤訊息:重複的發票號碼。
+        $message = returnmsg($dataarray, "404", "無法重複新增會員資料"); //回傳錯誤代碼404，錯誤訊息:重複的發票號碼。
         http_response_code(200);
         echo json_encode($message);
 
