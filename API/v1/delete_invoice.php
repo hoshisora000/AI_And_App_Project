@@ -43,7 +43,7 @@ if($accept){
     $link->close(); // 關閉資料庫連結
 
 
-    $message = returnmsg($dataarray, "0", "Success",$amount); // 呼叫 returnmsg 函式，回傳訊息
+    $message = returnmsg($dataarray, "200", "Success",$amount); // 呼叫 returnmsg 函式，回傳訊息
     http_response_code(200); // 設定 HTTP 狀態碼為 200
     echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
 
