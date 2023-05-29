@@ -18,13 +18,14 @@ HOST: https://hoshisora000.lionfree.net/api
 - 400 `Bad Request` - 無法理解請求或缺少必要的參數。
 - 403 `Forbidden` - 拒絕訪問。
 - 404 `Not Found` - 找不到資源。
-- 500 `Internal Server Error` - 內部伺服器錯誤
-- 501 `Not Implemented` - 伺服器目前不支援此功能(錯誤訊息存於error_log)
+- 405 `Method Not Allowed` - 伺服器理解此請求方法，但它被禁用或不可用。
+- 500 `Internal Server Error` - 內部伺服器錯誤。
+- 501 `Not Implemented` - 伺服器目前不支援此功能(錯誤訊息存於error_log)。
 
 
 ## 新增發票 [/add_invoice.php]
 
-### 上傳發票資料[POST]
+### 新增發票[POST]
 
 接收發票資料並存入資料庫。<br>
 <b>form-data須注意相關格式(值前面務必空一行)</b>
@@ -120,7 +121,7 @@ HOST: https://hoshisora000.lionfree.net/api
 
 ## 查詢發票 [/query_invoice.php]
 
-### 查詢會員發票 [GET]
+### 查詢發票 [GET]
 
 提供查詢使用者所有的發票。
 
@@ -164,18 +165,18 @@ HOST: https://hoshisora000.lionfree.net/api
     
     
 
-## 刪除發票-待補 [/delete_invoice.php]
+## 刪除發票 [/delete_invoice.php]
 
-### 上傳發票資料[POST]
+### 刪除發票[POST]
 
 刪除資料庫中指定的發票。
 
 
 
 
-- Parameters
-    - uid: "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6" (string, required) - 使用者ID
-    - invoice: "ZZ12345678" (string, required) - 發票號碼
+- Attributes
+    - uid (string, required) - 使用者ID
+    - invoice_number (string, required) - 發票號碼
 
 + Response 200 (application/json)
 
@@ -231,3 +232,158 @@ HOST: https://hoshisora000.lionfree.net/api
                 "datetime": "2023-05-2214:23:33(+08:00)"
             }
         }
+        
+## 查詢會員資料 [/query_member.php]
+
+### 查詢會員資料 [GET]
+
+提供查詢使用者所有的發票。
+
+- Parameters
+
+  - uid: "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6" (string, required) - 使用者ID
+
+
++ Response 200 (application/json)
+
+        {
+            "data": [
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "nickname": "??",
+                    "mobile_barcode": "87878740"
+                }
+            ],
+            "status": {
+                "amount": 1,
+                "code": "0",
+                "message": "Success",
+                "datetime": "2023-05-2913:35:52(+08:00)"
+            }
+        }
+
++ Response 400 (application/json)
+
+    [
+            
+    ]       
+        
+## 新增會員資料 [/add_member_inf.php]
+
+### 新增會員資料[POST]
+
+接收發票資料並存入資料庫。<br>
+<b>form-data須注意相關格式(值前面務必空一行)</b>
+
++ Request (multipart/form-data; boundary={boundary value})
+
+    + Attributes
+        + uid (string, required) - 使用者ID
+        + nickname (string, required) - 暱稱
+        + mobile_barcode (string, required) - 手機條碼   
+
+    + Body
+
+        --{boundary value}
+        Content-Disposition: form-data; name="uid"
+        
+        O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6
+        --{boundary value}
+        Content-Disposition: form-data; name="nickname"
+        
+        QWQ
+        --{boundary value}
+        Content-Disposition: form-data; name="mobile_barcode"
+        
+        ZXCVBN
+        --{boundary value}--
+
++ Response 201 (application/json)
+
+    + Body
+
+        {
+            "data": {
+                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
+                "invoice_number": null
+            },
+            "status": {
+                "code": "201",
+                "message": "Success",
+                "datetime": "2023-05-29-13:52:23(+08:00)"
+            }
+        }
+
++ Response 400 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏/資料格式錯誤",
+                "datetime": "2023-05-2213:36:15(+08:00)"
+            }
+        }
+
++ Response 404 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "404",
+                "message": "重複的發票號碼",
+                "datetime": "2023-05-2210:54:37(+08:00)"
+            }
+        }
+
++ Response 500 (application/json)
+
+    + Body
+
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
+        
+        
+## 修改會員資料 [/query_member.php]
+
+### 修改會員資料 [GET]
+
+提供查詢使用者所有的發票。
+
+    + Attributes
+        + uid (string, required) - 使用者ID
+        + nickname (string, required) - 暱稱
+        + mobile_barcode (string, required) - 手機條碼   
+
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
+                "nickname": "OwO",
+                "mobile_barcode": "7777777"
+            },
+            "status": {
+                "amount": null,
+                "code": "0",
+                "message": "Success",
+                "datetime": "2023-05-2914:34:12(+08:00)"
+            }
+        }
+
++ Response 400 (application/json)
+
+    [
+            
+    ]
