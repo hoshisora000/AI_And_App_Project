@@ -58,9 +58,7 @@ class NotificationsFragment : Fragment() {
         val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
         user_id = Firebase.auth.currentUser?.uid.toString()
 
-        if (!permissions.all { hasGrant(it) }) {
-            ActivityCompat.requestPermissions(requireActivity(), permissions, CODE_PERMISSION)
-        }
+
 
         bt_click(root) //按下按鈕
 
@@ -149,6 +147,9 @@ class NotificationsFragment : Fragment() {
 
         //電子發票掃描按鈕
         bt_create_qr.setOnClickListener {
+            if (!permissions.all { hasGrant(it) }) {
+                ActivityCompat.requestPermissions(requireActivity(), permissions, CODE_PERMISSION)
+            }
             if(Firebase.auth.currentUser != null){
                 intent_scane.putExtras(bundle_creat)
                 requestScan.launch(intent_scane)
