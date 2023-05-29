@@ -12,4 +12,5 @@ class HomeViewModel : ViewModel() {
 
     var USER_ID = "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6"
     val text: LiveData<String> = _text
+
 }

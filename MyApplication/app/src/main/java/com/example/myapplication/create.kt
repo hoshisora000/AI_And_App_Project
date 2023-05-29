@@ -8,32 +8,42 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
+import com.example.myapplication.databinding.ActivityCreateBinding
+import com.example.myapplication.databinding.ActivityScanBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
 class create : AppCompatActivity() {
+
+    private lateinit var binding:ActivityCreateBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
 
+        binding = ActivityCreateBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         val bundle = intent.extras
         val intent = Intent(this,MainActivity::class.java)
-
-        val but = findViewById<Button>(R.id.bt_create_submit)
-        val text1 = findViewById<EditText>(R.id.editTextTextPersonName)
-        val text2 = findViewById<EditText>(R.id.editTextTextPersonName2)
         val text3 = findViewById<EditText>(R.id.editTextTextPersonName3)
         val text4 = findViewById<EditText>(R.id.editTextTextPersonName5)
-        val text5 = findViewById<EditText>(R.id.editTextTextPersonName4)
+
+        if(bundle?.getString("Scan_en") != null){
+            binding!!.editTextTextPersonName.setText(bundle?.getString("Scan_en"))
+            binding!!.editTextTextPersonName2.setText(bundle?.getString("Scan_num"))
+            binding!!.editTextTextPersonName3.setText(bundle?.getString("Scan_year")+"-"+bundle?.getString("Scan_month")+"-"+bundle?.getString("Scan_day"))
+            binding!!.editTextTextPersonName4.setText(bundle?.getString("Scan_cost"))
+        }
 
         //回傳表單資料
-        but.setOnClickListener {
-            bundle!!.putString("data_en",text1.text.toString())
-            bundle.putString("data_int",text2.text.toString())
-            bundle.putString("data_day",text3.text.toString())
-            bundle.putString("data_time",text4.text.toString())
-            bundle.putString("data_coast",text5.text.toString())
+        binding.btCreateSubmit.setOnClickListener {
+            bundle!!.putString("data_en",binding!!.editTextTextPersonName.text.toString())
+            bundle.putString("data_int",binding!!.editTextTextPersonName2.text.toString())
+            bundle.putString("data_day",binding!!.editTextTextPersonName3.text.toString())
+            bundle.putString("data_time",binding!!.editTextTextPersonName5.text.toString())
+            bundle.putString("data_coast",binding!!.editTextTextPersonName4.text.toString())
             intent.putExtras(bundle)
             setResult(RESULT_OK,intent)
             finish()

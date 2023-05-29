@@ -4,55 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    android:background="@color/Linen"
+    tools:context=".SignUp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editTextTextEmailAddress"
+        <TextView
+            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="- 帳號註冊 -"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/editTextTextEmailAddress_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:ems="12"
-            android:inputType="textEmailAddress"
             android:hint="Email"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
+            android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/editTextTextPassword_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:ems="12"
-            android:inputType="textPassword"
             android:hint="Password"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
+            android:inputType="textPassword" />
 
-        <Button
-            android:id="@+id/but_login"
+        <EditText
+            android:id="@+id/editTextTextPassword_signup_reenter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="登入"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:ems="12"
+            android:hint="Reenter Password"
+            android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/but_signup"
+            android:id="@+id/but_login_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="註冊"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
-
-        <Button
-            android:id="@+id/but_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登出" />
-
+            android:layout_marginBottom="8dp"
+            android:text="送出" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
