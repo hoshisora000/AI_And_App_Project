@@ -26,6 +26,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.myapplication.Scan
+import com.example.myapplication.traditional_invoice
 
 //import maulik.barcodescanner.databinding.ActivityMainBinding
 
@@ -128,6 +129,7 @@ class NotificationsFragment : Fragment() {
         val bundle_creat = Bundle()
         val intent_creat = Intent(requireActivity(),create::class.java)
         val intent_scane = Intent(requireActivity(),Scan::class.java)
+        val intent_traditional_invoice = Intent(requireActivity(),traditional_invoice::class.java)
 
 
         //手動更新按鈕 開啟creat表單並要求回傳質
@@ -142,7 +144,8 @@ class NotificationsFragment : Fragment() {
 
         //傳統發票掃描按鈕
         bt_create_ai.setOnClickListener {
-
+            intent_traditional_invoice.putExtras(bundle_creat)
+            requestDataLauncher.launch(intent_traditional_invoice)
         }
 
         //電子發票掃描按鈕
