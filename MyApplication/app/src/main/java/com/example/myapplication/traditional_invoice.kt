@@ -18,8 +18,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.databinding.ActivityTraditionalInvoiceBinding
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 
 class traditional_invoice : AppCompatActivity() {
 
@@ -61,9 +65,39 @@ class traditional_invoice : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // Photo was taken successfully
-                var bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
+                val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
                 imageView.setImageBitmap(rotateIfRequired(bitmap))
 
+                /*
+                val client = OkHttpClient()
+                val file = File(externalCacheDir, "output_image.jpg")
+
+                val requestBody: RequestBody = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("file", file.name, file.asRequestBody("image/jpeg".toMediaTypeOrNull()))
+                    .build()
+
+                val request: Request = Request.Builder()
+                    .url("https://34.150.40.187:8000/upload")
+                    .post(requestBody)
+                    .build()
+
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        // 处理请求失败的情况
+                        e.printStackTrace()
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        // 处理请求成功的情况
+                        if (response.isSuccessful) {
+                            val responseBody = response.body?.string()
+                            // 处理服务器响应的数据
+                            println(responseBody)
+                        }
+                    }
+                })
+                */
             }
         }
 
