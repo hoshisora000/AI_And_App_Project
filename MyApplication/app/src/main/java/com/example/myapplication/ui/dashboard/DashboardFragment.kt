@@ -29,6 +29,7 @@ class DashboardFragment : Fragment() {
     private val client = OkHttpClient()
     private var url_query_invoice = "https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+Firebase.auth.currentUser?.uid.toString()
     private var url_delete_invoice = "https://hoshisora000.lionfree.net/api/delete_invoice.php"
+    private lateinit var btn_invoice: Array<Button?>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,29 +39,70 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val linearLayout = root.findViewById<LinearLayout>(R.id.linearLayout)
-
         //動態更新發票
         if(Firebase.auth.currentUser != null){
-            re_btn(linearLayout,root)
-            _binding!!.btReData.visibility = View.VISIBLE
+            getRealTime { result ->
+                val options = arrayOfNulls<String>(10)
+                var y = result.substring(0,4).toInt()
+                var m :Int
+                if(result.substring(5,7).toInt() % 2 == 0){
+                    m = result.substring(5,7).toInt() - 1
+                }else{
+                    m = result.substring(5,7).toInt()
+                }
+                for (i in 0 until 10 ){
+                    options[i] = y.toString()+"年 "
+                    if(m<10) options[i] += "0"
+                    options[i] += m.toString()+"月-"
+                    if(m+1<10) options[i] += "0"
+                    options[i] += (m+1).toString()+"月"
+                    if(m==1){
+                        y -= 1
+                        m = 11
+                    }else{
+                        m -= 2
+                    }
+                }
+                requireActivity().runOnUiThread {
+                    val adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, options){
+                        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                            val view = super.getDropDownView(position, convertView, parent)
+                            val textView = view.findViewById<TextView>(android.R.id.text1)
+                            textView.textSize = 18f // 設定字體大小為 18sp，你可以根據需要調整數值
+                            return view
+                        }
+                    }
+                    _binding!!.spinner.adapter = adapter
+                    re_btn(root)
+                }
+            }
+
+            //更新按鈕
+            _binding!!.btReData.setOnClickListener{
+                _binding!!.linearLayout.removeAllViews() //移除目前所有按鈕
+                re_btn(root) //重新取得資料更新
+                re_btn_UI()
+            }
+
+            _binding!!.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    re_btn_UI()
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
+
         }else{
             _binding!!.btReData.visibility = View.GONE
+            _binding!!.spinner.visibility = View.GONE
         }
 
-
-        //更新按鈕
-        val btn = root.findViewById<Button>(R.id.bt_re_data)
-        btn.setOnClickListener{
-            linearLayout.removeAllViews() //移除目前所有按鈕
-            re_btn(linearLayout,root) //重新取得資料更新
-        }
 
         return root
     }
 
     //取得資料庫的發票資料 並動態生成發票按鈕
-    private fun re_btn(linearLayout:LinearLayout,root:View){
+    private fun re_btn(root:View){
         val request = Request.Builder()
             .url(url_query_invoice)
             .build()
@@ -84,6 +126,7 @@ class DashboardFragment : Fragment() {
                         .asString
                         .toInt()
 
+                    btn_invoice = arrayOfNulls<Button>(max)
                     //解析資料並動態生成按鈕
                     for (i in 0 until max) {
                         //取得發票內容
@@ -120,23 +163,24 @@ class DashboardFragment : Fragment() {
 
                         //動態生成按鈕
                         requireActivity().runOnUiThread {
-                            val button = Button(requireContext())
-                            button.text = ""+en+"-"+num
-                            button.layoutParams = LinearLayout.LayoutParams(
+                            btn_invoice[i] = Button(requireContext())
+                            btn_invoice[i]?.text = ""+en+"-"+num
+                            btn_invoice[i]?.tag = day.substring(0,7)
+                            btn_invoice[i]?.layoutParams = LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT
                             ).apply {
                                 setMargins(0, 0, 0, dpToPx(10))
                             }
-                            button.setBackgroundResource(R.color.LightCoral)
-                            button.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                            btn_invoice[i]?.setBackgroundResource(R.color.LightCoral)
+                            btn_invoice[i]?.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
 
                             //設定按鈕監聽行為
-                            button.setOnClickListener {
+                            btn_invoice[i]?.setOnClickListener {
                                 AlertDialog.Builder(requireContext())
                                     .setTitle(""+en+"-"+num)
                                     .setMessage("購買日期:"+day+"\n購買時間:"+time+"\n購買金額:"+coast)
-                                    .setPositiveButton("刪除"){ dialog,which->
+                                    .setNegativeButton("刪除"){ dialog,which->
                                         AlertDialog.Builder(requireContext())
                                             .setTitle("警告")
                                             .setMessage("確定要刪除發票資料嗎？")
@@ -158,7 +202,7 @@ class DashboardFragment : Fragment() {
                                                     override fun onResponse(call: Call, response: Response) {
                                                         if (response.isSuccessful) {
                                                             requireActivity().runOnUiThread {
-                                                                button.visibility = View.GONE
+                                                                btn_invoice[i]?.visibility = View.GONE
                                                             }
                                                             val responseBody = response.body?.string()
                                                             println(responseBody)
@@ -173,18 +217,56 @@ class DashboardFragment : Fragment() {
 
                                             }
                                             .show()
+                                    }.setPositiveButton("取消") { dialog, which ->
+
                                     }.show()
                             }
-                            linearLayout.addView(button)
+                            _binding!!.linearLayout.addView(btn_invoice[i])
+                            re_btn_UI()
                         }
                     }
-
                 } else {
                     println("Request failed")
                 }
             }
         })
     }
+
+    private fun re_btn_UI(){
+        try {
+            for(i in 0 until btn_invoice.size){
+                val spi = _binding!!.spinner.selectedItem.toString()
+                val btntag = btn_invoice[i]?.tag.toString()
+                if(btntag.substring(0,4) == spi.substring(0,4) && (btntag.substring(5,7) == spi.substring(6,8) || btntag.substring(5,7) == spi.substring(10,12))){
+                    requireActivity().runOnUiThread {
+                        btn_invoice[i]?.visibility = View.VISIBLE
+                    }
+                }else{
+                    requireActivity().runOnUiThread {
+                        btn_invoice[i]?.visibility = View.GONE
+                    }
+                }
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun getRealTime(callback: (String) -> Unit) {
+        client.newCall(Request.Builder().url("https://hoshisora000.lionfree.net/api/get_time.php").build()).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // 請求失敗時的處理
+            }
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                val gson = Gson()
+                val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
+                val temp = jsonObject.getAsJsonObject("data").getAsJsonPrimitive("day").asString
+                callback(temp) // 將結果通過回呼函數返回
+            }
+        })
+    }
+
 
     //計算dp資料
     private fun dpToPx(dp: Int): Int {

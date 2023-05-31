@@ -4,7 +4,8 @@ import cv2
 from google.cloud import vision
 
 #---------------模型路徑----------需修改
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='D:/AI_And_App_Project/yoloV5/exp2/weights/best.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt')
+#model = torch.hub.load('ultralytics/yolov5', 'custom', path='D:/AI_And_App_Project/yoloV5/exp2/weights/best.pt')
 
 img_width=800
 img_height=480
@@ -35,7 +36,13 @@ for label, box in zip(labels, boxes):
     else:
         break
 #---------------金鑰路徑----------需修改
+"""
+-------本機測試------
 key_path="D:\Python\key.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = key_path
+"""
+#-------------調整
+key_path="key.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = key_path
 #detect_text(sys.argv[1])cropped_image
 img_path="cropped_image.jpg"

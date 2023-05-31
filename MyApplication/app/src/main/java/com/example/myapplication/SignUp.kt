@@ -12,6 +12,8 @@ import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import okhttp3.*
+import java.io.IOException
 
 //--------------------
 
@@ -27,11 +29,14 @@ class SignUp : AppCompatActivity() {
         val but = findViewById<Button>(R.id.but_login_send)
 
         but.setOnClickListener {
+            val nickname = findViewById<EditText>(R.id.text_nickname).text.toString()
             val email = findViewById<EditText>(R.id.editTextTextEmailAddress_signup).text.toString()
             val password = findViewById<EditText>(R.id.editTextTextPassword_signup).text.toString()
             val reenterpassword = findViewById<EditText>(R.id.editTextTextPassword_signup_reenter).text.toString()
 
-            if(email.isNullOrEmpty()){
+            if(nickname.isNullOrEmpty()){
+                Toast.makeText(this, "請輸入暱稱", Toast.LENGTH_SHORT).show()
+            }else if(email.isNullOrEmpty()){
                 Toast.makeText(this, "請輸入信箱", Toast.LENGTH_SHORT).show()
             }else if(password.isNullOrEmpty()){7
                 Toast.makeText(this, "請輸入密碼", Toast.LENGTH_SHORT).show()
@@ -41,7 +46,41 @@ class SignUp : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{
                     if (it.isSuccessful){
                         Log.d("Test","成功註冊")
-                        finish()
+
+                        //-----------------------------------
+                        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{
+                            if (it.isSuccessful){
+                                val formBody = FormBody.Builder()
+                                    .add("uid", Firebase.auth.currentUser?.uid.toString())
+                                    .add("nickname", nickname)
+                                    .add("mobile_barcode", "")
+                                    .build()
+
+                                OkHttpClient().newCall(Request.Builder()
+                                    .url("https://hoshisora000.lionfree.net/api/add_member_inf.php")
+                                    .post(formBody)
+                                    .build()).enqueue(object : Callback {
+                                    override fun onFailure(call: Call, e: IOException) {
+                                        e.printStackTrace()
+                                    }
+                                    override fun onResponse(call: Call, response: Response) {
+                                        if (response.isSuccessful) {
+                                            val responseBody = response.body?.string()
+                                            println(responseBody)
+                                        } else {
+                                            println("Request failed")
+                                        }
+                                        Firebase.auth.signOut()
+                                        finish()
+                                    }
+                                })
+
+                            }else{
+
+                            }
+                        }
+
+                        //-----------------------------------
                     }else{
                         Log.w("Test","註冊失敗", it.exception) //it.exception是把錯誤原因記下來
                         showMessage("註冊會員失敗")

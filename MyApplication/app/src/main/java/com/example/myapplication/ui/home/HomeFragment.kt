@@ -25,6 +25,10 @@ import com.google.firebase.ktx.Firebase
 import com.example.myapplication.databinding.ActivityMainBinding
 //import com.google.android.play.core.integrity.client.R
 import com.google.firebase.auth.FirebaseUser
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import okhttp3.*
+import java.io.IOException
 
 //--------------------
 
@@ -34,6 +38,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
+
+    private val client = OkHttpClient()
+    private val url_query_member = "https://hoshisora000.lionfree.net/api/query_member.php"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,16 +96,59 @@ class HomeFragment : Fragment() {
             _binding!!.editTextTextEmailAddress.visibility = View.GONE
             _binding!!.butLogin.visibility = View.GONE
             _binding!!.butSignup.visibility = View.GONE
+            _binding!!.textView8.visibility = View.GONE
 
             _binding!!.butLogout.visibility = View.VISIBLE
+            _binding!!.textMember.visibility =View.VISIBLE
+
+            getmember()
         }else{
             _binding!!.editTextTextPassword.visibility = View.VISIBLE
             _binding!!.editTextTextEmailAddress.visibility = View.VISIBLE
             _binding!!.butLogin.visibility = View.VISIBLE
             _binding!!.butSignup.visibility = View.VISIBLE
+            _binding!!.textView8.visibility = View.VISIBLE
 
             _binding!!.butLogout.visibility = View.GONE
+            _binding!!.textMember.visibility =View.GONE
         }
+    }
+
+    private fun getmember(){
+        val request = Request.Builder()
+            .url(url_query_member+"?uid="+Firebase.auth.currentUser?.uid.toString())
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    val gson = Gson()
+                    val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
+                    println(jsonObject)
+
+                    val nickname = jsonObject
+                        .getAsJsonArray("data")[0]
+                        .asJsonObject
+                        .get("nickname")
+                        .asString
+
+                    val mobile_barcode = jsonObject
+                        .getAsJsonArray("data")[0]
+                        .asJsonObject
+                        .get("mobile_barcode")
+                        .asString
+
+                    requireActivity().runOnUiThread {
+                        _binding!!.textMember.setText(nickname+" 您好")
+                    }
+                } else {
+                    println("Request failed")
+                }
+            }
+        })
     }
 
     private fun showToast(message: String) {
