@@ -3,6 +3,7 @@ import torch
 import cv2
 from google.cloud import vision
 
+#---------------模型路徑----------需修改
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='D:/AI_And_App_Project/yoloV5/exp2/weights/best.pt',force_reload=True)
 
 img_width=800
@@ -33,7 +34,7 @@ for label, box in zip(labels, boxes):
         cv2.imwrite('cropped_image.jpg', cropped_image)
     else:
         break
-
+#---------------金鑰路徑----------需修改
 key_path="D:\Python\key.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = key_path
 #detect_text(sys.argv[1])cropped_image
