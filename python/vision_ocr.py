@@ -4,7 +4,7 @@ import cv2
 from google.cloud import vision
 
 #---------------模型路徑----------需修改
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='D:/AI_And_App_Project/yoloV5/exp2/weights/best.pt',force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='D:/AI_And_App_Project/yoloV5/exp2/weights/best.pt')
 
 img_width=800
 img_height=480
