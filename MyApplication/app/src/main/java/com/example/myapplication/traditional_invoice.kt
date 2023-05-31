@@ -5,25 +5,33 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.RectF
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Button
+import android.util.Log
+import android.util.Size
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.databinding.ActivityTraditionalInvoiceBinding
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.ByteArrayOutputStream
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.common.FileUtil
+import org.tensorflow.lite.support.common.ops.NormalizeOp
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.ResizeOp
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.IOException
+import java.nio.ByteBuffer
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class traditional_invoice : AppCompatActivity() {
 
@@ -31,9 +39,6 @@ class traditional_invoice : AppCompatActivity() {
     private  lateinit var  imageView: ImageView
     lateinit var imageUri: Uri
     lateinit var outputImage: File
-
-    private val modelPath = "best-fp16.tflite"
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +73,9 @@ class traditional_invoice : AppCompatActivity() {
                 val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
                 imageView.setImageBitmap(rotateIfRequired(bitmap))
 
+                val file = File(externalCacheDir, "output_image.jpg")
                 /*
                 val client = OkHttpClient()
-                val file = File(externalCacheDir, "output_image.jpg")
 
                 val requestBody: RequestBody = MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -97,9 +102,77 @@ class traditional_invoice : AppCompatActivity() {
                         }
                     }
                 })
+
+                try {
+                    val tfliteModel: ByteBuffer = FileUtil.loadMappedFile(this, "best-fp16.tflite")
+                    val tflite = Interpreter(tfliteModel, Interpreter.Options())
+                    val associatedAxisLabels = FileUtil.loadLabels(this, "labels.txt")
+                    val OUTPUT_SIZE = intArrayOf(1, 6300, 85)
+                    val INPNUT_SIZE = Size(416, 416)
+
+                    var yolov5sTfliteInput: TensorImage
+                    val imageProcessor: ImageProcessor = ImageProcessor.Builder()
+                        .add(ResizeOp(INPNUT_SIZE.getHeight(), INPNUT_SIZE.getWidth(), ResizeOp.ResizeMethod.BILINEAR))
+                        .add(NormalizeOp(0f, 255f))
+                        .build()
+                    yolov5sTfliteInput = TensorImage(DataType.FLOAT32)
+                    yolov5sTfliteInput.load(bitmap)
+                    yolov5sTfliteInput = imageProcessor.process(yolov5sTfliteInput)
+
+                    val probabilityBuffer = TensorBuffer.createFixedSize(OUTPUT_SIZE, DataType.FLOAT32)
+                    tflite.run(yolov5sTfliteInput.buffer, probabilityBuffer.buffer)
+
+                    val recognitionArray = probabilityBuffer.floatArray
+
+                    val allRecognitions = ArrayList<Recognition>()
+                    for (i in 0 until OUTPUT_SIZE[1]) {
+                        val gridStride = i * OUTPUT_SIZE[2]
+                        // 由於 YOLOv5 在導出 TFLite 時將輸出除以了圖像大小，因此這裡需要乘回去
+                        val x = recognitionArray[0 + gridStride] * INPNUT_SIZE.getWidth()
+                        val y = recognitionArray[1 + gridStride] * INPNUT_SIZE.getHeight()
+                        val w = recognitionArray[2 + gridStride] * INPNUT_SIZE.getWidth()
+                        val h = recognitionArray[3 + gridStride] * INPNUT_SIZE.getHeight()
+                        val xmin = (x - w / 2.0f).coerceAtLeast(0F).toInt()
+                        val ymin = (y - h / 2.0f).coerceAtLeast(0F).toInt()
+                        val xmax = (x + w / 2.0f).coerceAtMost(416F).toInt()
+                        val ymax = (y + h / 2.0f).coerceAtMost(416F).toInt()
+                        val confidence = recognitionArray[4 + gridStride]
+
+                        val classScores: FloatArray = Arrays.copyOfRange(
+                            recognitionArray,
+                            5 + gridStride,
+                            OUTPUT_SIZE.get(2) + gridStride
+                        )
+
+                        // 找到最大分數對應的類別標籤
+                        var labelId = 0
+                        var maxLabelScores = 0.0f
+                        for (j in classScores.indices) {
+                            if (classScores[j] > maxLabelScores) {
+                                maxLabelScores = classScores[j]
+                                labelId = j
+                            }
+                        }
+
+                        // 創建 Recognition 物件並將結果加入到 allRecognitions 列表中
+                        val r = Recognition(
+                            labelId,
+                            "",
+                            maxLabelScores,
+                            confidence,
+                            RectF(xmin.toFloat(), ymin.toFloat(), xmax.toFloat(), ymax.toFloat())
+                        )
+                        allRecognitions.add(r)
+                    }
+                    Log.i("tfliteSupport", "recognize data size: "+allRecognitions.size);
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
                 */
             }
         }
+
+
 
     private fun rotateIfRequired(bitmap: Bitmap): Bitmap {
         val exif = ExifInterface(outputImage.path)
