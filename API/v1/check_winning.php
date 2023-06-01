@@ -46,7 +46,26 @@ if($accept){
         http_response_code(200);
         echo json_encode($message);
         exit;
+    }else{ // 若查詢結果有資料
+        while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+            $dataarray[]=$row; // 將資料加入陣列中  
+            $super_special= $row['super_special'];
+            $special= $row['special'];
+
+            $head[3];
+            $head1= $row['head1'];
+            $head2= $row['head2'];
+            $head3= $row['head3'];
+            $head[0]=$head1;
+            $head[1]=$head2;
+            $head[2]=$head3;
+        }
     }
+    $awards = array(10000000,2000000,200000, 40000, 10000, 4000, 1000, 200);
+    $link->close(); // 關閉資料庫連結
+    $win = 0;
+    $winning_amount=0;
+
 
     if(strlen($invoice_number)==10){
         //發票號碼含英文
@@ -58,6 +77,30 @@ if($accept){
             http_response_code(200);
             echo json_encode($message);
             exit();
+        }else{
+            $invoice_number = substr($invoice_number, -8);
+            if ($invoice_number == $super_special){
+                # 對中特別獎
+                $win = 1;
+                $winning_amount=$awards[0];
+            }
+            if ($invoice_number == $special){
+                 # 對中特獎
+                 $win = 1;
+                 $winning_amount=$awards[1];
+            }
+            for($i=0;$i<3;$i++){ # 頭獎號碼
+                $trace = 7;
+                for($a=-3;$a>=-8;$a--){
+                    $sub_invoice_number = substr($invoice_number, $a);
+                    $sub_head = substr($head[$i], $a);
+                    if ($sub_invoice_number == $sub_head){
+                        $win = 1;
+                        $winning_amount=$awards[$trace];
+                   }
+                   $trace--;
+                }
+            }
         } 
     }else if(strlen($invoice_number)==8){
         //發票號碼只有數字
@@ -69,6 +112,29 @@ if($accept){
             http_response_code(200);
             echo json_encode($message);
             exit();
+        } else{
+            if ($invoice_number == $super_special){
+                # 對中特別獎
+                $win = 1;
+                $winning_amount=$awards[0];
+            }
+            if ($invoice_number == $special){
+                 # 對中特獎
+                $win = 1;
+                $winning_amount=$awards[1];
+            }
+            for($i=0;$i<3;$i++){ # 頭獎號碼
+                $trace = 7;
+                for($a=-3;$a>=-8;$a--){
+                    $sub_invoice_number = substr($invoice_number, $a);
+                    $sub_head = substr($head[$i], $a);
+                    if ($sub_invoice_number == $sub_head){
+                        $win = 1;
+                        $winning_amount=$awards[$trace];
+                   }
+                   $trace--;
+                }
+            }
         } 
     }else if(strlen($invoice_number)==3){
         //發票號碼只有末三碼
@@ -80,6 +146,27 @@ if($accept){
             http_response_code(200);
             echo json_encode($message);
             exit();
+        } else{
+            $sub_super_special = substr($super_special, -3);
+            if($invoice_number==$sub_super_special){
+                $win = 2;
+                $winning_amount=$awards[0];
+                $return_for_user = $super_special;
+            }
+            $sub_special = substr($special, -3);
+            if($invoice_number==$sub_special){
+                $win = 2;
+                $winning_amount=$awards[1];
+                $return_for_user = $special;
+            }
+            for($i=0;$i<3;$i++){ # 頭獎號碼
+                $sub_head = substr($head[$i], -3);
+                if ($invoice_number == $sub_head){
+                    $win = 2;
+                    $winning_amount=$awards[7];
+                    $return_for_user = $head[$i];
+                }
+            }
         } 
     }else{
         //不接受的格式
@@ -89,33 +176,13 @@ if($accept){
         echo json_encode($message);
         exit();
     }
-    if($amount > 0){ // 若查詢結果有資料
-        while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
-            $dataarray[]=$row; // 將資料加入陣列中  
-            $period= $row['period'];
-            $period= $row['period'];
-            $period= $row['period'];
-            $period= $row['period'];
-            $period= $row['period'];
-            $period= $row['period'];
-            $period= $row['period'];
-        }
-        
-    }
-    $link->close(); // 關閉資料庫連結
-    /*
 
-    $messageArr = array();
-    $dataarray = array();
-    $link->close(); // 關閉資料庫連結
-    $amount = $result->num_rows; // 取得查詢結果的列數
+    $dataarray = array(
+        "win" => $win,
+        "winning_amount" => $winning_amount,
+        "return_for_user" => $return_for_user
+    );
 
-    if($result->num_rows > 0){ // 若查詢結果有資料
-        while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
-            $dataarray[]=$row; // 將資料加入陣列中         
-        }
-    }
-*/
     $message = returnmsg($dataarray, "200", "Success",$amount); // 呼叫 returnmsg 函式，回傳訊息
     http_response_code(200); // 設定 HTTP 狀態碼為 200
     echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出

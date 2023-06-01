@@ -18,7 +18,7 @@ https://aiappproject.docs.apiary.io/
 
 4.掃描電子發票QR code 
 
-5.AI辨傳統痛發票 (待補)
+5.AI辨傳統發票 (待補)
 
 6.消費模式分析 (待補)
 
