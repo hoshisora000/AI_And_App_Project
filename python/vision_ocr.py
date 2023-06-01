@@ -41,7 +41,7 @@ for label, box in zip(labels, boxes):
 key_path="D:\Python\key.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = key_path
 """
-#-------------調整
+#-------------調整-----------------
 key_path="key.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = key_path
 #detect_text(sys.argv[1])cropped_image
