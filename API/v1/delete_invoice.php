@@ -73,4 +73,19 @@ function returnmsg($dataarray, $re_code, $re_msg,$amount)
     $messageArr["status"] = $datetime; // 設定回傳訊息的狀態部分為包含相關資訊的陣列
     return $messageArr; // 回傳完整的訊息陣列
 }
+// 記錄錯誤訊息的函式
+function wh_log($log_msg)
+{
+
+    $log_time = date('Y-m-d H:i:s');
+    $log_filename = "error_log";
+    $log_msg = '[' . $log_time . '] ' . $log_msg;
+
+    if (!file_exists($log_filename)) {
+        // 建立資料夾
+        mkdir($log_filename, 0777, true); // mkdir(pathname[, mode[, recursive[, context]]])
+    }
+    $log_file_data = $log_filename . '/log_' . date('m-d-H-i-s') . '.log';
+    file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
+}
 ?>
