@@ -88,10 +88,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     public fun get_data_invoice () : String{
-        return data_invoice
+        var temp = ""
+        try {
+            temp = data_invoice
+        }catch (e: Exception){
+
+        }
+        return temp
     }
 
     public fun get_data_realtime () : String{
-        return data_realtime
+        var temp = ""
+        try {
+            temp = data_realtime
+        }catch (e: Exception){
+
+        }
+        return temp
     }
 }
