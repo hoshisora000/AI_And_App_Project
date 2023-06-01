@@ -38,48 +38,7 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
 
         if(Firebase.auth.currentUser != null){
-            val mainActivity = activity as MainActivity
-            val options = arrayOfNulls<String>(10)
-            var y = mainActivity.get_data_realtime().substring(0,4).toInt()
-            var m :Int
-            if(mainActivity.get_data_realtime().substring(5,7).toInt() % 2 == 0){
-                m = mainActivity.get_data_realtime().substring(5,7).toInt() - 1
-            }else{
-                m = mainActivity.get_data_realtime().substring(5,7).toInt()
-            }
-            for (i in 0 until 10 ){
-                options[i] = y.toString()+"年 "
-                if(m<10) options[i] += "0"
-                options[i] += m.toString()+"月-"
-                if(m+1<10) options[i] += "0"
-                options[i] += (m+1).toString()+"月"
-                if(m==1){
-                    y -= 1
-                    m = 11
-                }else{
-                    m -= 2
-                }
-            }
-            requireActivity().runOnUiThread {
-                val adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, options){
-                    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                        val view = super.getDropDownView(position, convertView, parent)
-                        val textView = view.findViewById<TextView>(android.R.id.text1)
-                        textView.textSize = 18f // 設定字體大小為 18sp，你可以根據需要調整數值
-                        return view
-                    }
-                }
-                _binding!!.spinner.adapter = adapter
-                re_btn(root)
-            }
-
-            _binding!!.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    re_btn_UI()
-                }
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-            }
+            set_spinner(root)
 
             //更新按鈕
             _binding!!.btReData.setOnClickListener{
@@ -211,6 +170,51 @@ class DashboardFragment : Fragment() {
                 }
                 _binding!!.linearLayout.addView(btn_invoice[i])
                 re_btn_UI()
+            }
+        }
+    }
+
+    private fun set_spinner(root: View){
+        val mainActivity = activity as MainActivity
+        val options = arrayOfNulls<String>(10)
+        var y = mainActivity.get_data_realtime().substring(0,4).toInt()
+        var m :Int
+        if(mainActivity.get_data_realtime().substring(5,7).toInt() % 2 == 0){
+            m = mainActivity.get_data_realtime().substring(5,7).toInt() - 1
+        }else{
+            m = mainActivity.get_data_realtime().substring(5,7).toInt()
+        }
+        for (i in 0 until 10 ){
+            options[i] = y.toString()+"年 "
+            if(m<10) options[i] += "0"
+            options[i] += m.toString()+"月-"
+            if(m+1<10) options[i] += "0"
+            options[i] += (m+1).toString()+"月"
+            if(m==1){
+                y -= 1
+                m = 11
+            }else{
+                m -= 2
+            }
+        }
+        requireActivity().runOnUiThread {
+            val adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, options){
+                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getDropDownView(position, convertView, parent)
+                    val textView = view.findViewById<TextView>(android.R.id.text1)
+                    textView.textSize = 18f // 設定字體大小為 18sp，你可以根據需要調整數值
+                    return view
+                }
+            }
+            _binding!!.spinner.adapter = adapter
+            re_btn(root)
+        }
+
+        _binding!!.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                re_btn_UI()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
     }
