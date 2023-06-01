@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import com.example.myapplication.MainActivity
 import com.example.myapplication.SignUp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -64,6 +65,9 @@ class HomeFragment : Fragment() {
         _binding!!.butLogout.setOnClickListener {
             auth.signOut()
             updateUI_home(Firebase.auth.currentUser)
+
+            val mainActivity = activity as MainActivity
+            mainActivity.re_data_invoice()
         }
 
         _binding!!.butLogin.setOnClickListener {
@@ -79,6 +83,9 @@ class HomeFragment : Fragment() {
                     if (it.isSuccessful){
                         val user = auth.currentUser
                         updateUI_home(Firebase.auth.currentUser)
+
+                        val mainActivity = activity as MainActivity
+                        mainActivity.re_data_invoice()
                     }else{
                         showToast("登入失敗，帳號或密碼錯誤")
                         updateUI_home(null)
