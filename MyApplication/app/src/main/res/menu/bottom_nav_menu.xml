@@ -16,4 +16,9 @@
         android:icon="@android:drawable/ic_menu_upload"
         android:title="新增" />
 
+    <item
+        android:id="@+id/navigation_award"
+        android:icon="@drawable/baseline_monetization_on_24"
+        android:title="兌獎" />
+
 </menu>

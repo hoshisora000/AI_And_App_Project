@@ -22,4 +22,10 @@
         android:name="com.example.myapplication.ui.notifications.NotificationsFragment"
         android:label="新增"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_award"
+        android:name="com.example.myapplication.ui.award.AwardFragment"
+        android:label="兌獎"
+        tools:layout="@layout/fragment_award" />
 </navigation>
