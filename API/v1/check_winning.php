@@ -36,7 +36,7 @@ if($accept){
 
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
-    $link->close(); // 關閉資料庫連結
+    
 
     if ($amount <=0) {
         $accept = false;
@@ -50,10 +50,37 @@ if($accept){
 
     if(strlen($invoice_number)==10){
         //發票號碼含英文
+        $number_pattern_10 = "/^[A-Z][A-Z]\d{8}$/"; //使用正規表示法檢查發票格式
+        if (!preg_match($number_pattern_10,$invoice_number)){
+            //不接受的格式
+            $dataarray = [];
+            $message = returnmsg($dataarray, "400", "發票號碼格式錯誤"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
+            http_response_code(200);
+            echo json_encode($message);
+            exit();
+        } 
     }else if(strlen($invoice_number)==8){
         //發票號碼只有數字
+        $number_pattern_8 = "/^\d{8}$/"; //使用正規表示法檢查發票格式
+        if (!preg_match($number_pattern_8,$invoice_number)){
+            //不接受的格式
+            $dataarray = [];
+            $message = returnmsg($dataarray, "400", "發票號碼格式錯誤"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
+            http_response_code(200);
+            echo json_encode($message);
+            exit();
+        } 
     }else if(strlen($invoice_number)==3){
         //發票號碼只有末三碼
+        $number_pattern_3 = "/^\d{3}$/"; //使用正規表示法檢查發票格式
+        if (!preg_match($number_pattern_3,$invoice_number)){
+            //不接受的格式
+            $dataarray = [];
+            $message = returnmsg($dataarray, "400", "發票號碼格式錯誤"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
+            http_response_code(200);
+            echo json_encode($message);
+            exit();
+        } 
     }else{
         //不接受的格式
         $dataarray = [];
@@ -62,8 +89,20 @@ if($accept){
         echo json_encode($message);
         exit();
     }
+    if($amount > 0){ // 若查詢結果有資料
+        while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+            $dataarray[]=$row; // 將資料加入陣列中  
+            $period= $row['period'];
+            $period= $row['period'];
+            $period= $row['period'];
+            $period= $row['period'];
+            $period= $row['period'];
+            $period= $row['period'];
+            $period= $row['period'];
+        }
         
-
+    }
+    $link->close(); // 關閉資料庫連結
     /*
 
     $messageArr = array();
