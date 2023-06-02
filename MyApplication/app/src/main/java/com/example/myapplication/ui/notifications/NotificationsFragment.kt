@@ -56,8 +56,6 @@ class NotificationsFragment : Fragment() {
         val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
         user_id = Firebase.auth.currentUser?.uid.toString()
 
-
-
         bt_click(root) //按下按鈕
 
         return root

@@ -99,22 +99,14 @@ class HomeFragment : Fragment() {
 
     private fun updateUI_home(user:FirebaseUser?){
         if(user != null){
-            _binding!!.editTextTextPassword.visibility = View.GONE
-            _binding!!.editTextTextEmailAddress.visibility = View.GONE
-            _binding!!.butLogin.visibility = View.GONE
-            _binding!!.butSignup.visibility = View.GONE
-            _binding!!.textView8.visibility = View.GONE
+            _binding!!.linearLogin.visibility = View.GONE
 
             _binding!!.butLogout.visibility = View.VISIBLE
             _binding!!.textMember.visibility =View.VISIBLE
 
             getmember()
         }else{
-            _binding!!.editTextTextPassword.visibility = View.VISIBLE
-            _binding!!.editTextTextEmailAddress.visibility = View.VISIBLE
-            _binding!!.butLogin.visibility = View.VISIBLE
-            _binding!!.butSignup.visibility = View.VISIBLE
-            _binding!!.textView8.visibility = View.VISIBLE
+            _binding!!.linearLogin.visibility = View.VISIBLE
 
             _binding!!.butLogout.visibility = View.GONE
             _binding!!.textMember.visibility =View.GONE

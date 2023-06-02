@@ -38,56 +38,22 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
 
         if(Firebase.auth.currentUser != null){
-            val mainActivity = activity as MainActivity
-            val options = arrayOfNulls<String>(10)
-            var y = mainActivity.get_data_realtime().substring(0,4).toInt()
-            var m :Int
-            if(mainActivity.get_data_realtime().substring(5,7).toInt() % 2 == 0){
-                m = mainActivity.get_data_realtime().substring(5,7).toInt() - 1
-            }else{
-                m = mainActivity.get_data_realtime().substring(5,7).toInt()
-            }
-            for (i in 0 until 10 ){
-                options[i] = y.toString()+"年 "
-                if(m<10) options[i] += "0"
-                options[i] += m.toString()+"月-"
-                if(m+1<10) options[i] += "0"
-                options[i] += (m+1).toString()+"月"
-                if(m==1){
-                    y -= 1
-                    m = 11
-                }else{
-                    m -= 2
-                }
-            }
-            requireActivity().runOnUiThread {
-                val adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, options){
-                    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                        val view = super.getDropDownView(position, convertView, parent)
-                        val textView = view.findViewById<TextView>(android.R.id.text1)
-                        textView.textSize = 18f // 設定字體大小為 18sp，你可以根據需要調整數值
-                        return view
-                    }
-                }
-                _binding!!.spinner.adapter = adapter
-                re_btn(root)
-            }
-
-            _binding!!.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    re_btn_UI()
-                }
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-            }
+            set_spinner(root)
 
             //更新按鈕
             _binding!!.btReData.setOnClickListener{
                 _binding!!.linearLayout.removeAllViews() //移除目前所有按鈕
                 val mainActivity = activity as MainActivity
-                mainActivity.re_data_invoice()
-                re_btn(root) //重新取得資料更新
-                re_btn_UI()
+
+                Thread{
+                    mainActivity.re_data_invoice()
+                    mainActivity.progressbar()
+                    Thread.sleep(500)
+                    re_btn(root) //重新取得資料更新
+                    Thread.sleep(500)
+                    mainActivity.progressbar()
+                    re_btn_UI()
+                }.start()
             }
 
         }else{
@@ -162,6 +128,7 @@ class DashboardFragment : Fragment() {
                 }
                 btn_invoice[i]?.setBackgroundResource(R.color.LightCoral)
                 btn_invoice[i]?.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                btn_invoice[i]?.visibility =View.GONE
 
                 //設定按鈕監聽行為
                 btn_invoice[i]?.setOnClickListener {
@@ -173,33 +140,46 @@ class DashboardFragment : Fragment() {
                                 .setTitle("警告")
                                 .setMessage("確定要刪除發票資料嗎？")
                                 .setPositiveButton("確定") { dialog, which ->
-                                    val formBody = FormBody.Builder()
-                                        .add("uid",Firebase.auth.currentUser?.uid.toString())
-                                        .add("invoice_number",""+en+num)
-                                        .build()
+                                    Thread{
+                                        val formBody = FormBody.Builder()
+                                            .add("uid",Firebase.auth.currentUser?.uid.toString())
+                                            .add("invoice_number",""+en+num)
+                                            .build()
 
-                                    val request = Request.Builder()
-                                        .url("https://hoshisora000.lionfree.net/api/delete_invoice.php")
-                                        .post(formBody)
-                                        .build()
+                                        val request = Request.Builder()
+                                            .url("https://hoshisora000.lionfree.net/api/delete_invoice.php")
+                                            .post(formBody)
+                                            .build()
 
-                                    OkHttpClient().newCall(request).enqueue(object : Callback {
-                                        override fun onFailure(call: Call, e: IOException) {
-                                            e.printStackTrace()
-                                        }
-                                        override fun onResponse(call: Call, response: Response) {
-                                            if (response.isSuccessful) {
-                                                requireActivity().runOnUiThread {
-                                                    btn_invoice[i]?.visibility = View.GONE
-                                                }
-                                                val responseBody = response.body?.string()
-                                                println(responseBody)
-                                            } else {
-                                                println("Request failed")
+                                        OkHttpClient().newCall(request).enqueue(object : Callback {
+                                            override fun onFailure(call: Call, e: IOException) {
+                                                e.printStackTrace()
                                             }
+                                            override fun onResponse(call: Call, response: Response) {
+                                                if (response.isSuccessful) {
+                                                    requireActivity().runOnUiThread {
+                                                        _binding!!.linearLayout.removeAllViews()
 
-                                        }
-                                    })
+                                                    }
+                                                    Thread{
+                                                        mainActivity.re_data_invoice()
+                                                        mainActivity.progressbar()
+                                                        Thread.sleep(500)
+                                                        re_btn(root) //重新取得資料更新
+                                                        Thread.sleep(500)
+                                                        mainActivity.progressbar()
+                                                        re_btn_UI()
+                                                    }.start()
+                                                    val responseBody = response.body?.string()
+                                                    println(responseBody)
+                                                } else {
+                                                    println("Request failed")
+                                                }
+
+                                            }
+                                        })
+
+                                    }.start()
                                 }
                                 .setNegativeButton("取消") { dialog, which ->
 
@@ -210,7 +190,51 @@ class DashboardFragment : Fragment() {
                         }.show()
                 }
                 _binding!!.linearLayout.addView(btn_invoice[i])
+            }
+        }
+    }
+
+    private fun set_spinner(root: View){
+        val mainActivity = activity as MainActivity
+        val options = arrayOfNulls<String>(10)
+        var y = mainActivity.get_data_realtime().substring(0,4).toInt()
+        var m :Int
+        if(mainActivity.get_data_realtime().substring(5,7).toInt() % 2 == 0){
+            m = mainActivity.get_data_realtime().substring(5,7).toInt() - 1
+        }else{
+            m = mainActivity.get_data_realtime().substring(5,7).toInt()
+        }
+        for (i in 0 until 10 ){
+            options[i] = y.toString()+"年 "
+            if(m<10) options[i] += "0"
+            options[i] += m.toString()+"月-"
+            if(m+1<10) options[i] += "0"
+            options[i] += (m+1).toString()+"月"
+            if(m==1){
+                y -= 1
+                m = 11
+            }else{
+                m -= 2
+            }
+        }
+        requireActivity().runOnUiThread {
+            val adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, options){
+                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getDropDownView(position, convertView, parent)
+                    val textView = view.findViewById<TextView>(android.R.id.text1)
+                    textView.textSize = 18f // 設定字體大小為 18sp，你可以根據需要調整數值
+                    return view
+                }
+            }
+            _binding!!.spinner.adapter = adapter
+            re_btn(root)
+        }
+
+        _binding!!.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 re_btn_UI()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
     }

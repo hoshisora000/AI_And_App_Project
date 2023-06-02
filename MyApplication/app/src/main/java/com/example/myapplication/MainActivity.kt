@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -50,8 +51,14 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        re_data_invoice()
-        re_data_realtime()
+        Thread{
+            re_data_invoice()
+            re_data_realtime()
+            progressbar()
+            Thread.sleep(1500)
+            progressbar()
+        }.start()
+
 
         //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -105,5 +112,19 @@ class MainActivity : AppCompatActivity() {
 
         }
         return temp
+    }
+
+    public fun progressbar(){
+        this.runOnUiThread {
+            if(binding!!.progressBar2.visibility == View.VISIBLE){
+                binding!!.progressBar2.visibility = View.GONE
+                binding!!.butFask1.visibility = View.GONE
+                binding!!.butFask2.visibility = View.GONE
+            }else{
+                binding!!.progressBar2.visibility = View.VISIBLE
+                binding!!.butFask1.visibility = View.VISIBLE
+                binding!!.butFask2.visibility = View.VISIBLE
+            }
+        }
     }
 }
