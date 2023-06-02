@@ -30,7 +30,7 @@ if($accept){
     $link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
 
     if ($link->connect_error) {
-    wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
+        wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
     }
     $sql1 = "SELECT * FROM `winning_numbers` WHERE `period`='" . $period ."'";
 
