@@ -44,9 +44,16 @@ class DashboardFragment : Fragment() {
             _binding!!.btReData.setOnClickListener{
                 _binding!!.linearLayout.removeAllViews() //移除目前所有按鈕
                 val mainActivity = activity as MainActivity
-                mainActivity.re_data_invoice()
-                re_btn(root) //重新取得資料更新
-                re_btn_UI()
+
+                Thread{
+                    mainActivity.re_data_invoice()
+                    mainActivity.progressbar()
+                    Thread.sleep(500)
+                    re_btn(root) //重新取得資料更新
+                    Thread.sleep(500)
+                    mainActivity.progressbar()
+                    re_btn_UI()
+                }.start()
             }
 
         }else{
@@ -121,6 +128,7 @@ class DashboardFragment : Fragment() {
                 }
                 btn_invoice[i]?.setBackgroundResource(R.color.LightCoral)
                 btn_invoice[i]?.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                btn_invoice[i]?.visibility =View.GONE
 
                 //設定按鈕監聽行為
                 btn_invoice[i]?.setOnClickListener {
@@ -132,33 +140,46 @@ class DashboardFragment : Fragment() {
                                 .setTitle("警告")
                                 .setMessage("確定要刪除發票資料嗎？")
                                 .setPositiveButton("確定") { dialog, which ->
-                                    val formBody = FormBody.Builder()
-                                        .add("uid",Firebase.auth.currentUser?.uid.toString())
-                                        .add("invoice_number",""+en+num)
-                                        .build()
+                                    Thread{
+                                        val formBody = FormBody.Builder()
+                                            .add("uid",Firebase.auth.currentUser?.uid.toString())
+                                            .add("invoice_number",""+en+num)
+                                            .build()
 
-                                    val request = Request.Builder()
-                                        .url("https://hoshisora000.lionfree.net/api/delete_invoice.php")
-                                        .post(formBody)
-                                        .build()
+                                        val request = Request.Builder()
+                                            .url("https://hoshisora000.lionfree.net/api/delete_invoice.php")
+                                            .post(formBody)
+                                            .build()
 
-                                    OkHttpClient().newCall(request).enqueue(object : Callback {
-                                        override fun onFailure(call: Call, e: IOException) {
-                                            e.printStackTrace()
-                                        }
-                                        override fun onResponse(call: Call, response: Response) {
-                                            if (response.isSuccessful) {
-                                                requireActivity().runOnUiThread {
-                                                    btn_invoice[i]?.visibility = View.GONE
-                                                }
-                                                val responseBody = response.body?.string()
-                                                println(responseBody)
-                                            } else {
-                                                println("Request failed")
+                                        OkHttpClient().newCall(request).enqueue(object : Callback {
+                                            override fun onFailure(call: Call, e: IOException) {
+                                                e.printStackTrace()
                                             }
+                                            override fun onResponse(call: Call, response: Response) {
+                                                if (response.isSuccessful) {
+                                                    requireActivity().runOnUiThread {
+                                                        _binding!!.linearLayout.removeAllViews()
 
-                                        }
-                                    })
+                                                    }
+                                                    Thread{
+                                                        mainActivity.re_data_invoice()
+                                                        mainActivity.progressbar()
+                                                        Thread.sleep(500)
+                                                        re_btn(root) //重新取得資料更新
+                                                        Thread.sleep(500)
+                                                        mainActivity.progressbar()
+                                                        re_btn_UI()
+                                                    }.start()
+                                                    val responseBody = response.body?.string()
+                                                    println(responseBody)
+                                                } else {
+                                                    println("Request failed")
+                                                }
+
+                                            }
+                                        })
+
+                                    }.start()
                                 }
                                 .setNegativeButton("取消") { dialog, which ->
 
@@ -169,7 +190,6 @@ class DashboardFragment : Fragment() {
                         }.show()
                 }
                 _binding!!.linearLayout.addView(btn_invoice[i])
-                re_btn_UI()
             }
         }
     }
