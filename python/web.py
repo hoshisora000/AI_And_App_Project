@@ -14,8 +14,10 @@ UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# 設定圖片暫存路徑
+app.config['UPLOAD_FOLDER'] =  './upload'
 app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024  # 25MB
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -26,10 +28,14 @@ def upload_file():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 
+            # 將接受到的檔案存到設定的路徑
+            file.save(os.path.join(app.config['UPLOAD_FOLDER']+"/"+
                                    filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            print(os.path.join(app.config['UPLOAD_FOLDER']+"/"+
+                                   filename))
+            import vision_ocr
+            return vision_ocr.return_resule()
+            
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -43,5 +49,5 @@ def uploaded_file(filename):
                                filename)
 if __name__ == '__main__':
     
-    #app.run(ssl_context=('cert.pem', 'key.pem'),debug=True,host="0.0.0.0", port=3000)
-    app.run(ssl_context='adhoc',debug=True,host="0.0.0.0", port=3000)
+    app.run(ssl_context=('cert.pem', 'key.pem'),debug=True,host="0.0.0.0", port=3000)
+    #app.run(ssl_context='adhoc',debug=True,host="0.0.0.0", port=3000)
