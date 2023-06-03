@@ -75,14 +75,13 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginBottom="40dp">
+                android:gravity="center_horizontal">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -128,15 +127,396 @@
                     android:background="@drawable/round_back">
 
                     <RelativeLayout
+                        android:id="@+id/layout_codabar_bt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <ImageView
+                            android:id="@+id/icon6"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/shape_circle"
-                            android:padding="12dp"/>
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon6"
+                            android:text="手機載具條碼"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_codabar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_back_white"
+                        android:padding="20dp"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/image_barcode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/text_barcode_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:background="@drawable/round_back">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_member_bt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/icon1"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon1"
+                            android:text="修改會員資料"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_member"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_back_white"
+                        android:padding="30dp"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-修改會員資料-"
+                            android:textSize="30dp"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/text_member_nickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:hint="暱稱"
+                            android:layout_marginTop="20dp"/>
+
+                        <EditText
+                            android:id="@+id/text_member_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:hint="手機載具"
+                            android:layout_marginTop="20dp"/>
+
+                        <Button
+                            android:id="@+id/bt_layout_member"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_circle"
+                            android:layout_marginTop="20dp"
+                            android:text="送出"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:background="@drawable/round_back">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_memberpassword_bt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/icon4"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon4"
+                            android:text="修改會員密碼"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_memberpassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_back_white"
+                        android:padding="30dp"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-修改會員密碼-"
+                            android:textSize="30dp"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/text_member_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="新密碼"
+                            android:layout_marginTop="20dp"
+                            android:inputType="textPassword" />
+
+                        <EditText
+                            android:id="@+id/text_member_passwordcheck"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="確認密碼"
+                            android:layout_marginTop="20dp"
+                            android:inputType="textPassword" />
+
+                        <Button
+                            android:id="@+id/bt_layout_memberpassword"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_circle"
+                            android:layout_marginTop="20dp"
+                            android:text="送出"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:background="@drawable/round_back">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_invoiceaward_bt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/icon5"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon5"
+                            android:text="我的中獎發票"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:background="@drawable/round_back">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_appupdate_bt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/icon2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon2"
+                            android:text="軟體更新"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:background="@drawable/round_back">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_appver_bt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/icon3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon3"
+                            android:text="軟體版本"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:background="@drawable/round_back">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_info_bt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/icon7"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/shape_circle"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_notifications_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_toEndOf="@id/icon7"
+                            android:text="關於"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/baseline_chevron_right_24" />
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <Button
@@ -144,11 +524,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
-                    android:layout_marginVertical="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
                     android:text="登出"
-                    android:background="@drawable/shape_circle"/>
+                    android:background="@drawable/shape_circle" />
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
