@@ -31,10 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var data_invoice : String
     private lateinit var data_realtime : String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
-
         val viewModelProvider = ViewModelProvider(this)
 
         super.onCreate(savedInstanceState)
@@ -42,23 +40,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
+        Thread{
+            re_data_invoice()
+            re_data_realtime()
+            progressbar()
+            Thread.sleep(3000)
+            progressbar()
+        }.start()
 
+        val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications ,R.id.navigation_award
             )
         )
-
-        Thread{
-            re_data_invoice()
-            re_data_realtime()
-            progressbar()
-            Thread.sleep(1500)
-            progressbar()
-        }.start()
-
 
         //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
