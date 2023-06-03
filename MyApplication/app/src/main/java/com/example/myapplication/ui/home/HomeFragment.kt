@@ -123,25 +123,30 @@ class HomeFragment : Fragment() {
             }
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
-                    println(jsonObject)
+                    try {
+                        val responseBody = response.body?.string()
+                        val gson = Gson()
+                        val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
+                        println(jsonObject)
 
-                    val nickname = jsonObject
-                        .getAsJsonArray("data")[0]
-                        .asJsonObject
-                        .get("nickname")
-                        .asString
+                        val nickname = jsonObject
+                            .getAsJsonArray("data")[0]
+                            .asJsonObject
+                            .get("nickname")
+                            .asString
 
-                    val mobile_barcode = jsonObject
-                        .getAsJsonArray("data")[0]
-                        .asJsonObject
-                        .get("mobile_barcode")
-                        .asString
+                        val mobile_barcode = jsonObject
+                            .getAsJsonArray("data")[0]
+                            .asJsonObject
+                            .get("mobile_barcode")
+                            .asString
 
-                    requireActivity().runOnUiThread {
-                        _binding!!.textMember.setText(nickname+" 您好")
+                        requireActivity().runOnUiThread {
+                            _binding!!.textMember.setText(nickname+" 您好")
+                        }
+
+                    }catch (e:Exception){
+
                     }
                 } else {
                     println("Request failed")
