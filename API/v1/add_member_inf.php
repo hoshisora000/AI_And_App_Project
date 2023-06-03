@@ -21,7 +21,7 @@ if ($_POST["nickname"] != "") {
 }
 if ($_POST["mobile_barcode"] != "") {
     $mobile_barcode = $_POST["mobile_barcode"];
-} else { //不接受沒有資料的內容
+} else { //如果為空就設定為空
     $mobile_barcode = NULL;
 }
 

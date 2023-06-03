@@ -9,12 +9,13 @@ import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/home/ai_app_project_ncue'
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
+#UPLOAD_FOLDER = '/home/ai_app_project_ncue/up_img'
+UPLOAD_FOLDER = ''
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024  # 16MB
+app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024  # 25MB
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -41,4 +42,6 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0", port=3000)
+    
+    #app.run(ssl_context=('cert.pem', 'key.pem'),debug=True,host="0.0.0.0", port=3000)
+    app.run(ssl_context='adhoc',debug=True,host="0.0.0.0", port=3000)
