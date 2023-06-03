@@ -330,18 +330,18 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
                             android:hint="新密碼"
-                            android:layout_marginTop="20dp"/>
+                            android:layout_marginTop="20dp"
+                            android:inputType="textPassword" />
 
                         <EditText
                             android:id="@+id/text_member_passwordcheck"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
                             android:hint="確認密碼"
-                            android:layout_marginTop="20dp"/>
+                            android:layout_marginTop="20dp"
+                            android:inputType="textPassword" />
 
                         <Button
                             android:id="@+id/bt_layout_memberpassword"

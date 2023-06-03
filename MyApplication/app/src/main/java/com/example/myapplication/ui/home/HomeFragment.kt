@@ -77,18 +77,6 @@ class HomeFragment : Fragment() {
             mainActivity.re_data_invoice()
         }
 
-        _binding!!.layoutCodabarBt.setOnClickListener {
-            if(membercodabar == ""){
-                showToast("尚未設定手機載具")
-            }else{
-                if(_binding!!.layoutCodabar.visibility == View.GONE){
-                    _binding!!.layoutCodabar.visibility = View.VISIBLE
-                }else{
-                    _binding!!.layoutCodabar.visibility = View.GONE
-                }
-            }
-        }
-
         _binding!!.butLogin.setOnClickListener {
             val email = _binding!!.editTextTextEmailAddress.text.toString()
             val password = _binding!!.editTextTextPassword.text.toString()
@@ -109,6 +97,18 @@ class HomeFragment : Fragment() {
                         showToast("登入失敗，帳號或密碼錯誤")
                         updateUI_home(null)
                     }
+                }
+            }
+        }
+
+        _binding!!.layoutCodabarBt.setOnClickListener {
+            if(membercodabar == ""){
+                showToast("尚未設定手機載具")
+            }else{
+                if(_binding!!.layoutCodabar.visibility == View.GONE){
+                    _binding!!.layoutCodabar.visibility = View.VISIBLE
+                }else{
+                    _binding!!.layoutCodabar.visibility = View.GONE
                 }
             }
         }
@@ -136,8 +136,6 @@ class HomeFragment : Fragment() {
                         .add("nickname", _binding!!.textMemberNickname.text.toString())
                         .add("mobile_barcode", _binding!!.textMemberCode.text.toString() )
                         .build()
-
-                    println("777 "+_binding!!.textMemberCode.text.toString())
 
                     OkHttpClient().newCall(Request.Builder()
                         .url("https://hoshisora000.lionfree.net/api/update_member_inf.php")
@@ -177,15 +175,40 @@ class HomeFragment : Fragment() {
         }
 
         _binding!!.btLayoutMemberpassword.setOnClickListener {
-            Thread{
-                val mainActivity = activity as MainActivity
-                mainActivity.progressbar()
-                Thread.sleep(1000)
-                requireActivity().runOnUiThread {
-                    _binding!!.layoutMemberpassword.visibility =View.GONE
-                }
-                mainActivity.progressbar()
-            }.start()
+            if(_binding!!.textMemberPassword.text.toString() == ""){
+                showToast("請輸入新密碼")
+            }else if(_binding!!.textMemberPasswordcheck.text.toString() == ""){
+                showToast("請重新輸入密碼")
+            }else if(_binding!!.textMemberPassword.text.toString() != _binding!!.textMemberPasswordcheck.text.toString()){
+                showToast("密碼輸入不一致")
+            }else{
+                Thread{
+                    val mainActivity = activity as MainActivity
+                    mainActivity.progressbar()
+
+                    val user = FirebaseAuth.getInstance().currentUser
+                    user?.updatePassword(_binding!!.textMemberPassword.text.toString())?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // 密碼修改成功
+                            showToast("密碼修改成功")
+
+                            _binding!!.textMemberPassword.setText("")
+                            _binding!!.textMemberPasswordcheck.setText("")
+                        } else {
+                            // 密碼修改失敗
+                            showToast("登入超時，請重新登入以修改密碼")
+                            _binding!!.textMemberPassword.setText("")
+                            _binding!!.textMemberPasswordcheck.setText("")
+                        }
+                    }
+
+                    Thread.sleep(1000)
+                    requireActivity().runOnUiThread {
+                        _binding!!.layoutMemberpassword.visibility =View.GONE
+                    }
+                    mainActivity.progressbar()
+                }.start()
+            }
         }
 
         _binding!!.layoutAppupdateBt.setOnClickListener{
