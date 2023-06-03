@@ -365,7 +365,7 @@
                     android:background="@drawable/round_back">
 
                     <RelativeLayout
-                        android:id="@+id/layout_invoiceaward_bt"
+                        android:id="@+id/layout_appnews_bt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -383,7 +383,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:layout_toEndOf="@id/icon5"
-                            android:text="我的中獎發票"
+                            android:text="訊息公告"
                             android:textStyle="bold" />
 
                         <ImageView

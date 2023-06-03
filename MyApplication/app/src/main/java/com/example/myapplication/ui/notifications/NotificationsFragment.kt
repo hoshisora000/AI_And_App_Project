@@ -120,6 +120,7 @@ class NotificationsFragment : Fragment() {
         val bt_creat = root.findViewById<Button>(R.id.bt_create)
         val bt_create_ai = root.findViewById<Button>(R.id.bt_create_ai)
         val bt_create_qr = root.findViewById<Button>(R.id.bt_create_qr)
+        val bt_cloudpair = root.findViewById<Button>(R.id.bt_cloudpair)
 
         val bundle_creat = Bundle()
         val intent_creat = Intent(requireActivity(),create::class.java)
@@ -154,6 +155,33 @@ class NotificationsFragment : Fragment() {
             }else{
                 showToast("請先登入帳號")
             }
+        }
+
+        bt_cloudpair.setOnClickListener {
+            val formBody = FormBody.Builder()
+                .add("uid", Firebase.auth.currentUser?.uid.toString())
+                .add("period","1120304")
+                .build()
+
+            val request = Request.Builder()
+                .url("https://hoshisora000.lionfree.net/api/check_invoice.php")
+                .post(formBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        println(responseBody)
+
+                    } else {
+                        println("Request failed")
+                    }
+                }
+            })
         }
     }
 

@@ -211,6 +211,10 @@ class HomeFragment : Fragment() {
             }
         }
 
+        _binding!!.layoutAppnewsBt.setOnClickListener {
+            showToast("暫無新訊息")
+        }
+
         _binding!!.layoutAppupdateBt.setOnClickListener{
             showToast("您已擁有最新版本")
         }
