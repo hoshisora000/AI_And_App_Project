@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.databinding.FragmentDashboardBinding
 import com.example.myapplication.R
 import android.widget.LinearLayout
@@ -14,8 +13,6 @@ import java.io.IOException
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.myapplication.MainActivity
-import com.example.myapplication.ui.home.HomeFragment
-import com.example.myapplication.ui.home.HomeViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson

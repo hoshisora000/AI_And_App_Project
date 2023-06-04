@@ -5,12 +5,8 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.DatePicker
 import android.widget.EditText
 import com.example.myapplication.databinding.ActivityCreateBinding
-import com.example.myapplication.databinding.ActivityScanBinding
-import java.text.SimpleDateFormat
 import java.util.*
 
 class create : AppCompatActivity() {
