@@ -1,6 +1,7 @@
 # AI&App_Project
-預計結合人工智慧以及APP程式設計製作一個專題
 
+
+結合人工智慧以及APP程式設計製作的專題(發票存摺)
 
 
 API說明文件請參閱:
@@ -18,7 +19,7 @@ https://aiappproject.docs.apiary.io/
 
 4.掃描電子發票QR code 
 
-5.AI辨傳統發票 (待補)
+5.AI辨傳統發票
 
 6.消費模式分析 (待補)
 
