@@ -135,8 +135,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_notifications_black_24dp" />
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_qr_code_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -199,8 +199,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_notifications_black_24dp" />
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_folder_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -286,8 +286,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_notifications_black_24dp" />
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_security_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -373,8 +373,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_notifications_black_24dp" />
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_chat_bubble_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -414,8 +414,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_notifications_black_24dp" />
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_update_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -455,7 +455,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_notifications_black_24dp" />
 
                         <TextView
@@ -496,8 +496,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/shape_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_notifications_black_24dp" />
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_info_24"/>
 
                         <TextView
                             android:layout_width="wrap_content"

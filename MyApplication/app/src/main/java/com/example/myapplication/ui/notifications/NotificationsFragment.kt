@@ -205,7 +205,9 @@ class NotificationsFragment : Fragment() {
                                 val  record = jsonObject.get("record").asInt
 
                                 if(record == 0){
-                                    showToast("沒中")
+                                    requireActivity().runOnUiThread{
+                                        showToast("本期 03月-04月 都沒中")
+                                    }
                                 }else{
                                     var temp = "\n"
                                     for(i in 0 until record){
