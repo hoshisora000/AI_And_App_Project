@@ -2,6 +2,7 @@ import os
 import torch
 import cv2
 from google.cloud import vision
+import re
 
 def ocr(path):
     #---------------模型路徑----------需修改
@@ -73,6 +74,9 @@ def ocr(path):
 
     show=response.full_text_annotation.text.replace('\n', '').replace('\r', '').replace(' ', '')
     print(show)
+    m1 = re.match (r'^[A-Z][A-Z]\d{8}$', show)
+    if not m1:
+        return "tryagain"
     return show
 
 
