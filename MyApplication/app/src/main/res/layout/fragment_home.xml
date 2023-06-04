@@ -97,10 +97,9 @@
                         android:id="@+id/imageView2"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
-                        android:background="@drawable/shape_circle"
-                        android:src="@drawable/baseline_person_24" />
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/_135715"/>
 
                     <TextView
                         android:id="@+id/text_member"

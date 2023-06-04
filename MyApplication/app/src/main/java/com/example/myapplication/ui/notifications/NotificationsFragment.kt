@@ -21,9 +21,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.myapplication.*
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 
 //import maulik.barcodescanner.databinding.ActivityMainBinding
 
@@ -111,6 +114,21 @@ class NotificationsFragment : Fragment() {
             bundle_creat!!.putString("Scan_month",data?.getStringExtra("Scan_month"))
             bundle_creat!!.putString("Scan_day",data?.getStringExtra("Scan_day"))
             bundle_creat!!.putString("Scan_cost",data?.getStringExtra("Scan_cost"))
+
+            intent_creat.putExtras(bundle_creat)
+            requestDataLauncher.launch(intent_creat)
+        }
+    }
+
+    private val requesttra = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if(it.resultCode == AppCompatActivity.RESULT_OK){
+            val data = it.data
+
+            val bundle_creat = Bundle()
+            val intent_creat = Intent(requireActivity(),create::class.java)
+            bundle_creat!!.putString("Scan_en",data?.getStringExtra("Scan_en"))
+            bundle_creat!!.putString("Scan_num",data?.getStringExtra("Scan_num"))
+
             intent_creat.putExtras(bundle_creat)
             requestDataLauncher.launch(intent_creat)
         }
@@ -141,7 +159,7 @@ class NotificationsFragment : Fragment() {
         //傳統發票掃描按鈕
         bt_create_ai.setOnClickListener {
             intent_traditional_invoice.putExtras(bundle_creat)
-            requestDataLauncher.launch(intent_traditional_invoice)
+            requesttra.launch(intent_traditional_invoice)
         }
 
         //電子發票掃描按鈕
@@ -158,30 +176,74 @@ class NotificationsFragment : Fragment() {
         }
 
         bt_cloudpair.setOnClickListener {
-            val formBody = FormBody.Builder()
-                .add("uid", Firebase.auth.currentUser?.uid.toString())
-                .add("period","1120304")
-                .build()
+            if(Firebase.auth.currentUser == null){
+                showToast("請先登入帳號")
+            }else{
+                val formBody = FormBody.Builder()
+                    .add("uid", Firebase.auth.currentUser?.uid.toString())
+                    .add("period","1120304")
+                    .build()
 
-            val request = Request.Builder()
-                .url("https://hoshisora000.lionfree.net/api/check_invoice.php")
-                .post(formBody)
-                .build()
+                val request = Request.Builder()
+                    .url("https://hoshisora000.lionfree.net/api/check_invoice.php")
+                    .post(formBody)
+                    .build()
 
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                }
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body?.string()
-                        println(responseBody)
-
-                    } else {
-                        println("Request failed")
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        e.printStackTrace()
                     }
-                }
-            })
+                    override fun onResponse(call: Call, response: Response) {
+                        if (response.isSuccessful) {
+                            try {
+                                val responseBody = response.body?.string()
+                                println(responseBody)
+
+                                val gson = Gson()
+                                val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
+
+                                val  record = jsonObject.get("record").asInt
+
+                                if(record == 0){
+                                    showToast("沒中")
+                                }else{
+                                    var temp = "\n"
+                                    for(i in 0 until record){
+                                        val invoice_number = jsonObject
+                                            .getAsJsonArray("data")[i]
+                                            .asJsonObject
+                                            .get("invoice_number")
+                                            .asString
+
+                                        val winning_amount = jsonObject
+                                            .getAsJsonArray("data")[i]
+                                            .asJsonObject
+                                            .get("winning_amount")
+                                            .asString
+
+                                        temp += "發票："+invoice_number+"  中了"+winning_amount+"元"
+                                        if(i != record-1) temp += "\n\n"
+                                    }
+
+                                    requireActivity().runOnUiThread{
+                                        AlertDialog.Builder(requireContext())
+                                            .setTitle("本期 03月-04月 中獎了!!!")
+                                            .setMessage(temp)
+                                            .setNegativeButton("取消") { dialog, which ->
+
+                                            }.show()
+                                    }
+                                }
+
+                            }catch (e:Exception){
+                                println(e)
+                            }
+                        } else {
+                            println("Request failed")
+                        }
+                    }
+                })
+            }
         }
     }
 

@@ -5,32 +5,23 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.graphics.RectF
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.util.Size
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.example.myapplication.databinding.ActivityTraditionalInvoiceBinding
-import org.tensorflow.lite.DataType
-import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.FileUtil
-import org.tensorflow.lite.support.common.ops.NormalizeOp
-import org.tensorflow.lite.support.image.ImageProcessor
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.image.ops.ResizeOp
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import okhttp3.*
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
-import java.nio.ByteBuffer
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.concurrent.TimeUnit
 
 
 class traditional_invoice : AppCompatActivity() {
@@ -49,8 +40,13 @@ class traditional_invoice : AppCompatActivity() {
 
         imageView = binding!!.imageView
 
-        binding!!.button.setOnClickListener {
-            outputImage = File(externalCacheDir, "output_image.jpg")
+        val bundle = intent.extras
+        val intent = Intent(this,MainActivity::class.java)
+
+        outputImage = File(externalCacheDir, "output_image.jpg")
+
+        binding!!.btTraOpencamera.setOnClickListener {
+
             if (outputImage.exists()) {
                 outputImage.delete()
             }
@@ -64,6 +60,23 @@ class traditional_invoice : AppCompatActivity() {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
             takePhotoLauncher.launch(intent)
         }
+
+        binding!!.btTraSend.setOnClickListener {
+            if(binding!!.textView9.text == "請先啟動相機進行拍攝"){
+                Toast.makeText(this, "請先拍攝照片", Toast.LENGTH_SHORT).show()
+            }else if(binding!!.textView9.text.substring(8,9)=="t"){
+                Toast.makeText(this, "請重新拍攝", Toast.LENGTH_SHORT).show()
+            }else{
+
+                val value = binding!!.textView9.text.substring(6,16)
+                bundle!!.putString("Scan",value)
+                bundle!!.putString("Scan_en",value.substring(0,2))
+                bundle!!.putString("Scan_num",value.substring(2,10))
+                intent.putExtras(bundle)
+                setResult(RESULT_OK,intent)
+                finish()
+            }
+        }
     }
 
     private val takePhotoLauncher =
@@ -73,102 +86,36 @@ class traditional_invoice : AppCompatActivity() {
                 val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
                 imageView.setImageBitmap(rotateIfRequired(bitmap))
 
-                val file = File(externalCacheDir, "output_image.jpg")
-                /*
-                val client = OkHttpClient()
+                val client = OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .build()
 
                 val requestBody: RequestBody = MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", file.name, file.asRequestBody("image/jpeg".toMediaTypeOrNull()))
+                    .addFormDataPart("file", outputImage.name, outputImage.asRequestBody())
                     .build()
 
                 val request: Request = Request.Builder()
-                    .url("https://34.150.40.187:8000/upload")
+                    .url("http://34.96.209.0:3000/")
                     .post(requestBody)
                     .build()
 
                 client.newCall(request).enqueue(object : Callback {
                     override fun onFailure(call: Call, e: IOException) {
-                        // 处理请求失败的情况
                         e.printStackTrace()
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        // 处理请求成功的情况
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
-                            // 处理服务器响应的数据
                             println(responseBody)
+
+                            val textresult = findViewById<TextView>(R.id.textView9)
+                            textresult.setText("辨識結果為："+responseBody)
                         }
                     }
                 })
-
-                try {
-                    val tfliteModel: ByteBuffer = FileUtil.loadMappedFile(this, "best-fp16.tflite")
-                    val tflite = Interpreter(tfliteModel, Interpreter.Options())
-                    val associatedAxisLabels = FileUtil.loadLabels(this, "labels.txt")
-                    val OUTPUT_SIZE = intArrayOf(1, 6300, 85)
-                    val INPNUT_SIZE = Size(416, 416)
-
-                    var yolov5sTfliteInput: TensorImage
-                    val imageProcessor: ImageProcessor = ImageProcessor.Builder()
-                        .add(ResizeOp(INPNUT_SIZE.getHeight(), INPNUT_SIZE.getWidth(), ResizeOp.ResizeMethod.BILINEAR))
-                        .add(NormalizeOp(0f, 255f))
-                        .build()
-                    yolov5sTfliteInput = TensorImage(DataType.FLOAT32)
-                    yolov5sTfliteInput.load(bitmap)
-                    yolov5sTfliteInput = imageProcessor.process(yolov5sTfliteInput)
-
-                    val probabilityBuffer = TensorBuffer.createFixedSize(OUTPUT_SIZE, DataType.FLOAT32)
-                    tflite.run(yolov5sTfliteInput.buffer, probabilityBuffer.buffer)
-
-                    val recognitionArray = probabilityBuffer.floatArray
-
-                    val allRecognitions = ArrayList<Recognition>()
-                    for (i in 0 until OUTPUT_SIZE[1]) {
-                        val gridStride = i * OUTPUT_SIZE[2]
-                        // 由於 YOLOv5 在導出 TFLite 時將輸出除以了圖像大小，因此這裡需要乘回去
-                        val x = recognitionArray[0 + gridStride] * INPNUT_SIZE.getWidth()
-                        val y = recognitionArray[1 + gridStride] * INPNUT_SIZE.getHeight()
-                        val w = recognitionArray[2 + gridStride] * INPNUT_SIZE.getWidth()
-                        val h = recognitionArray[3 + gridStride] * INPNUT_SIZE.getHeight()
-                        val xmin = (x - w / 2.0f).coerceAtLeast(0F).toInt()
-                        val ymin = (y - h / 2.0f).coerceAtLeast(0F).toInt()
-                        val xmax = (x + w / 2.0f).coerceAtMost(416F).toInt()
-                        val ymax = (y + h / 2.0f).coerceAtMost(416F).toInt()
-                        val confidence = recognitionArray[4 + gridStride]
-
-                        val classScores: FloatArray = Arrays.copyOfRange(
-                            recognitionArray,
-                            5 + gridStride,
-                            OUTPUT_SIZE.get(2) + gridStride
-                        )
-
-                        // 找到最大分數對應的類別標籤
-                        var labelId = 0
-                        var maxLabelScores = 0.0f
-                        for (j in classScores.indices) {
-                            if (classScores[j] > maxLabelScores) {
-                                maxLabelScores = classScores[j]
-                                labelId = j
-                            }
-                        }
-
-                        // 創建 Recognition 物件並將結果加入到 allRecognitions 列表中
-                        val r = Recognition(
-                            labelId,
-                            "",
-                            maxLabelScores,
-                            confidence,
-                            RectF(xmin.toFloat(), ymin.toFloat(), xmax.toFloat(), ymax.toFloat())
-                        )
-                        allRecognitions.add(r)
-                    }
-                    Log.i("tfliteSupport", "recognize data size: "+allRecognitions.size);
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                */
             }
         }
 
@@ -193,6 +140,4 @@ class traditional_invoice : AppCompatActivity() {
         bitmap.recycle()
         return rotatedBitmap
     }
-
-
 }
