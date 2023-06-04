@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "c502f881-a2f1-4241-8695-ec4aab208d13",
+		"name": "ai+app_project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add_invoice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data; boundary={boundary value}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+							"type": "text"
+						},
+						{
+							"key": "invoice_number",
+							"value": "ZZ12345678",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2023-05-22",
+							"type": "text"
+						},
+						{
+							"key": "time",
+							"value": "10:22:33",
+							"type": "text"
+						},
+						{
+							"key": "money",
+							"value": "542",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/add_invoice.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"add_invoice.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add_member_inf",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "hAonkFh8d3WLtpebxHtJKlQD5w92",
+							"type": "text"
+						},
+						{
+							"key": "nickname",
+							"value": "7666",
+							"type": "text"
+						},
+						{
+							"key": "mobile_barcode",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/add_member_inf.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"add_member_inf.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "query_invoice",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/query_invoice.php?uid=O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"query_invoice.php"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_invoice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data; boundary={boundary value}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+							"type": "text"
+						},
+						{
+							"key": "invoice_number",
+							"value": "ZZ12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/delete_invoice.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"delete_invoice.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "query_member",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/query_member.php?uid=O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"query_member.php"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_member_inf",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
+							"type": "text"
+						},
+						{
+							"key": "nickname",
+							"value": "OwO",
+							"type": "text"
+						},
+						{
+							"key": "mobile_barcode",
+							"value": "7777777",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/update_member_inf.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"update_member_inf.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check_winning",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/check_winning.php?period=1120304&invoice_number=51055355",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"check_winning.php"
+					],
+					"query": [
+						{
+							"key": "period",
+							"value": "1120304"
+						},
+						{
+							"key": "invoice_number",
+							"value": "51055355"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_time.php",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/get_time.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"get_time.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check_invoice.php",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "hAonkFh8d3WLtpebxHtJKlQD5w92",
+							"type": "text"
+						},
+						{
+							"key": "period",
+							"value": "1120304",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/check_invoice.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"check_invoice.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GCP_傳統發票辨識",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/D:/AI_And_App_Project/yoloV5/d/images/230529_1.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://34.96.209.0:3000/",
+					"protocol": "https",
+					"host": [
+						"34",
+						"96",
+						"209",
+						"0"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
