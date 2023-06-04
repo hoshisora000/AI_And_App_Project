@@ -8,6 +8,7 @@ Created on Wed May 31 10:51:11 2023
 import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import vision_ocr
 
 #UPLOAD_FOLDER = '/home/ai_app_project_ncue/up_img'
 UPLOAD_FOLDER = ''
@@ -33,8 +34,9 @@ def upload_file():
                                    filename))
             print(os.path.join(app.config['UPLOAD_FOLDER']+"/"+
                                    filename))
-            import vision_ocr
-            return vision_ocr.return_resule()
+            return vision_ocr.ocr(os.path.join(app.config['UPLOAD_FOLDER']+"/"+
+                                   filename))
+            
             
     return '''
     <!doctype html>

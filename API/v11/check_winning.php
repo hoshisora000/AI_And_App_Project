@@ -4,19 +4,19 @@ header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 js
 $accept = true; //如果接收資料格式正確才接收
 $error_msg = ""; //記錄錯誤訊息
 $date_pattern = "/^[1]\d{2}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/"; //使用正規表示法檢查日期格式
-
 //----------接收資料並檢查送進來的資料是否有問題--------------------//
+
 if ($_GET["period"] != "" && preg_match($date_pattern,$_GET["period"])){
     $period = $_GET["period"];
 } else { //不接受沒有資料的內容
     $accept = false;
-    $error_msg = "period資料為空或格式錯誤"; //記錄錯誤訊息 
+    $error_msg = "period資料為空或格式錯誤"; //錯誤訊息 
 }
 if ($_GET["invoice_number"] != "") {
     $invoice_number = $_GET["invoice_number"];
 } else { //不接受沒有資料的內容
     $accept = false;
-    $error_msg = "invoice_number資料為空"; //記錄錯誤訊息 
+    $error_msg = "invoice_number資料為空"; //錯誤訊息 
 }
 
 
@@ -30,36 +30,29 @@ if($accept){
     $link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
 
     if ($link->connect_error) {
-        // 如果連接失敗，呼叫函式將錯誤訊息記錄到伺服器中
-        wh_log("Connection failed: " . $link->connect_error);
-        // 回傳錯誤訊息，通知使用者
-        $dataarray = [];
-        $message = returnmsg($dataarray, "500", "內部伺服器錯誤"); //回傳錯誤代碼500，錯誤訊息:內部伺服器錯誤。
-        http_response_code(200);
-        echo json_encode($message);
-        //結束程式
-        exit();
+        wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
     }
-
-    //--------------查詢指定期數的中獎號碼------------------//
     $sql1 = "SELECT * FROM `winning_numbers` WHERE `period`='" . $period ."'";
+
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
     
-    if ($amount <=0) { // 查詢不到內容
+
+    if ($amount <=0) {
         $accept = false;
         $error_msg = "資料庫尚未新增該期內容或日期格式錯誤"; //錯誤訊息 
         $dataarray = [];
-        $message = returnmsg($dataarray, "400",  $error_msg); //回傳錯誤代碼500，錯誤訊息:資料庫尚未新增該期內容或日期格式錯誤。
+        $message = returnmsg($dataarray, "400",  $error_msg); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
         http_response_code(200);
         echo json_encode($message);
-        exit();
+        exit;
     }else{ // 若查詢結果有資料
         while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
             $dataarray[]=$row; // 將資料加入陣列中  
-            $super_special= $row['super_special']; // 特別獎
-            $special= $row['special']; // 特獎
-            $head[3]; // 頭獎有三個號碼
+            $super_special= $row['super_special'];
+            $special= $row['special'];
+
+            $head[3];
             $head1= $row['head1'];
             $head2= $row['head2'];
             $head3= $row['head3'];
@@ -68,18 +61,19 @@ if($accept){
             $head[2]=$head3;
         }
     }
+    $awards = array(10000000,2000000,200000, 40000, 10000, 4000, 1000, 200);
     $link->close(); // 關閉資料庫連結
+    $win = 0;
+    $winning_amount=0;
 
-    $awards = array(10000000,2000000,200000, 40000, 10000, 4000, 1000, 200); // 獎項對應的獎金
-    $win = 0; // 中獎代碼[0代表沒中獎1代表確定中了多少2代表三碼檢查有中獎(返回使用者中獎號碼)]
-    $winning_amount=0; //中獎金額
 
-    if(strlen($invoice_number)==10){ // 發票長度為10碼(2碼英文+8碼數字)
+    if(strlen($invoice_number)==10){
+        //發票號碼含英文
         $number_pattern_10 = "/^[A-Z][A-Z]\d{8}$/"; //使用正規表示法檢查發票格式
         if (!preg_match($number_pattern_10,$invoice_number)){
             //不接受的格式
             $dataarray = [];
-            $message = returnmsg($dataarray, "400", "發票號碼格式錯誤"); //回傳錯誤代碼400，錯誤訊息:發票號碼格式錯誤
+            $message = returnmsg($dataarray, "400", "發票號碼格式錯誤"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
             http_response_code(200);
             echo json_encode($message);
             exit();
@@ -96,20 +90,20 @@ if($accept){
                  $winning_amount=$awards[1];
             }
             for($i=0;$i<3;$i++){ # 頭獎號碼
-                for($a=-3;$a>=-8;$a--){ # 一獎到六獎
-                    // 依據規定檢查倒數N個號碼
+                $trace = 7;
+                for($a=-3;$a>=-8;$a--){
                     $sub_invoice_number = substr($invoice_number, $a);
                     $sub_head = substr($head[$i], $a);
-
                     if ($sub_invoice_number == $sub_head){
-                        # 號碼對中
-                        $win = 1; # 中獎代碼
-                        $winning_amount=$awards[($a+10)]; # 中獎金額
+                        $win = 1;
+                        $winning_amount=$awards[$trace];
                    }
+                   $trace--;
                 }
             }
         } 
-    }else if(strlen($invoice_number)==8){ // 發票長度為8碼(8碼數字)
+    }else if(strlen($invoice_number)==8){
+        //發票號碼只有數字
         $number_pattern_8 = "/^\d{8}$/"; //使用正規表示法檢查發票格式
         if (!preg_match($number_pattern_8,$invoice_number)){
             //不接受的格式
@@ -130,17 +124,20 @@ if($accept){
                 $winning_amount=$awards[1];
             }
             for($i=0;$i<3;$i++){ # 頭獎號碼
-                for($a=-3;$a>=-8;$a--){ # 一獎到六獎
+                $trace = 7;
+                for($a=-3;$a>=-8;$a--){
                     $sub_invoice_number = substr($invoice_number, $a);
                     $sub_head = substr($head[$i], $a);
                     if ($sub_invoice_number == $sub_head){
                         $win = 1;
-                        $winning_amount=$awards[(10+$a)];
+                        $winning_amount=$awards[$trace];
                    }
+                   $trace--;
                 }
             }
         } 
-    }else if(strlen($invoice_number)==3){ // 發票長度為3碼(末3碼數字)
+    }else if(strlen($invoice_number)==3){
+        //發票號碼只有末三碼
         $number_pattern_3 = "/^\d{3}$/"; //使用正規表示法檢查發票格式
         if (!preg_match($number_pattern_3,$invoice_number)){
             //不接受的格式

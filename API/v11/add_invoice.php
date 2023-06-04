@@ -3,6 +3,8 @@ header('Content-Type: application/json; charset=UTF-8'); //設定資料類型 js
 date_default_timezone_set("Asia/Taipei"); //設定時間時區
 
 $accept = true; //如果接收資料格式正確才接收
+$date_pattern = "/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"; //使用正規表示法檢查日期格式
+$time_pattern = "/^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/"; //使用正規表示法檢查時間格式
 $error_msg = ""; //記錄錯誤訊息
 
 //----------接收資料並檢查送進來的資料是否有問題-------------------//
@@ -10,20 +12,32 @@ if ($_POST["uid"] != "") {
     $uid = $_POST["uid"];
 } else { //不接受沒有資料的內容
     $accept = false;
-    $error_msg = "uid資料為空"; //記錄錯誤訊息
+    $error_msg = "uid資料為空"; //錯誤訊息
 }
-if ($_POST["nickname"] != "") {
-    $nickname = $_POST["nickname"];
+if ($_POST["invoice_number"] != "") {
+    $invoice_number = $_POST["invoice_number"];
 } else { //不接受沒有資料的內容
     $accept = false;
-    $error_msg = "nickname資料為空"; //記錄錯誤訊息
+    $error_msg = "invoice_number資料為空"; //錯誤訊息
 }
-if ($_POST["mobile_barcode"] != "") {
-    $mobile_barcode = $_POST["mobile_barcode"];
-} else { //如果為空就設定為空
-    $mobile_barcode = NULL;
+if ($_POST["date"] != "" && preg_match($date_pattern,$_POST["date"])) {
+    $date = $_POST["date"];
+} else { //不接受沒有資料的內容或格式錯誤
+    $accept = false;
+    $error_msg = "date資料為空或格式錯誤，輸入資料為:" . $_POST["date"]; //錯誤訊息
 }
-
+if ($_POST["time"] != "" && preg_match($time_pattern,$_POST["time"])) {
+    $time = $_POST["time"];
+} else { //不接受沒有資料的內容或格式錯誤
+    $accept = false;
+    $error_msg = "time資料為空或格式錯誤，輸入資料為:" . $_POST["time"]; //錯誤訊息
+}
+if ($_POST["money"] != "") {
+    $money = $_POST["money"]; 
+} else { //不接受沒有資料的內容ㄋ
+    $accept = false;
+    $error_msg = "money資料為空"; //錯誤訊息
+}
 
 if($accept){
     //-------------存取資料庫--------------//
@@ -34,33 +48,34 @@ if($accept){
     $link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
 
     if ($link->connect_error) {
-        // 如果連接失敗，呼叫函式將錯誤訊息記錄到伺服器中
         wh_log("Connection failed: " . $link->connect_error);
-        // 回傳錯誤訊息，通知使用者
-        $dataarray = [];
-        $message = returnmsg($dataarray, "500", "內部伺服器錯誤"); //回傳錯誤代碼500，錯誤訊息:內部伺服器錯誤。
-        http_response_code(200);
-        echo json_encode($message);
-        //結束程式
-        exit();
     }
 
-    //-------------檢查使用者ID是否重複-------------//
-    $sql1 = "SELECT * FROM `member` WHERE `uid`= '" . $uid ."'";
+    //-------------檢查發票號碼是否重複-------------//
+
+    // 檢查發票號碼是否已存在於資料庫中
+    $sql1 = "SELECT `uid`, `invoice_number`, `date`, `time`, `money` FROM `member_invoice` WHERE `uid`= '" . $uid ."'AND `invoice_number` = '" . $invoice_number ."'";
     $result1 = mysqli_query($link,$sql1);
+
     $row = mysqli_num_rows($result1) ;
-    if ($row==0) { // 使用者ID未重複
+    if ($row==0) { 
         //--------上傳資料到資料庫--------//
-        $sql = "INSERT INTO `member`(`uid`, `nickname`, `mobile_barcode`) VALUES ('" . $uid . "', '" . $nickname . "','" . $mobile_barcode . "') ";
+        $sql = "INSERT INTO `member_invoice` (`uid`, `invoice_number`, `date`, `time`, `money`) VALUES ('" . $uid . "', '" . $invoice_number . "', '" . $date . "', '" . $time . "', '" . $money . "') ";
         try {
             $result = $link->query($sql);
-            // 回傳成功的訊息
-            $dataarray = array(
-                "uid" => $uid,
-            );
-            // 呼叫函示產生回傳訊息
-            $message = returnmsg($dataarray, "201", "會員資料新增成功");
+            if ($_POST["uid"] != "") {
+                // 回傳成功的訊息
+                $dataarray = array(
+                    "uid" => $uid,
+                    "invoice_number" => $invoice_number
+                );
+                $message = returnmsg($dataarray, "201", "Success");
 
+            } else {
+                // 回傳錯誤的訊息
+                $dataarray = [];
+                $message = returnmsg($dataarray, "404", "Error");
+            }
             mysqli_close($link); // 關閉資料庫連結
             http_response_code(200);
             echo json_encode($message);
@@ -71,9 +86,9 @@ if($accept){
             http_response_code(200);
             echo json_encode($message);
         }
-    }else{ // 使用者ID重複
+    }else{            
         $dataarray = [];
-        $message = returnmsg($dataarray, "400", "無法重複新增會員資料"); //回傳錯誤代碼404，錯誤訊息:重複的發票號碼。
+        $message = returnmsg($dataarray, "404", "重複的發票號碼"); //回傳錯誤代碼404，錯誤訊息:重複的發票號碼。
         http_response_code(200);
         echo json_encode($message);
 
@@ -92,8 +107,8 @@ if($accept){
 // 產生回傳訊息的函式
 function returnmsg($dataarray, $re_code, $re_msg)
 {
-    // 建立回傳訊息的JSON內容
-    $messageArr["data"] = $dataarray;
+
+    $messageArr["data"] = $dataarray; // 設定回傳訊息的資料部分為查詢結果的陣列
     $messageArr["status"] = array();
     $today = date('Y-m-d-H:i:s(p)'); // 取得當前日期和時間
     $datetime = array(
@@ -108,12 +123,14 @@ function returnmsg($dataarray, $re_code, $re_msg)
 // 記錄錯誤訊息的函式
 function wh_log($log_msg)
 {
-    // 將錯誤訊息寫成紀錄檔儲存到伺服器上。
+
     $log_time = date('Y-m-d H:i:s');
     $log_filename = "error_log";
     $log_msg = '[' . $log_time . '] ' . $log_msg;
+
     if (!file_exists($log_filename)) {
-        mkdir($log_filename, 0777, true);
+        // 建立資料夾
+        mkdir($log_filename, 0777, true); // mkdir(pathname[, mode[, recursive[, context]]])
     }
     $log_file_data = $log_filename . '/log_' . date('m-d-H-i-s') . '.log';
     file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
