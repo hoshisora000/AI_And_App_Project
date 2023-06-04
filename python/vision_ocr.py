@@ -22,6 +22,8 @@ def ocr(path):
     labels = results.xyxyn[0][:, -1].cpu().numpy()  # 標籤(label)
     boxes = results.xyxyn[0][:, :-1].cpu().numpy()  # 座標
 
+    accept = True
+
     # 印出標籤(label)和座標
     for label, box in zip(labels, boxes):
         x, y, w, h ,i = box
@@ -34,8 +36,13 @@ def ocr(path):
             bottom = h*img_height
             cropped_image = frame[int(top):int(bottom), int(left):int(right)]
             cv2.imwrite('cropped_image.jpg', cropped_image)
+            accept=False
         else:
             break
+
+    if(accept):
+        return "notfound"
+    
     #---------------金鑰路徑----------需修改
     """
     #-------本機測試------
