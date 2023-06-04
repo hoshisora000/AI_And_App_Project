@@ -15,8 +15,6 @@ if ($_POST["invoice_number"] != "") {
     $accept = false;
     $error_msg = "invoice_number資料為空"; //錯誤訊息
 }
-echo $_POST["uid"];
-echo $accept;
 
 if($accept){
     //-------------存取資料庫--------------//
