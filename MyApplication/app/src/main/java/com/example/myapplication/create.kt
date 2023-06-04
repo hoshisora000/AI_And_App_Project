@@ -33,10 +33,12 @@ class create : AppCompatActivity() {
         if(bundle?.getString("Scan_en") != null){
             binding!!.editTextTextPersonName.setText(bundle?.getString("Scan_en"))
             binding!!.editTextTextPersonName2.setText(bundle?.getString("Scan_num"))
+        }
+
+        if(bundle?.getString("Scan_year") != null){
             binding!!.editTextTextPersonName3.setText(bundle?.getString("Scan_year")+"-"+bundle?.getString("Scan_month")+"-"+bundle?.getString("Scan_day"))
             binding!!.editTextTextPersonName4.setText(bundle?.getString("Scan_cost"))
         }
-
         //回傳表單資料
         binding.btCreateSubmit.setOnClickListener {
             bundle!!.putString("data_en",binding!!.editTextTextPersonName.text.toString())
