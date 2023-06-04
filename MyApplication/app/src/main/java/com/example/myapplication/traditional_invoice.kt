@@ -64,7 +64,7 @@ class traditional_invoice : AppCompatActivity() {
         binding!!.btTraSend.setOnClickListener {
             if(binding!!.textView9.text == "請先啟動相機進行拍攝"){
                 Toast.makeText(this, "請先拍攝照片", Toast.LENGTH_SHORT).show()
-            }else if(binding!!.textView9.text.substring(8,9)=="t"){
+            }else if(binding!!.textView9.text == "辨識結果為：notfound" || binding!!.textView9.text == "辨識結果為：tryagain"){
                 Toast.makeText(this, "請重新拍攝", Toast.LENGTH_SHORT).show()
             }else{
 

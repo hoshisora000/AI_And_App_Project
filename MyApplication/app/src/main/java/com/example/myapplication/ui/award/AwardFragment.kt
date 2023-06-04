@@ -91,9 +91,9 @@ class AwardFragment : Fragment() {
                                             _binding!!.textAward.setTextSize(15f)
                                             _binding!!.textAward.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                                             if (winning_amount == "10000000") {
-                                                _binding!!.textAward.setText("可能中獎!!!\n\n 特別獎: $return_for_user \n\n全部號碼相同及中 1000萬")
+                                                _binding!!.textAward.setText("可能中獎!!!\n\n 特別獎: $return_for_user \n\n全部號碼相同即中 1000萬")
                                             } else if (winning_amount == "2000000") {
-                                                _binding!!.textAward.setText("可能中獎!!!\n\n 特獎: $return_for_user \n\n全部號碼相同及中 200萬")
+                                                _binding!!.textAward.setText("可能中獎!!!\n\n 特獎: $return_for_user \n\n全部號碼相同即中 200萬")
                                             } else {
                                                 _binding!!.textAward.setText("中獎了!!!\n\n 頭獎: $return_for_user \n\n全中20萬 中七碼4萬 中六碼1萬\n中五碼4千 中四碼1千 中三碼2百")
                                             }
