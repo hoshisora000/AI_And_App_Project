@@ -58,8 +58,6 @@ class DashboardFragment : Fragment() {
             _binding!!.spinner.visibility = View.GONE
         }
 
-
-        //showToast(mainActivity.ttt)
         return root
     }
 
@@ -178,10 +176,8 @@ class DashboardFragment : Fragment() {
                                                 } else {
                                                     println("Request failed")
                                                 }
-
                                             }
                                         })
-
                                     }.start()
                                 }
                                 .setNegativeButton("取消") { dialog, which ->
@@ -197,6 +193,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    //下拉式選單資料更新
     private fun set_spinner(root: View){
         val mainActivity = activity as MainActivity
         val options = arrayOfNulls<String>(10)
@@ -233,6 +230,7 @@ class DashboardFragment : Fragment() {
             re_btn(root)
         }
 
+        //下拉式選單監聽行為
         _binding!!.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 re_btn_UI()
@@ -242,6 +240,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    //更新按鈕顯示
     private fun re_btn_UI(){
         try {
             for(i in 0 until btn_invoice.size){

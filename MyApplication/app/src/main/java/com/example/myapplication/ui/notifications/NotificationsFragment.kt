@@ -28,8 +28,6 @@ import com.example.myapplication.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
-//import maulik.barcodescanner.databinding.ActivityMainBinding
-
 class NotificationsFragment : Fragment() {
 
     private val client = OkHttpClient()
@@ -47,7 +45,6 @@ class NotificationsFragment : Fragment() {
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,10 +53,11 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        //取得登入資料
         user_id = Firebase.auth.currentUser?.uid.toString()
 
-        bt_click(root) //按下按鈕
+        //按鈕監聽設定
+        bt_click(root)
 
         return root
     }
@@ -102,6 +100,7 @@ class NotificationsFragment : Fragment() {
         }
     }
 
+    //接收QRcode掃描結果並將資料送到creat表單
     private val requestScan = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == AppCompatActivity.RESULT_OK){
             val data = it.data
@@ -120,6 +119,7 @@ class NotificationsFragment : Fragment() {
         }
     }
 
+    //接收傳統發票辨識結果並將資料送到creat表單
     private val requesttra = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == AppCompatActivity.RESULT_OK){
             val data = it.data
@@ -134,6 +134,7 @@ class NotificationsFragment : Fragment() {
         }
     }
 
+    //設定按紐監聽事件
     private fun bt_click(root:View){
         val bt_creat = root.findViewById<Button>(R.id.bt_create)
         val bt_create_ai = root.findViewById<Button>(R.id.bt_create_ai)
@@ -144,7 +145,6 @@ class NotificationsFragment : Fragment() {
         val intent_creat = Intent(requireActivity(),create::class.java)
         val intent_scane = Intent(requireActivity(),Scan::class.java)
         val intent_traditional_invoice = Intent(requireActivity(),traditional_invoice::class.java)
-
 
         //手動更新按鈕 開啟creat表單並要求回傳質
         bt_creat.setOnClickListener {
@@ -158,8 +158,12 @@ class NotificationsFragment : Fragment() {
 
         //傳統發票掃描按鈕
         bt_create_ai.setOnClickListener {
-            intent_traditional_invoice.putExtras(bundle_creat)
-            requesttra.launch(intent_traditional_invoice)
+            if(Firebase.auth.currentUser != null){
+                intent_traditional_invoice.putExtras(bundle_creat)
+                requesttra.launch(intent_traditional_invoice)
+            }else{
+                showToast("請先登入帳號")
+            }
         }
 
         //電子發票掃描按鈕
@@ -175,6 +179,7 @@ class NotificationsFragment : Fragment() {
             }
         }
 
+        //線上兌獎功能按鈕
         bt_cloudpair.setOnClickListener {
             if(Firebase.auth.currentUser == null){
                 showToast("請先登入帳號")
@@ -202,8 +207,10 @@ class NotificationsFragment : Fragment() {
                                 val gson = Gson()
                                 val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
 
+                                //取得共中獎幾張發票
                                 val  record = jsonObject.get("record").asInt
 
+                                //沒有中獎
                                 if(record == 0){
                                     requireActivity().runOnUiThread{
                                         showToast("本期 03月-04月 都沒中")
@@ -227,6 +234,7 @@ class NotificationsFragment : Fragment() {
                                         if(i != record-1) temp += "\n\n"
                                     }
 
+                                    //中獎結果彈窗
                                     requireActivity().runOnUiThread{
                                         AlertDialog.Builder(requireContext())
                                             .setTitle("本期 03月-04月 中獎了!!!")
@@ -236,7 +244,6 @@ class NotificationsFragment : Fragment() {
                                             }.show()
                                     }
                                 }
-
                             }catch (e:Exception){
                                 println(e)
                             }

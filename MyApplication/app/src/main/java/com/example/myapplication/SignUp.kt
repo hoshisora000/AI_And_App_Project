@@ -25,17 +25,19 @@ class SignUp : AppCompatActivity() {
         auth = Firebase.auth
         val but = findViewById<Button>(R.id.but_login_send)
 
+        //註冊送出按鈕
         but.setOnClickListener {
             val nickname = findViewById<EditText>(R.id.text_nickname).text.toString()
             val email = findViewById<EditText>(R.id.editTextTextEmailAddress_signup).text.toString()
             val password = findViewById<EditText>(R.id.editTextTextPassword_signup).text.toString()
             val reenterpassword = findViewById<EditText>(R.id.editTextTextPassword_signup_reenter).text.toString()
 
+            //判斷是否輸入內容是否有空
             if(nickname.isNullOrEmpty()){
                 Toast.makeText(this, "請輸入暱稱", Toast.LENGTH_SHORT).show()
             }else if(email.isNullOrEmpty()){
                 Toast.makeText(this, "請輸入信箱", Toast.LENGTH_SHORT).show()
-            }else if(password.isNullOrEmpty()){7
+            }else if(password.isNullOrEmpty()){
                 Toast.makeText(this, "請輸入密碼", Toast.LENGTH_SHORT).show()
             }else if(reenterpassword.isNullOrEmpty()){
                 Toast.makeText(this, "請重新輸入密碼", Toast.LENGTH_SHORT).show()
@@ -44,7 +46,7 @@ class SignUp : AppCompatActivity() {
                     if (it.isSuccessful){
                         Log.d("Test","成功註冊")
 
-                        //-----------------------------------
+                        //更新資料到資料庫
                         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{
                             if (it.isSuccessful){
                                 val formBody = FormBody.Builder()
@@ -71,13 +73,8 @@ class SignUp : AppCompatActivity() {
                                         finish()
                                     }
                                 })
-
-                            }else{
-
                             }
                         }
-
-                        //-----------------------------------
                     }else{
                         Log.w("Test","註冊失敗", it.exception) //it.exception是把錯誤原因記下來
                         showMessage("註冊會員失敗")

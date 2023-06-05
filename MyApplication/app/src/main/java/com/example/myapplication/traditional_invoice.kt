@@ -43,13 +43,17 @@ class traditional_invoice : AppCompatActivity() {
         val bundle = intent.extras
         val intent = Intent(this,MainActivity::class.java)
 
+        //設定輸出圖片檔案
         outputImage = File(externalCacheDir, "output_image.jpg")
 
+        //啟動相機
         binding!!.btTraOpencamera.setOnClickListener {
-
+            //如果圖片已存在就刪除就擋
             if (outputImage.exists()) {
                 outputImage.delete()
             }
+
+            //啟動相機並將拍攝照片更新
             outputImage.createNewFile()
             imageUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 FileProvider.getUriForFile(this, "com.example.cameraalbumtest.fileprovider", outputImage)
@@ -61,13 +65,15 @@ class traditional_invoice : AppCompatActivity() {
             takePhotoLauncher.launch(intent)
         }
 
+        //新增發票按鈕
         binding!!.btTraSend.setOnClickListener {
+            //判斷是否得到辨識結果
             if(binding!!.textView9.text == "請先啟動相機進行拍攝"){
                 Toast.makeText(this, "請先拍攝照片", Toast.LENGTH_SHORT).show()
             }else if(binding!!.textView9.text == "辨識結果為：notfound" || binding!!.textView9.text == "辨識結果為：tryagain"){
                 Toast.makeText(this, "請重新拍攝", Toast.LENGTH_SHORT).show()
             }else{
-
+                //回傳辨識結果
                 val value = binding!!.textView9.text.substring(6,16)
                 bundle!!.putString("Scan",value)
                 bundle!!.putString("Scan_en",value.substring(0,2))
@@ -79,48 +85,46 @@ class traditional_invoice : AppCompatActivity() {
         }
     }
 
-    private val takePhotoLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // Photo was taken successfully
-                val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
-                imageView.setImageBitmap(rotateIfRequired(bitmap))
+    //解析辨識結果
+    private val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
+            imageView.setImageBitmap(rotateIfRequired(bitmap))
 
-                val client = OkHttpClient.Builder()
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .build()
+            //設定連線超時
+            val client = OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build()
 
-                val requestBody: RequestBody = MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", outputImage.name, outputImage.asRequestBody())
-                    .build()
+            val requestBody: RequestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", outputImage.name, outputImage.asRequestBody())
+                .build()
 
-                val request: Request = Request.Builder()
-                    .url("http://34.96.209.0:3000/")
-                    .post(requestBody)
-                    .build()
+            val request: Request = Request.Builder()
+                .url("http://34.96.209.0:3000/")
+                .post(requestBody)
+                .build()
 
-                client.newCall(request).enqueue(object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        e.printStackTrace()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                //更新辨識結果
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        val textresult = findViewById<TextView>(R.id.textView9)
+                        textresult.setText("辨識結果為："+responseBody)
                     }
-
-                    override fun onResponse(call: Call, response: Response) {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body?.string()
-                            println(responseBody)
-
-                            val textresult = findViewById<TextView>(R.id.textView9)
-                            textresult.setText("辨識結果為："+responseBody)
-                        }
-                    }
-                })
-            }
+                }
+            })
         }
+    }
 
-
-
+    //照片轉向處理
     private fun rotateIfRequired(bitmap: Bitmap): Bitmap {
         val exif = ExifInterface(outputImage.path)
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
@@ -136,7 +140,6 @@ class traditional_invoice : AppCompatActivity() {
         val matrix = Matrix()
         matrix.postRotate(degree.toFloat())
         val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-        // 将不需要的Bitmap对象回收
         bitmap.recycle()
         return rotatedBitmap
     }
