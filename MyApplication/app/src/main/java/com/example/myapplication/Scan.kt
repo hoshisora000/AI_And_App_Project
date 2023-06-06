@@ -76,11 +76,13 @@ class Scan : AppCompatActivity() {
             }
     }
 
+    //回傳掃朴結果
     private fun onSuccess(result: List<Barcode>) {
         if (!result.isEmpty()){
             val value = result.joinToString { it.displayValue!! }
+
+            //判斷左右QRcode
             if(value[0] != '*' && value[1] != '*'){
-                //Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
                 try {
                     val bundle = intent.extras
                     val intent = Intent(this,MainActivity::class.java)

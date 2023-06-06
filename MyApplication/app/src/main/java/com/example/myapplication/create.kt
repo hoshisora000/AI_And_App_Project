@@ -26,6 +26,7 @@ class create : AppCompatActivity() {
         val text3 = findViewById<EditText>(R.id.editTextTextPersonName3)
         val text4 = findViewById<EditText>(R.id.editTextTextPersonName5)
 
+        //如果有偵測資料將更新到表單上
         if(bundle?.getString("Scan_en") != null){
             binding!!.editTextTextPersonName.setText(bundle?.getString("Scan_en"))
             binding!!.editTextTextPersonName2.setText(bundle?.getString("Scan_num"))
@@ -35,6 +36,7 @@ class create : AppCompatActivity() {
             binding!!.editTextTextPersonName3.setText(bundle?.getString("Scan_year")+"-"+bundle?.getString("Scan_month")+"-"+bundle?.getString("Scan_day"))
             binding!!.editTextTextPersonName4.setText(bundle?.getString("Scan_cost"))
         }
+
         //回傳表單資料
         binding.btCreateSubmit.setOnClickListener {
             bundle!!.putString("data_en",binding!!.editTextTextPersonName.text.toString())
