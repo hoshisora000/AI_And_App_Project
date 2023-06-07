@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
+    //取得資料庫發票資料
     public fun re_data_invoice (){
         val request = Request.Builder()
             .url("https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+ Firebase.auth.currentUser?.uid.toString())
@@ -68,10 +69,11 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    //取得資料庫真實世界日期資料
     public fun re_data_realtime (){
         OkHttpClient().newCall(Request.Builder().url("https://hoshisora000.lionfree.net/api/get_time.php").build()).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // 請求失敗時的處理
+
             }
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    //回傳發票資料
     public fun get_data_invoice () : String{
         var temp = ""
         try {
@@ -92,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         return temp
     }
 
+    //回傳時間資料
     public fun get_data_realtime () : String{
         var temp = ""
         try {
@@ -102,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         return temp
     }
 
+    //等待畫面處理
     public fun progressbar(){
         this.runOnUiThread {
             if(binding!!.progressBar2.visibility == View.VISIBLE){

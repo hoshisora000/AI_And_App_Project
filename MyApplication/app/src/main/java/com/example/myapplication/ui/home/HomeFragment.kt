@@ -42,20 +42,19 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //----------------------
         auth = Firebase.auth
         _binding!!.butSignup.setOnClickListener {
             var intent = Intent(requireActivity(), SignUp::class.java)
             startActivity(intent)
         }
 
+        //更新UI介面
         updateUI_home(Firebase.auth.currentUser)
 
+        //跳轉住頁面
         _binding!!.butLogout.setOnClickListener {
             auth.signOut()
             updateUI_home(Firebase.auth.currentUser)
@@ -64,6 +63,7 @@ class HomeFragment : Fragment() {
             mainActivity.re_data_invoice()
         }
 
+        //登入按鈕
         _binding!!.butLogin.setOnClickListener {
             val email = _binding!!.editTextTextEmailAddress.text.toString()
             val password = _binding!!.editTextTextPassword.text.toString()
@@ -88,6 +88,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //手機載具頁面
         _binding!!.layoutCodabarBt.setOnClickListener {
             if(membercodabar == ""){
                 showToast("尚未設定手機載具")
@@ -100,6 +101,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //會員資料更新頁面
         _binding!!.layoutMemberBt.setOnClickListener {
             if(_binding!!.layoutMember.visibility == View.GONE){
                 _binding!!.textMemberNickname.setText(_binding!!.textMember.text.substring(0,_binding!!.textMember.text.length-3))
@@ -110,6 +112,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //會員資料更新按鈕
         _binding!!.btLayoutMember.setOnClickListener {
             if(_binding!!.textMemberNickname.text.toString() == ""){
                 showToast("請輸入暱稱")
@@ -153,6 +156,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //修改密碼頁面
         _binding!!.layoutMemberpasswordBt.setOnClickListener {
             if(_binding!!.layoutMemberpassword.visibility == View.GONE){
                 _binding!!.layoutMemberpassword.visibility = View.VISIBLE
@@ -161,6 +165,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //修改密碼按鈕
         _binding!!.btLayoutMemberpassword.setOnClickListener {
             if(_binding!!.textMemberPassword.text.toString() == ""){
                 showToast("請輸入新密碼")
@@ -198,24 +203,29 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //訊息公告按鈕
         _binding!!.layoutAppnewsBt.setOnClickListener {
             showToast("暫無新訊息")
         }
 
+        //軟體更新按鈕
         _binding!!.layoutAppupdateBt.setOnClickListener{
             showToast("您已擁有最新版本")
         }
 
+        //軟體版本按鈕
         _binding!!.layoutAppverBt.setOnClickListener{
             showToast("Ver 1.0.0")
         }
 
+        //關於按鈕
         _binding!!.layoutInfoBt.setOnClickListener{
             showToast("            -製作者-\nCHIH-HSUAN WANG\n      YOU-CHEN LIN ")
         }
         return root
     }
 
+    //更新頁面UI
     private fun updateUI_home(user:FirebaseUser?){
         if(user != null){
             _binding!!.linearLogin.visibility = View.GONE
@@ -232,6 +242,8 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+    //取得資料庫暱稱與載具內容
     private fun getmember(){
         val request = Request.Builder()
             .url(url_query_member+"?uid="+Firebase.auth.currentUser?.uid.toString())
@@ -290,6 +302,7 @@ class HomeFragment : Fragment() {
         return (dp * scale + 0.5f).toInt()
     }
 
+    //更新載具條碼圖片
     private fun set_member_codabar(value: String) {
         val barcodeColor = ContextCompat.getColor(requireContext(), R.color.black)
         val backgroundColor = ContextCompat.getColor(requireContext(), android.R.color.white)

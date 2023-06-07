@@ -30,13 +30,16 @@ class AwardFragment : Fragment() {
         _binding = FragmentAwardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        //基礎介面設定
         set_award_UI()
         set_spinner()
 
+        //清空資料
         text_award[0]?.setText(null)
         text_award[1]?.setText(null)
         text_award[2]?.setText(null)
 
+        //設定按鈕行為
         for (i in 0 until 10){
             btn_award[i]?.setOnClickListener {
                 if(text_award[0]?.text.toString() == ""){
@@ -46,7 +49,7 @@ class AwardFragment : Fragment() {
                 }else if(text_award[2]?.text.toString()  == ""){
                     text_award[2]?.setText(((i+1)%10).toString())
 
-                    //--------------------------------------------
+                    //核對是否中獎
                     val guessnumber = ""+text_award[0]?.text+text_award[1]?.text+text_award[2]?.text
                     val guesstime = (_binding!!.spinner2.selectedItem.toString().substring(0,4).toInt()-1911).toString()+_binding!!.spinner2.selectedItem.toString().substring(6,8)+_binding!!.spinner2.selectedItem.toString().substring(10,12)
 
@@ -84,6 +87,7 @@ class AwardFragment : Fragment() {
                                             .get("return_for_user")
                                             .asString
 
+                                        //更新中獎結果
                                         requireActivity().runOnUiThread{
                                             _binding!!.textAward.setTextSize(15f)
                                             _binding!!.textAward.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
@@ -95,8 +99,8 @@ class AwardFragment : Fragment() {
                                                 _binding!!.textAward.setText("中獎了!!!\n\n 頭獎: $return_for_user \n\n全中20萬 中七碼4萬 中六碼1萬\n中五碼4千 中四碼1千 中三碼2百")
                                             }
                                         }
-
                                     }else{
+                                        //更新沒中結果
                                         requireActivity().runOnUiThread{
                                             _binding!!.textAward.setTextSize(30f)
                                             _binding!!.textAward.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
@@ -114,6 +118,7 @@ class AwardFragment : Fragment() {
                                     }
                                 }
                             }catch (e:java.lang.Exception){
+                                //更新資料庫未紀錄資料之結果
                                 requireActivity().runOnUiThread{
                                     _binding!!.textAward.setTextSize(20f)
                                     _binding!!.textAward.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
@@ -133,12 +138,14 @@ class AwardFragment : Fragment() {
             }
         }
 
+        //設定清除按鈕結果
         btn_award[10]?.setOnClickListener {
             text_award[0]?.setText(null)
             text_award[1]?.setText(null)
             text_award[2]?.setText(null)
         }
 
+        //設定倒退按鈕結果
         btn_award[11]?.setOnClickListener {
             if(text_award[2]?.text.toString() != ""){
                 text_award[2]?.setText(null)
@@ -148,11 +155,10 @@ class AwardFragment : Fragment() {
                 text_award[0]?.setText(null)
             }
         }
-
-
         return root
     }
 
+    //設定元件陣列
     private fun set_award_UI(){
         btn_award[0] = _binding!!.button2
         btn_award[1] = _binding!!.button3
@@ -176,6 +182,7 @@ class AwardFragment : Fragment() {
         text_award[2]?.setText(null)
     }
 
+    //設定下拉式選單
     private fun set_spinner(){
         val mainActivity = activity as MainActivity
         val options = arrayOfNulls<String>(3)
