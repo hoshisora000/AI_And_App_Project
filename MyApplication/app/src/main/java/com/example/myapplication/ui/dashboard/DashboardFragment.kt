@@ -121,14 +121,14 @@ class DashboardFragment : Fragment() {
                 ).apply {
                     setMargins(0, 0, 0, dpToPx(10))
                 }
-                btn_invoice[i]?.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.LightCoral))
-                /*
-                val identifier = context?.resources?.getIdentifier("round_back_white", "drawable", context?.packageName)
+                //btn_invoice[i]?.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.LightCoral))
+
+                val identifier = context?.resources?.getIdentifier("round_back", "drawable", context?.packageName)
                 identifier?.let { resourceId ->
                     btn_invoice[i]?.setBackgroundResource(resourceId)
                 }
-                */
-                btn_invoice[i]?.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+
+                //btn_invoice[i]?.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
                 btn_invoice[i]?.visibility =View.GONE
 
                 //設定按鈕監聽行為
