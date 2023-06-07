@@ -8,35 +8,41 @@ if ($_GET["uid"] != "") {
     $accept = false;
     $error_msg = "uid資料為空"; //錯誤訊息 
 }
+if($accept){
+    //-------------存取資料庫--------------//
+    $severname = "192.168.2.200"; //SQL位置
+    $username = "hoshiso1_system"; //帳號
+    $password = "system123456"; //密碼
+    $dbname = "hoshiso1_project"; //SQL名稱
+    $link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
 
-//-------------存取資料庫--------------//
-$severname = "192.168.2.200"; //SQL位置
-$username = "hoshiso1_system"; //帳號
-$password = "system123456"; //密碼
-$dbname = "hoshiso1_project"; //SQL名稱
-$link = mysqli_connect($severname, $username, $password, $dbname); // 建立MySQL的資料庫連結
-
-if ($link->connect_error) {
-    wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
-}
-$sql1 = "SELECT * FROM `member` WHERE `uid` ='" . $uid ."'";
-$result=$link->query($sql1); // 執行 SQL 查詢
-$messageArr = array();
-$dataarray = array();
-
-if($result->num_rows > 0){ // 若查詢結果有資料
-    while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
-        $dataarray[]=$row; // 將資料加入陣列中         
+    if ($link->connect_error) {
+        wh_log("Connection failed: " . $link->connect_error); // 記錄連接失敗的錯誤訊息
     }
+    $sql1 = "SELECT * FROM `member` WHERE `uid` ='" . $uid ."'";
+    $result=$link->query($sql1); // 執行 SQL 查詢
+    $messageArr = array();
+    $dataarray = array();
+
+    if($result->num_rows > 0){ // 若查詢結果有資料
+        while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+            $dataarray[]=$row; // 將資料加入陣列中         
+        }
+    }
+    $link->close(); // 關閉資料庫連結
+
+
+    $message = returnmsg($dataarray, "200", "查詢成功"); // 呼叫 returnmsg 函式，回傳訊息
+    http_response_code(200); // 設定 HTTP 狀態碼為 200
+    echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
+
+    $messageArr["status"]=array();
+}else{ //對於資料POST不完整的處理
+    $dataarray = [];
+    $message = returnmsg($dataarray, "400", "資料有缺漏或資料格式錯誤(" . $error_msg .")"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
+    http_response_code(200);
+    echo json_encode($message);
 }
-$link->close(); // 關閉資料庫連結
-
-
-$message = returnmsg($dataarray, "200", "Success"); // 呼叫 returnmsg 函式，回傳訊息
-http_response_code(200); // 設定 HTTP 狀態碼為 200
-echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
-
-$messageArr["status"]=array();
 
 // -------------其他函式定義--------------//
 

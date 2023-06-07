@@ -150,18 +150,21 @@ if($accept){
             echo json_encode($message);
             exit();
         } else{
+            // 檢查特別獎後三碼
             $sub_super_special = substr($super_special, -3);
             if($invoice_number==$sub_super_special){
                 $win = 2;
                 $winning_amount=$awards[0];
                 $return_for_user = $super_special;
             }
+            // 檢查特獎後三碼
             $sub_special = substr($special, -3);
             if($invoice_number==$sub_special){
                 $win = 2;
                 $winning_amount=$awards[1];
                 $return_for_user = $special;
             }
+            // 檢查頭獎後三碼
             for($i=0;$i<3;$i++){ # 頭獎號碼
                 $sub_head = substr($head[$i], -3);
                 if ($invoice_number == $sub_head){
@@ -199,9 +202,7 @@ if($accept){
     echo json_encode($message);
 }
 
-
 // -------------其他函式定義--------------//
-
 // 產生回傳訊息的函式
 function returnmsg($dataarray, $re_code, $re_msg)
 {

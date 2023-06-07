@@ -54,7 +54,7 @@ if($accept){
         $sql = "INSERT INTO `member`(`uid`, `nickname`, `mobile_barcode`) VALUES ('" . $uid . "', '" . $nickname . "','" . $mobile_barcode . "') ";
         try {
             $result = $link->query($sql);
-            // 回傳成功的訊息
+            // 回傳的訊息
             $dataarray = array(
                 "uid" => $uid,
             );
