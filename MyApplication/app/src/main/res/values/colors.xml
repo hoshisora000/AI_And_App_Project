@@ -17,5 +17,7 @@
     <color name="DarkSlateGray">#354F52</color>
     <color name="DavyGray">#494850</color>
 
+    <color name="background">#F1F1F1</color>
+
 
 </resources>

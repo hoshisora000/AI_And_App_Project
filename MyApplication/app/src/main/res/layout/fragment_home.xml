@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F1F1"
+    android:background="@color/background"
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
@@ -15,8 +15,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -116,15 +115,15 @@
                         android:id="@+id/text_member"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/imageView2"
                         android:text="CHIH-HSUAN"
+                        android:textColor="@color/white"
                         android:textSize="30dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -134,9 +133,9 @@
                         android:layout_marginStart="16dp"
                         android:layout_toEndOf="@id/imageView2"
                         android:text="/-QIUKHF"
+                        android:textColor="@color/white"
                         android:textSize="15dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
 
@@ -152,15 +151,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="本月累計消費:"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="NT$ 354332"
-                        android:textStyle="bold"
+                        android:textColor="@color/white"
                         android:textSize="30dp"
-                        android:textColor="@color/white"/>
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>

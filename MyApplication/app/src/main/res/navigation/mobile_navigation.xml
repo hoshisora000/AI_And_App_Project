@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_notifications">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -28,4 +28,10 @@
         android:name="com.example.myapplication.ui.award.AwardFragment"
         android:label="兌獎"
         tools:layout="@layout/fragment_award" />
+
+    <fragment
+        android:id="@+id/navigation_analyze"
+        android:name="com.example.myapplication.ui.analyze.AnalyzeFragment"
+        android:label="兌獎"
+        tools:layout="@layout/fragment_analyze" />
 </navigation>
