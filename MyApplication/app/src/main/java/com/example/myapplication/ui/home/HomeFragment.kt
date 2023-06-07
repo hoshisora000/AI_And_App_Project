@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
         //會員資料更新頁面
         _binding!!.layoutMemberBt.setOnClickListener {
             if(_binding!!.layoutMember.visibility == View.GONE){
-                _binding!!.textMemberNickname.setText(_binding!!.textMember.text.substring(0,_binding!!.textMember.text.length-3))
+                _binding!!.textMemberNickname.setText(_binding!!.textMember.text)
                 _binding!!.textMemberCode.setText(membercodabar)
                 _binding!!.layoutMember.visibility = View.VISIBLE
             }else{
@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
                     Thread.sleep(1000)
                     requireActivity().runOnUiThread {
                         _binding!!.layoutMember.visibility =View.GONE
-                        _binding!!.textMember.setText(_binding!!.textMemberNickname.text.toString()+" 您好")
+                        _binding!!.textMember.setText(_binding!!.textMemberNickname.text.toString())
                     }
                     mainActivity.progressbar()
                 }.start()
@@ -273,7 +273,7 @@ class HomeFragment : Fragment() {
                             .asString
 
                         requireActivity().runOnUiThread {
-                            _binding!!.textMember.setText(nickname+" 您好")
+                            _binding!!.textMember.setText(nickname)
                         }
 
                         set_member_codabar(membercodabar)

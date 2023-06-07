@@ -4,7 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F1F1F1"
     tools:context=".ui.home.HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:layout_marginTop="-50dp"
+        android:background="@drawable/round_back_2"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +28,8 @@
             android:id="@+id/linear_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
@@ -80,50 +92,87 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="40dp"
-                    android:background="@drawable/round_back"
+                    android:layout_marginBottom="5dp"
                     android:orientation="vertical"
                     android:padding="15dp">
 
                     <ImageView
                         android:id="@+id/imageView2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/_135715"/>
+                        android:src="@drawable/_135715" />
 
                     <TextView
                         android:id="@+id/text_member"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text=""
-                        android:textSize="30dp"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/imageView2"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"/>
+                        android:text="CHIH-HSUAN"
+                        android:textSize="30dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text_member"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@id/imageView2"
+                        android:text="/-QIUKHF"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
 
                 </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="本月累計消費:"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NT$ 354332"
+                        android:textStyle="bold"
+                        android:textSize="30dp"
+                        android:textColor="@color/white"/>
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_codabar_bt"
@@ -132,9 +181,9 @@
 
                         <ImageView
                             android:id="@+id/icon6"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_1"
                             android:padding="8dp"
                             android:src="@drawable/baseline_qr_code_24" />
 
@@ -159,23 +208,23 @@
                         android:id="@+id/layout_codabar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_back_white"
-                        android:padding="20dp"
-                        android:orientation="vertical"
                         android:layout_marginTop="15dp"
+                        android:background="@drawable/round_back_white"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="20dp"
                         android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/image_barcode"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/text_barcode_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"/>
+                            android:layout_marginTop="8dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -185,9 +234,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_member_bt"
@@ -196,9 +245,9 @@
 
                         <ImageView
                             android:id="@+id/icon1"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_2"
                             android:padding="8dp"
                             android:src="@drawable/baseline_folder_24" />
 
@@ -223,11 +272,11 @@
                         android:id="@+id/layout_member"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_back_white"
-                        android:padding="30dp"
-                        android:orientation="vertical"
                         android:layout_marginTop="15dp"
+                        android:background="@drawable/round_back_3"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="30dp"
                         android:visibility="gone">
 
                         <TextView
@@ -235,33 +284,33 @@
                             android:layout_height="wrap_content"
                             android:text="-修改會員資料-"
                             android:textSize="30dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/text_member_nickname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
                             android:ems="10"
-                            android:inputType="textPersonName"
                             android:hint="暱稱"
-                            android:layout_marginTop="20dp"/>
+                            android:inputType="textPersonName" />
 
                         <EditText
                             android:id="@+id/text_member_code"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
                             android:ems="10"
-                            android:inputType="textPersonName"
                             android:hint="手機載具"
-                            android:layout_marginTop="20dp"/>
+                            android:inputType="textPersonName" />
 
                         <Button
                             android:id="@+id/bt_layout_member"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/shape_circle"
                             android:layout_marginTop="20dp"
-                            android:text="送出"/>
+                            android:background="@drawable/shape_circle"
+                            android:text="送出" />
 
                     </LinearLayout>
 
@@ -272,9 +321,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_memberpassword_bt"
@@ -283,9 +332,9 @@
 
                         <ImageView
                             android:id="@+id/icon4"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_3"
                             android:padding="8dp"
                             android:src="@drawable/baseline_security_24" />
 
@@ -310,11 +359,11 @@
                         android:id="@+id/layout_memberpassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_back_white"
-                        android:padding="30dp"
-                        android:orientation="vertical"
                         android:layout_marginTop="15dp"
+                        android:background="@drawable/round_back_3"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="30dp"
                         android:visibility="gone">
 
                         <TextView
@@ -322,33 +371,33 @@
                             android:layout_height="wrap_content"
                             android:text="-修改會員密碼-"
                             android:textSize="30dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/text_member_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
                             android:ems="10"
                             android:hint="新密碼"
-                            android:layout_marginTop="20dp"
                             android:inputType="textPassword" />
 
                         <EditText
                             android:id="@+id/text_member_passwordcheck"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
                             android:ems="10"
                             android:hint="確認密碼"
-                            android:layout_marginTop="20dp"
                             android:inputType="textPassword" />
 
                         <Button
                             android:id="@+id/bt_layout_memberpassword"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/shape_circle"
                             android:layout_marginTop="20dp"
-                            android:text="送出"/>
+                            android:background="@drawable/shape_circle"
+                            android:text="送出" />
 
                     </LinearLayout>
 
@@ -359,9 +408,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_appnews_bt"
@@ -370,9 +419,9 @@
 
                         <ImageView
                             android:id="@+id/icon5"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_4"
                             android:padding="8dp"
                             android:src="@drawable/baseline_chat_bubble_24" />
 
@@ -400,9 +449,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_appupdate_bt"
@@ -411,9 +460,9 @@
 
                         <ImageView
                             android:id="@+id/icon2"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_1"
                             android:padding="8dp"
                             android:src="@drawable/baseline_update_24" />
 
@@ -441,9 +490,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_appver_bt"
@@ -452,9 +501,9 @@
 
                         <ImageView
                             android:id="@+id/icon3"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_2"
                             android:padding="8dp"
                             android:src="@drawable/ic_notifications_black_24dp" />
 
@@ -482,9 +531,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
+                    android:background="@drawable/round_back"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:background="@drawable/round_back">
+                    android:padding="15dp">
 
                     <RelativeLayout
                         android:id="@+id/layout_info_bt"
@@ -493,11 +542,11 @@
 
                         <ImageView
                             android:id="@+id/icon7"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_circle"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/shape_circle_3"
                             android:padding="8dp"
-                            android:src="@drawable/baseline_info_24"/>
+                            android:src="@drawable/baseline_info_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -525,8 +574,8 @@
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="20dp"
-                    android:text="登出"
-                    android:background="@drawable/shape_circle" />
+                    android:background="@drawable/shape_circle"
+                    android:text="登出" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
