@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from ultralytics import YOLO
 
-model = YOLO('best.pt')  # load a custom trained
+model = YOLO('D:/yolo_v8/ultralytics/best_cpu500.pt')  # load a custom trained
 
 cap = cv2.VideoCapture(0)
 img_width=1000
