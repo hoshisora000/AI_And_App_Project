@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Linen"
+    android:background="@color/background"
     tools:context=".SignUp">
 
     <LinearLayout
@@ -17,10 +17,10 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="- 帳號註冊 -"
             android:textSize="30dp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/text_nickname"

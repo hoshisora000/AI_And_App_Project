@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -136,10 +137,10 @@ class NotificationsFragment : Fragment() {
 
     //設定按紐監聽事件
     private fun bt_click(root:View){
-        val bt_creat = root.findViewById<Button>(R.id.bt_create)
-        val bt_create_ai = root.findViewById<Button>(R.id.bt_create_ai)
-        val bt_create_qr = root.findViewById<Button>(R.id.bt_create_qr)
-        val bt_cloudpair = root.findViewById<Button>(R.id.bt_cloudpair)
+        val bt_creat = root.findViewById<LinearLayout>(R.id.bt_create)
+        val bt_create_ai = root.findViewById<LinearLayout>(R.id.bt_create_ai)
+        val bt_create_qr = root.findViewById<LinearLayout>(R.id.bt_create_qr)
+        val bt_cloudpair = root.findViewById<LinearLayout>(R.id.bt_cloudpair)
 
         val bundle_creat = Bundle()
         val intent_creat = Intent(requireActivity(),create::class.java)

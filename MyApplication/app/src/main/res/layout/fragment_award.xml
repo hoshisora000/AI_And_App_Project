@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Linen"
+    android:background="@color/background"
     tools:context=".ui.award.AwardFragment">
 
     <LinearLayout
@@ -23,7 +23,6 @@
             android:textStyle="bold" />
 
 
-
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -36,11 +35,11 @@
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
                 android:inputType="textPersonName"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:enabled="false"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName7"
@@ -49,11 +48,11 @@
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
                 android:inputType="textPersonName"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:enabled="false"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName8"
@@ -61,11 +60,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
                 android:inputType="textPersonName"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:enabled="false"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -74,21 +73,21 @@
             android:layout_width="300dp"
             android:layout_height="150dp"
             android:gravity="center"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <Spinner
                 android:id="@+id/spinner2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:dropDownVerticalOffset="40dp"/>
+                android:dropDownVerticalOffset="40dp"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <LinearLayout

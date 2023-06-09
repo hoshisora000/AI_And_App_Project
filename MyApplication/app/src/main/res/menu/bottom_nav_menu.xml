@@ -14,11 +14,16 @@
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="功能" />
+        android:title="首頁" />
 
     <item
         android:id="@+id/navigation_award"
         android:icon="@drawable/baseline_monetization_on_24"
         android:title="兌獎" />
+
+    <item
+        android:id="@+id/navigation_analyze"
+        android:icon="@drawable/baseline_analytics_24"
+        android:title="分析" />
 
 </menu>
