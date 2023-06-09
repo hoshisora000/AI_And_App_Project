@@ -68,7 +68,7 @@ class NotificationsFragment : Fragment() {
         val imageSlider = root.findViewById<ImageSlider>(R.id.imageSlider)
         val imageList = ArrayList<SlideModel>()
         //imageList.add(SlideModel("圖片網址", "Title名稱"))
-        imageList.add(SlideModel("https://tip-tr4cdn.cdn.hinet.net/tra-tip-web/tip/img/3442e983-e266-45c6-a2c0-f213db2bf1a0/460x300", "彰化扇形車庫"))
+        imageList.add(SlideModel("https://github.com/hoshisora000/AI_And_App_Project/tree/main/AD/1.jpg", "彰化扇形車庫"))
         imageList.add(SlideModel("https://images.1111.com.tw/media/share/85/85eeda953ea54e4c81b4f7979c0c24e9.jpg", "彰化孔廟"))
         imageList.add(SlideModel("https://fam.bocach.gov.tw/Images/footer.png", "彰化縣立美術館"))
 
