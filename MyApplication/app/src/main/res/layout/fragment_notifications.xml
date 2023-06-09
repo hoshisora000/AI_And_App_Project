@@ -28,6 +28,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <com.denzcoskun.imageslider.ImageSlider
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:id="@+id/imageSlider"
+            app:iss_auto_cycle="true"
+            app:iss_delay="1000"
+            app:iss_placeholder="@android:color/darker_gray"
+            app:iss_error_image="@android:color/darker_gray"
+            app:iss_corner_radius="10"
+            app:iss_selected_dot="@drawable/default_selected_dot"
+            app:iss_unselected_dot="@drawable/default_unselected_dot"
+            app:iss_period="2000"
+            app:iss_text_align="CENTER"
+            tools:ignore="MissingConstraints" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

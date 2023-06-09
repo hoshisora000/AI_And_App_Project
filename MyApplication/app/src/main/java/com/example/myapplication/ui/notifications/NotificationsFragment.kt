@@ -25,6 +25,11 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.AnimationTypes
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.myapplication.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -59,6 +64,17 @@ class NotificationsFragment : Fragment() {
 
         //按鈕監聽設定
         bt_click(root)
+
+        val imageSlider = root.findViewById<ImageSlider>(R.id.imageSlider)
+        val imageList = ArrayList<SlideModel>()
+        //imageList.add(SlideModel("圖片網址", "Title名稱"))
+        imageList.add(SlideModel("https://github.com/hoshisora000/AI_And_App_Project/tree/main/AD/1.jpg", "彰化扇形車庫"))
+        imageList.add(SlideModel("https://images.1111.com.tw/media/share/85/85eeda953ea54e4c81b4f7979c0c24e9.jpg", "彰化孔廟"))
+        imageList.add(SlideModel("https://fam.bocach.gov.tw/Images/footer.png", "彰化縣立美術館"))
+
+        imageSlider.setImageList(imageList, ScaleTypes.FIT)
+        imageSlider.setSlideAnimation(AnimationTypes.DEPTH_SLIDE)
+        imageSlider.startSliding(3000)
 
         return root
     }
