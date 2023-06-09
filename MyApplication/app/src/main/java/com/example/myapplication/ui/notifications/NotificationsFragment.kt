@@ -65,12 +65,12 @@ class NotificationsFragment : Fragment() {
         //按鈕監聽設定
         bt_click(root)
 
+        //廣告業面
         val imageSlider = root.findViewById<ImageSlider>(R.id.imageSlider)
         val imageList = ArrayList<SlideModel>()
-        //imageList.add(SlideModel("圖片網址", "Title名稱"))
-        imageList.add(SlideModel("https://github.com/hoshisora000/AI_And_App_Project/tree/main/AD/1.jpg", "彰化扇形車庫"))
-        imageList.add(SlideModel("https://images.1111.com.tw/media/share/85/85eeda953ea54e4c81b4f7979c0c24e9.jpg", "彰化孔廟"))
-        imageList.add(SlideModel("https://fam.bocach.gov.tw/Images/footer.png", "彰化縣立美術館"))
+        imageList.add(SlideModel("https://hoshisora000.lionfree.net/img/ad1.png"))
+        imageList.add(SlideModel("https://hoshisora000.lionfree.net/img/ad2.png"))
+        imageList.add(SlideModel("https://hoshisora000.lionfree.net/img/ad3.png"))
 
         imageSlider.setImageList(imageList, ScaleTypes.FIT)
         imageSlider.setSlideAnimation(AnimationTypes.DEPTH_SLIDE)
