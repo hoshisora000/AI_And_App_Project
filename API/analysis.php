@@ -103,26 +103,40 @@ if($accept){
         exit();
     }
 
-
+    $record = 0;
     //--------------查詢使用者的發票------------------//
-    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>'11:59:59' AND `time`< '18:00:00'";
+    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='00:00:00' AND `time`<= '05:59:59'";
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
-    echo $sql1;
-    if ($amount ==0) { // 該用戶沒有任何發票
-        $message = returnmsg($amount,$dataarray, "200", "無資料"); //回傳錯誤代碼400，錯誤訊息:資料有缺漏或資料格式錯誤。
-        http_response_code(200);
-        echo json_encode($message);
-        exit;
-    }else{ // 若查詢結果有資料
-        while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
-            $dataarray[] = $row; // 將中獎資料新增到回傳資料中。
-        }
-    }
+    $midnight = $amount; #凌晨-0:00~5:59
+
+    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='06:00:00' AND `time`<= '11:59:59'";
+    $result=$link->query($sql1); // 執行 SQL 查詢
+    $amount = $result->num_rows; // 取得查詢結果的列數
+    $morning = $amount; #早上-6:00~11:59
+
+    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='12:00:00' AND `time`<= '17:59:59'";
+    $result=$link->query($sql1); // 執行 SQL 查詢
+    $amount = $result->num_rows; // 取得查詢結果的列數
+    $afternoon = $amount; #下午-12:00~17:59
+
+    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='18:00:00' AND `time`<= '23:59:59'";
+    $result=$link->query($sql1); // 執行 SQL 查詢
+    $amount = $result->num_rows; // 取得查詢結果的列數
+    $night = $amount; #晚上-18:00~23:59
+
     $messageArr = array();
     $link->close(); // 關閉資料庫連結
+    
+    $record=$midnight+$morning +$afternoon+$night;
+    $dataarray = array(
+        "midnight" => $midnight,
+        "morning" => $morning,
+        "afternoon" => $afternoon,
+        "night" => $night
+    );
     // 呼叫函示產生回傳訊息
-    $message = returnmsg($amount,$dataarray, "200", "查詢成功");
+    $message = returnmsg($record,$dataarray, "200", "查詢成功");
 
     http_response_code(200); // 設定 HTTP 狀態碼為 200
     echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
