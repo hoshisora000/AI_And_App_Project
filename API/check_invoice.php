@@ -52,7 +52,7 @@ if($accept){
         break;
         case "1112":
             $start_day= $year ."-" . "11-01" ;
-            $end_day= $year ."-" . "01-01" ;
+            $end_day= (((int)$year)+1) ."-" . "01-01" ;
         break;
         default:
             $error_msg = "period日期格式錯誤"; //錯誤訊息 
@@ -180,7 +180,7 @@ if($accept){
     $messageArr = array();
     $link->close(); // 關閉資料庫連結
     // 呼叫函示產生回傳訊息
-    $message = returnmsg($record,$dataarray, "200", "Success");
+    $message = returnmsg($record,$dataarray, "200", "查詢成功");
 
     http_response_code(200); // 設定 HTTP 狀態碼為 200
     echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
