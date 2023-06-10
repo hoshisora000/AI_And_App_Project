@@ -19,18 +19,17 @@ HOST: https://hoshisora000.lionfree.net/api
 - 403 `Forbidden` - 拒絕訪問。
 - 404 `Not Found` - 找不到資源。
 - 405 `Method Not Allowed` - 伺服器理解此請求方法，但它被禁用或不可用。
-- 500 `Internal Server Error` - 內部伺服器錯誤。
-- 501 `Not Implemented` - 伺服器目前不支援此功能(錯誤訊息存於error_log)。
+- 500 `Internal Server Error` - 內部伺服器錯誤(錯誤訊息存於error_log)。
+- 501 `Not Implemented` - 伺服器目前不支援此功能。
 
 
 ## 新增發票 [/add_invoice.php]
 
 ### 新增發票[POST]
 
-接收發票資料並存入資料庫。<br>
-<b>form-data須注意相關格式(值前面務必空一行)</b>
+接收發票資料存入資料庫。
 
-+ Request (multipart/form-data; boundary={boundary value})
++ Request
 
     + Attributes
         + uid (string, required) - 使用者ID
@@ -40,33 +39,19 @@ HOST: https://hoshisora000.lionfree.net/api
         + money (string, required) - 發票金額    
 
     + Body
+    
+        {
+            uid:O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6
+            invoice_number:ZZ12345678
+            date:2023-05-22
+            time:10:22:33
+            money:542
+        }
 
-        --{boundary value}
-        Content-Disposition: form-data; name="uid"
-        
-        O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6
-        --{boundary value}
-        Content-Disposition: form-data; name="invoice_number"
-        
-        ZZ12345678
-        --{boundary value}
-        Content-Disposition: form-data; name="date"
-        
-        2023-05-21
-        --{boundary value}
-        Content-Disposition: form-data; name="time"
-        
-        21:26:55
-        --{boundary value}
-        Content-Disposition: form-data; name="money"
-        
-        32
-        --{boundary value}--
++ Response 200
 
-+ Response 200 (application/json)
-
-    + Body
-
+    + Body (application/json)
+        
         {
             "data": {
                 "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
@@ -74,15 +59,16 @@ HOST: https://hoshisora000.lionfree.net/api
             },
             "status": {
                 "code": "201",
-                "message": "Success",
-                "datetime": "2023-05-2200:50:38(+08:00)"
+                "message": "發票新增成功",
+                "datetime": "2023-05-22 00:50:38 (+08:00)"
             }
         }
+        
 
-+ Response 400 (application/json)
++ Response 400
 
-    + Body
-
+    + Body(application/json)
+    
         {
             "data": [],
             "status": {
@@ -92,23 +78,12 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 404 (application/json)
+        
 
-    + Body
++ Response 500
 
-        {
-            "data": [],
-            "status": {
-                "code": "404",
-                "message": "重複的發票號碼",
-                "datetime": "2023-05-2210:54:37(+08:00)"
-            }
-        }
-
-+ Response 500 (application/json)
-
-    + Body
-
+    + Body(application/json)
+        
         {
             "data": [],
             "status": {
@@ -118,6 +93,242 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
+
+## 新增會員 [/add_member_inf.php]
+
+### 新增會員資料[POST]
+
+接收會員資料存入資料庫。
+
++ Request (multipart/form-data)
+
+    + Attributes
+        + uid (string, required) - 使用者ID
+        + nickname (string, required) - 暱稱
+        + mobile_barcode (string, required) - 手機載具
+
+    + Body
+        uid:hAonkFh8d3WLtpebxHtJKlQD5w92
+        nickname:7666
+        mobile_barcode:
+
++ Response 200 (application/json)
+
+    + Body(application/json)
+        {
+            "data": {
+                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                "invoice_number": "ZZ12345678"
+            },
+            "status": {
+                "code": "201",
+                "message": "發票新增成功",
+                "datetime": "2023-05-2200:50:38(+08:00)"
+            }
+        }
+
++ Response 400
+
+    + Body(application/json)
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏/資料格式錯誤",
+                "datetime": "2023-05-2213:36:15(+08:00)"
+            }
+        }
+
++ Response 500
+
+    + Body(application/json)
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
+
+
+## 會員分析 [/analysis.php]
+
+### 會員分析[POST]
+
+分析會員消費習慣。
+
++ Request (multipart/form-data)
+
+    + Attributes
+        + uid (string, required) - 使用者ID
+        + year_month (string, required) - 時間(年月)
+
+    + Body
+        uid:hAonkFh8d3WLtpebxHtJKlQD5w92
+        year_month:11205
+
++ Response 200
+
+    + Body (application/json)
+        {
+            "record": 3,
+            "data": {
+                "midnight": 1,
+                "midnight_money": 66,
+                "morning": 2,
+                "morning_money": 1027,
+                "afternoon": 0,
+                "afternoon_money": 0,
+                "night": 0,
+                "night_money": 0
+            },
+            "status": {
+                "code": "200",
+                "message": "查詢成功",
+                "datetime": "2023-06-1100:43:00(+08:00)"
+            }
+        }
+
++ Response 400
+
+    + Body (application/json)
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏/資料格式錯誤",
+                "datetime": "2023-05-2213:36:15(+08:00)"
+            }
+        }
+
++ Response 500
+
+    + Body (application/json)
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
+        
+## 會員中獎查詢 [/check_invoice.php]
+
+### 會員發票中獎查詢[POST]
+
+分析會員消費習慣。
+
++ Request (multipart/form-data)
+
+    + Attributes
+        + uid (string, required) - 使用者ID
+        + period (string, required) - 發票期數
+
+    + Body
+        uid:hAonkFh8d3WLtpebxHtJKlQD5w92
+        year_month:11205
+
++ Response 200 
+
+    + Body(application/json)
+        {
+            "record": 3,
+            "data": {
+                "midnight": 1,
+                "midnight_money": 66,
+                "morning": 2,
+                "morning_money": 1027,
+                "afternoon": 0,
+                "afternoon_money": 0,
+                "night": 0,
+                "night_money": 0
+            },
+            "status": {
+                "code": "200",
+                "message": "查詢成功",
+                "datetime": "2023-06-1100:43:00(+08:00)"
+            }
+        }
+
++ Response 400 
+
+    + Body(application/json)
+        {
+            "record": 0,
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏/資料格式錯誤",
+                "datetime": "2023-05-2213:36:15(+08:00)"
+            }
+        }
+
++ Response 500 
+
+    + Body(application/json)
+        {
+            "record": 0,
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
+
+## 發票對獎 [/check_winning.php]
+
+### 發票對獎[GET]
+
+分析會員消費習慣。
+
+- Parameters
+
+  - period: "1120102" (string, required) - 發票期數
+  - invoice_number: "AB12345678" (string, required) - 發票號碼
+
++ Response 200 
+
+    + Body(application/json)
+        {
+            "data": {
+                "win": 1,
+                "winning_amount": 4000,
+                "return_for_user": null
+            },
+            "status": {
+                "code": "200",
+                "message": "查詢成功",
+                "datetime": "2023-06-1101:10:15(+08:00)"
+            }
+        }
+
++ Response 400 
+
+    + Body(application/json)
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "發票號碼格式錯誤",
+                "datetime": "2023-06-1101:10:27(+08:00)"
+            }
+        }
+
++ Response 500 更新ap
+
+    + Body(application/json)
+        {
+            "record": 0,
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
 
 ## 查詢發票 [/query_invoice.php]
 
@@ -130,8 +341,8 @@ HOST: https://hoshisora000.lionfree.net/api
   - uid: "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6" (string, required) - 使用者ID
 
 
-+ Response 200 (application/json)
-
++ Response 200
+    + Body
         {
             "data": [
                 {
@@ -157,7 +368,7 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 400 (application/json)
++ Response 400 
 
     [
             
@@ -267,91 +478,8 @@ HOST: https://hoshisora000.lionfree.net/api
     [
             
     ]       
-        
-## 新增會員資料 [/add_member_inf.php]
+    
 
-### 新增會員資料[POST]
-
-新增會員資料。<br>
-<b>form-data須注意相關格式(值前面務必空一行)</b>
-
-+ Request (multipart/form-data; boundary={boundary value})
-
-    + Attributes
-        + uid (string, required) - 使用者ID
-        + nickname (string, required) - 暱稱
-        + mobile_barcode (string, required) - 手機條碼   
-
-    + Body
-
-        --{boundary value}
-        Content-Disposition: form-data; name="uid"
-        
-        O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6
-        --{boundary value}
-        Content-Disposition: form-data; name="nickname"
-        
-        QWQ
-        --{boundary value}
-        Content-Disposition: form-data; name="mobile_barcode"
-        
-        ZXCVBN
-        --{boundary value}--
-
-+ Response 201 (application/json)
-
-    + Body
-
-        {
-            "data": {
-                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
-                "invoice_number": null
-            },
-            "status": {
-                "code": "201",
-                "message": "Success",
-                "datetime": "2023-05-29-13:52:23(+08:00)"
-            }
-        }
-
-+ Response 400 (application/json)
-
-    + Body
-
-        {
-            "data": [],
-            "status": {
-                "code": "400",
-                "message": "資料有缺漏/資料格式錯誤",
-                "datetime": "2023-05-2213:36:15(+08:00)"
-            }
-        }
-
-+ Response 404 (application/json)
-
-    + Body
-
-        {
-            "data": [],
-            "status": {
-                "code": "404",
-                "message": "重複的發票號碼",
-                "datetime": "2023-05-2210:54:37(+08:00)"
-            }
-        }
-
-+ Response 500 (application/json)
-
-    + Body
-
-        {
-            "data": [],
-            "status": {
-                "code": "500",
-                "message": "內部伺服器錯誤",
-                "datetime": "2023-05-2214:23:33(+08:00)"
-            }
-        }
         
 
 ## 修改會員資料 [/update_member_inf.php]
@@ -382,43 +510,3 @@ HOST: https://hoshisora000.lionfree.net/api
                 "datetime": "2023-05-2914:34:12(+08:00)"
             }
         }
-
-+ Response 400 (application/json)
-
-    [
-            
-    ] 
-
-        
-## 中獎發票查詢 [/check_winning.php]
-
-### 中獎發票查詢 [GET]
-
-查詢中獎發票。
-
-- Parameters
-
-  - period: "1120102" (string, required) - 發票期數
-  - invoice_number: "AB12345678" (string, required) - 發票號碼
-
-+ Response 200 (application/json)
-
-        {
-            "data": {
-                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
-                "nickname": "OwO",
-                "mobile_barcode": "7777777"
-            },
-            "status": {
-                "amount": null,
-                "code": "0",
-                "message": "Success",
-                "datetime": "2023-05-2914:34:12(+08:00)"
-            }
-        }
-
-+ Response 400 (application/json)
-
-    [
-            
-    ]
