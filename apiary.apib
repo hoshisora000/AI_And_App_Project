@@ -29,7 +29,7 @@ HOST: https://hoshisora000.lionfree.net/api
 
 接收發票資料存入資料庫。
 
-+ Request
++ Request(multipart/form-data)
 
     + Attributes
         + uid (string, required) - 使用者ID
@@ -38,20 +38,8 @@ HOST: https://hoshisora000.lionfree.net/api
         + time (string, required) - 發票時間
         + money (string, required) - 發票金額    
 
-    + Body
-    
-        {
-            uid:O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6
-            invoice_number:ZZ12345678
-            date:2023-05-22
-            time:10:22:33
-            money:542
-        }
++ Response 200(application/json)
 
-+ Response 200
-
-    + Body (application/json)
-        
         {
             "data": {
                 "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
@@ -63,12 +51,10 @@ HOST: https://hoshisora000.lionfree.net/api
                 "datetime": "2023-05-22 00:50:38 (+08:00)"
             }
         }
-        
 
-+ Response 400
 
-    + Body(application/json)
-    
++ Response 400(application/json)
+
         {
             "data": [],
             "status": {
@@ -78,11 +64,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-        
++ Response 500(application/json)
 
-+ Response 500
-
-    + Body(application/json)
         
         {
             "data": [],
@@ -100,21 +83,15 @@ HOST: https://hoshisora000.lionfree.net/api
 
 接收會員資料存入資料庫。
 
-+ Request (multipart/form-data)
++ Request(multipart/form-data)
 
     + Attributes
         + uid (string, required) - 使用者ID
         + nickname (string, required) - 暱稱
         + mobile_barcode (string, required) - 手機載具
 
-    + Body
-        uid:hAonkFh8d3WLtpebxHtJKlQD5w92
-        nickname:7666
-        mobile_barcode:
++ Response 200(application/json)
 
-+ Response 200 (application/json)
-
-    + Body(application/json)
         {
             "data": {
                 "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
@@ -127,9 +104,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 400 (application/json)
++ Response 400(application/json)
 
-    + Body(application/json)
         {
             "data": [],
             "status": {
@@ -139,9 +115,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 500 (application/json)
++ Response 500(application/json)
 
-    + Body(application/json)
         {
             "data": [],
             "status": {
@@ -158,19 +133,14 @@ HOST: https://hoshisora000.lionfree.net/api
 
 分析會員消費習慣。
 
-+ Request (multipart/form-data)
++ Request(multipart/form-data)
 
     + Attributes
         + uid (string, required) - 使用者ID
         + year_month (string, required) - 時間(年月)
 
-    + Body
-        uid:hAonkFh8d3WLtpebxHtJKlQD5w92
-        year_month:11205
++ Response 200(application/json)
 
-+ Response 200 (application/json)
-
-    + Body (application/json)
         {
             "record": 3,
             "data": {
@@ -190,9 +160,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 400
++ Response 400(application/json)
 
-    + Body (application/json)
         {
             "data": [],
             "status": {
@@ -202,9 +171,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 500
++ Response 500(application/json)
 
-    + Body (application/json)
         {
             "data": [],
             "status": {
@@ -220,19 +188,14 @@ HOST: https://hoshisora000.lionfree.net/api
 
 分析會員消費習慣。
 
-+ Request (multipart/form-data)
++ Request(multipart/form-data)
 
     + Attributes
         + uid (string, required) - 使用者ID
         + period (string, required) - 發票期數
 
-    + Body
-        uid:hAonkFh8d3WLtpebxHtJKlQD5w92
-        year_month:11205
++ Response 200(application/json)
 
-+ Response 200 
-
-    + Body(application/json)
         {
             "record": 3,
             "data": {
@@ -252,9 +215,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 400 
++ Response 400(application/json) 
 
-    + Body(application/json)
         {
             "record": 0,
             "data": [],
@@ -265,9 +227,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 500 
++ Response 500(application/json) 
 
-    + Body(application/json)
         {
             "record": 0,
             "data": [],
@@ -278,20 +239,18 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-## 發票對獎 [/check_winning.php]
+## 發票對獎 [/check_winning.php/{?period,invoice_number}]
 
 ### 發票對獎[GET]
 
 分析會員消費習慣。
 
 - Parameters
+  - period: 1120304(string) - 發票期數
+  - invoice_number: AB53999145(string) - 發票號碼
 
-  - period: "1120102" (string, required) - 發票期數
-  - invoice_number: "AB12345678" (string, required) - 發票號碼
++ Response 200(application/json) 
 
-+ Response 200 
-
-    + Body(application/json)
         {
             "data": {
                 "win": 1,
@@ -305,9 +264,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 400 
++ Response 400(application/json)
 
-    + Body(application/json)
         {
             "data": [],
             "status": {
@@ -317,9 +275,8 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 500 更新ap
++ Response 500(application/json)
 
-    + Body(application/json)
         {
             "record": 0,
             "data": [],
@@ -330,51 +287,6 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-## 查詢發票 [/query_invoice.php]
-
-### 查詢發票 [GET]
-
-提供查詢使用者所有的發票。
-
-- Parameters
-
-  - uid: "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6" (string, required) - 使用者ID
-
-
-+ Response 200
-    + Body
-        {
-            "data": [
-                {
-                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
-                    "invoice_number": "AA54578621",
-                    "date": "2023-05-21",
-                    "time": "14:24:00",
-                    "money": "777"
-                },
-                {
-                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
-                    "invoice_number": "NQ1234569",
-                    "date": "2023-05-12",
-                    "time": "21:31:00",
-                    "money": "100"
-                }
-            ],
-            "status": {
-                "amount": 2,
-                "code": "0",
-                "message": "Success",
-                "datetime": "2023-05-2211:23:24(+08:00)"
-            }
-        }
-
-+ Response 400 
-
-    [
-            
-    ]
-    
-    
 
 ## 刪除發票 [/delete_invoice.php]
 
@@ -382,16 +294,11 @@ HOST: https://hoshisora000.lionfree.net/api
 
 刪除資料庫中指定的發票。
 
-
-
-
 - Attributes
     - uid (string, required) - 使用者ID
     - invoice_number (string, required) - 發票號碼
 
-+ Response 200 (application/json)
-
-    + Body
++ Response 200(application/json)
 
         {
             "data": {
@@ -404,10 +311,8 @@ HOST: https://hoshisora000.lionfree.net/api
                 "datetime": "2023-05-2200:50:38(+08:00)"
             }
         }
-
-+ Response 400 (application/json)
-
-    + Body
+        
++ Response 400(application/json)
 
         {
             "data": [],
@@ -418,9 +323,7 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 404 (application/json)
-
-    + Body
++ Response 404(application/json)
 
         {
             "data": [],
@@ -431,7 +334,7 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 500 (application/json)
++ Response 500(application/json)
 
     + Body
 
@@ -444,7 +347,7 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
         
-## 查詢會員資料 [/query_member.php]
+## 查詢會員資料 [/query_member.php{?uid}]
 
 ### 查詢會員資料 [GET]
 
@@ -452,10 +355,9 @@ HOST: https://hoshisora000.lionfree.net/api
 
 - Parameters
 
-  - uid: "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6" (string, required) - 使用者ID
+  - uid: O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6 (string, required) - 使用者ID
 
-
-+ Response 200 (application/json)
++ Response 200(application/json)
 
         {
             "data": [
@@ -468,16 +370,34 @@ HOST: https://hoshisora000.lionfree.net/api
             "status": {
                 "amount": 1,
                 "code": "0",
-                "message": "Success",
+                "message": "查詢成功",
                 "datetime": "2023-05-2913:35:52(+08:00)"
             }
         }
 
-+ Response 400 (application/json)
++ Response 400(application/json)
 
-    [
-            
-    ]       
+        {
+            "data": [],
+            "status": {
+                "code": "404",
+                "message": "重複的發票號碼",
+                "datetime": "2023-05-2210:54:37(+08:00)"
+            }
+        }
+
+
+
++ Response 500(application/json)
+
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
     
 
         
@@ -495,7 +415,7 @@ HOST: https://hoshisora000.lionfree.net/api
     + mobile_barcode (string, required) - 手機條碼   
 
 
-+ Response 200 (application/json)
++ Response 200(application/json)
 
         {
             "data": {
