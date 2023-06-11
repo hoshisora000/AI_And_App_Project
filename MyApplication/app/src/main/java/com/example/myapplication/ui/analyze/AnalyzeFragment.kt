@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.analyze
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.graphics.Color
 import androidx.core.content.ContextCompat
 import com.example.myapplication.MainActivity
 import com.example.myapplication.databinding.FragmentAnalyzeBinding
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -27,12 +25,6 @@ class AnalyzeFragment : Fragment() {
 
     private var _binding: FragmentAnalyzeBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        fun newInstance() = AnalyzeFragment()
-    }
-
-    private lateinit var viewModel: AnalyzeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,12 +62,11 @@ class AnalyzeFragment : Fragment() {
             get_analyze_data()
         }
 
-
         return root
     }
 
     private fun get_analyze_data(){
-               val formBody = FormBody.Builder()
+        val formBody = FormBody.Builder()
             .add("uid", Firebase.auth.currentUser?.uid.toString())
             .add("year_month",binding.analyzeTime.text.substring(0,3)+binding.analyzeTime.text.substring(4,6))
             .build()

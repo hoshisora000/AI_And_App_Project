@@ -7,26 +7,34 @@
     android:background="@color/background"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="-50dp"
+        android:layout_height="50dp"
         android:background="#C19783"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/bt_re_data"
-        android:layout_width="239dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="20dp"
-        android:text="更新"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="發票資料"
+            android:layout_centerInParent="true"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+        <ImageView
+            android:id="@+id/bt_re_data"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/baseline_refresh_24"
+            android:padding="8dp" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"

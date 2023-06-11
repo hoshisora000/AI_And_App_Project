@@ -23,66 +23,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linear_login"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="-會員登入-"
-                android:textSize="30dp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/editTextTextEmailAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="12"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/editTextTextPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="12"
-                android:hint="Password"
-                android:inputType="textPassword" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/but_login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="70dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="登入" />
-
-                <Button
-                    android:id="@+id/but_signup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="註冊" />
-            </LinearLayout>
-        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -120,19 +60,18 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/imageView2"
-                        android:text="CHIH-HSUAN"
                         android:textColor="@color/white"
                         android:textSize="30dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/home_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/text_member"
                         android:layout_alignParentEnd="true"
                         android:layout_marginStart="16dp"
                         android:layout_toEndOf="@id/imageView2"
-                        android:text="/-QIUKHF"
                         android:textColor="@color/white"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -154,9 +93,10 @@
                         android:textColor="@color/white" />
 
                     <TextView
+                        android:id="@+id/home_cost"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="NT$ 354332"
+                        android:text="NT$"
                         android:textColor="@color/white"
                         android:textSize="30dp"
                         android:textStyle="bold" />
