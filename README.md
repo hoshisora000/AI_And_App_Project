@@ -21,6 +21,6 @@ https://aiappproject.docs.apiary.io/
 
 5.AI辨傳統發票
 
-6.消費模式分析 (待補)
+6.消費分析
 
 7.API開發與應用
