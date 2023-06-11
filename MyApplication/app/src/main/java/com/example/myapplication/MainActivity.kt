@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     private var navController: NavController? = null
 
+    private var progressbar_value = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         val viewModelProvider = ViewModelProvider(this)
@@ -51,13 +53,8 @@ class MainActivity : AppCompatActivity() {
             binding.mainLyfragement.visibility = View.GONE
         }
 
-        Thread{
-            re_data_invoice()
-            re_data_realtime()
-            progressbar()
-            Thread.sleep(3000)
-            progressbar()
-        }.start()
+        re_data_invoice()
+        re_data_realtime()
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -103,6 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     //取得資料庫發票資料
     public fun re_data_invoice (){
+        progressbar(1)
         val request = Request.Builder()
             .url("https://hoshisora000.lionfree.net/api/query_invoice.php?uid="+ Firebase.auth.currentUser?.uid.toString())
             .build()
@@ -113,6 +111,7 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     data_invoice = response.body?.string().toString()
+                    progressbar(-1)
                 }
             }
         })
@@ -120,6 +119,7 @@ class MainActivity : AppCompatActivity() {
 
     //取得資料庫真實世界日期資料
     public fun re_data_realtime (){
+        progressbar(1)
         OkHttpClient().newCall(Request.Builder().url("https://hoshisora000.lionfree.net/api/get_time.php").build()).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
 
@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                 val gson = Gson()
                 val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
                 data_realtime = jsonObject.getAsJsonObject("data").getAsJsonPrimitive("day").asString
+                progressbar(-1)
             }
         })
     }
@@ -156,9 +157,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     //等待畫面處理
-    public fun progressbar(){
+    public fun progressbar(flag : Int){
+        if(progressbar_value + flag >= 0) progressbar_value += flag
+
         this.runOnUiThread {
-            if(binding!!.progressBar2.visibility == View.VISIBLE){
+            if(progressbar_value <= 0){
                 binding!!.progressBar2.visibility = View.GONE
                 binding!!.butFask1.visibility = View.GONE
                 binding!!.butFask2.visibility = View.GONE

@@ -38,17 +38,21 @@ class Scan : AppCompatActivity() {
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scan)
+        try {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_scan)
 
-        binding = ActivityScanBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+            binding = ActivityScanBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
-        cameraExecutor = Executors.newSingleThreadExecutor()
-        imageAnalysis.setAnalyzer(cameraExecutor, this::analyzeBitmap)
-        binding.previewView.startCamera(this, imageAnalysis)
-        binding.previewView.setOnClickListener {
-            startAnalyze()
+            cameraExecutor = Executors.newSingleThreadExecutor()
+            imageAnalysis.setAnalyzer(cameraExecutor, this::analyzeBitmap)
+            binding.previewView.startCamera(this, imageAnalysis)
+            binding.previewView.setOnClickListener {
+                startAnalyze()
+            }
+        }catch (e:Exception){
+
         }
     }
 
@@ -62,50 +66,58 @@ class Scan : AppCompatActivity() {
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun analyzeBitmap(imageProxy: ImageProxy) {
-        if (!enableAnalyze) {
-            imageProxy.close()
-            return
-        }
-
-        val mediaImage = imageProxy.image ?: return
-        val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-        scanner.process(image)
-            .addOnSuccessListener(this::onSuccess)
-            .addOnCompleteListener {
+        try {
+            if (!enableAnalyze) {
                 imageProxy.close()
+                return
             }
+
+            val mediaImage = imageProxy.image ?: return
+            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+            scanner.process(image)
+                .addOnSuccessListener(this::onSuccess)
+                .addOnCompleteListener {
+                    imageProxy.close()
+                }
+        }catch (e:Exception){
+
+        }
     }
 
     //回傳掃朴結果
     private fun onSuccess(result: List<Barcode>) {
-        if (!result.isEmpty()){
-            val value = result.joinToString { it.displayValue!! }
+        try {
+            if (!result.isEmpty()){
+                val value = result.joinToString { it.displayValue!! }
 
-            //判斷左右QRcode
-            if(value[0] != '*' && value[1] != '*'){
-                try {
-                    val bundle = intent.extras
-                    val intent = Intent(this,MainActivity::class.java)
-                    bundle!!.putString("Scan",value)
-                    bundle!!.putString("Scan_en",value.substring(0,2))
-                    bundle!!.putString("Scan_num",value.substring(2,10))
-                    bundle!!.putString("Scan_year",(value.substring(10,13).toInt()+1911).toString())
-                    bundle!!.putString("Scan_month",value.substring(13,15))
-                    bundle!!.putString("Scan_day",value.substring(15,17))
-                    bundle!!.putString("Scan_cost",value.substring(29,37).toInt(16).toString())
-                    intent.putExtras(bundle)
-                    setResult(RESULT_OK,intent)
-                    finish()
-                } catch (e: StringIndexOutOfBoundsException) {
+                //判斷左右QRcode
+                if(value[0] != '*' && value[1] != '*'){
+                    try {
+                        val bundle = intent.extras
+                        val intent = Intent(this,MainActivity::class.java)
+                        bundle!!.putString("Scan",value)
+                        bundle!!.putString("Scan_en",value.substring(0,2))
+                        bundle!!.putString("Scan_num",value.substring(2,10))
+                        bundle!!.putString("Scan_year",(value.substring(10,13).toInt()+1911).toString())
+                        bundle!!.putString("Scan_month",value.substring(13,15))
+                        bundle!!.putString("Scan_day",value.substring(15,17))
+                        bundle!!.putString("Scan_cost",value.substring(29,37).toInt(16).toString())
+                        intent.putExtras(bundle)
+                        setResult(RESULT_OK,intent)
+                        finish()
+                    } catch (e: StringIndexOutOfBoundsException) {
 
+                    }
+                }else{
+                    return
                 }
-            }else{
-                return
             }
-        }
 
-        if (!continuous) {
-            stopAnalyze()
+            if (!continuous) {
+                stopAnalyze()
+            }
+        }catch (e:Exception){
+
         }
     }
 
@@ -113,24 +125,32 @@ class Scan : AppCompatActivity() {
         lifecycleOwner: LifecycleOwner,
         imageAnalysis: ImageAnalysis
     ) {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-        cameraProviderFuture.addListener({
-            val preview = Preview.Builder().build()
-            preview.setSurfaceProvider(surfaceProvider)
-            val cameraProvider = cameraProviderFuture.get()
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
-                lifecycleOwner,
-                CameraSelector.DEFAULT_BACK_CAMERA,
-                preview,
-                imageAnalysis,
-            )
-        }, ContextCompat.getMainExecutor(context))
+        try {
+            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+            cameraProviderFuture.addListener({
+                val preview = Preview.Builder().build()
+                preview.setSurfaceProvider(surfaceProvider)
+                val cameraProvider = cameraProviderFuture.get()
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview,
+                    imageAnalysis,
+                )
+            }, ContextCompat.getMainExecutor(context))
+        }catch (e:Exception){
+
+        }
     }
 
     override fun onDestroy() {
-        scanner.close()
-        cameraExecutor.shutdown()
-        super.onDestroy()
+        try {
+            scanner.close()
+            cameraExecutor.shutdown()
+            super.onDestroy()
+        }catch (e:Exception){
+
+        }
     }
 }

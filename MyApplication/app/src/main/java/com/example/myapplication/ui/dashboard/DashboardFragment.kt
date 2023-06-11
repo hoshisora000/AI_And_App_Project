@@ -34,28 +34,17 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        if(Firebase.auth.currentUser != null){
-            set_spinner(root)
 
-            //更新按鈕
-            _binding!!.btReData.setOnClickListener{
-                _binding!!.linearLayout.removeAllViews() //移除目前所有按鈕
-                val mainActivity = activity as MainActivity
+        set_spinner(root)
 
-                Thread{
-                    mainActivity.re_data_invoice()
-                    mainActivity.progressbar()
-                    Thread.sleep(500)
-                    re_btn(root) //重新取得資料更新
-                    Thread.sleep(500)
-                    mainActivity.progressbar()
-                    re_btn_UI()
-                }.start()
-            }
-
-        }else{
-            _binding!!.btReData.visibility = View.GONE
-            _binding!!.spinner.visibility = View.GONE
+        //更新按鈕
+        _binding!!.btReData.setOnClickListener{
+            _binding!!.linearLayout.removeAllViews() //移除目前所有按鈕
+            val mainActivity = activity as MainActivity
+            mainActivity.progressbar(1)
+            mainActivity.re_data_invoice()
+            Thread.sleep(1000)
+            re_btn(root)
         }
 
         return root
@@ -158,21 +147,13 @@ class DashboardFragment : Fragment() {
                                             }
                                             override fun onResponse(call: Call, response: Response) {
                                                 if (response.isSuccessful) {
+                                                    mainActivity.progressbar(1)
                                                     requireActivity().runOnUiThread {
                                                         _binding!!.linearLayout.removeAllViews()
-
-                                                    }
-                                                    Thread{
                                                         mainActivity.re_data_invoice()
-                                                        mainActivity.progressbar()
-                                                        Thread.sleep(500)
-                                                        re_btn(root) //重新取得資料更新
-                                                        Thread.sleep(500)
-                                                        mainActivity.progressbar()
-                                                        re_btn_UI()
-                                                    }.start()
-                                                    val responseBody = response.body?.string()
-                                                    println(responseBody)
+                                                        Thread.sleep(1000)
+                                                        re_btn(root)
+                                                    }
                                                 } else {
                                                     println("Request failed")
                                                 }
@@ -190,6 +171,9 @@ class DashboardFragment : Fragment() {
                 }
                 _binding!!.linearLayout.addView(btn_invoice[i])
             }
+            re_btn_UI()
+            val mainActivity = activity as MainActivity
+            mainActivity.progressbar(-1)
         }
     }
 
@@ -227,6 +211,9 @@ class DashboardFragment : Fragment() {
                 }
             }
             _binding!!.spinner.adapter = adapter
+
+            val mainActivity = activity as MainActivity
+            mainActivity.progressbar(1)
             re_btn(root)
         }
 

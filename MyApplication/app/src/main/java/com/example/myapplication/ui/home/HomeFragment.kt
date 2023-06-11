@@ -92,7 +92,7 @@ class HomeFragment : Fragment() {
             }else{
                 Thread{
                     val mainActivity = activity as MainActivity
-                    mainActivity.progressbar()
+                    mainActivity.progressbar(1)
 
                     val formBody = FormBody.Builder()
                         .add("uid", Firebase.auth.currentUser?.uid.toString())
@@ -124,7 +124,7 @@ class HomeFragment : Fragment() {
                         _binding!!.layoutMember.visibility =View.GONE
                         _binding!!.textMember.setText(_binding!!.textMemberNickname.text.toString())
                     }
-                    mainActivity.progressbar()
+                    mainActivity.progressbar(-1)
                 }.start()
             }
         }
@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
             }else{
                 Thread{
                     val mainActivity = activity as MainActivity
-                    mainActivity.progressbar()
+                    mainActivity.progressbar(1)
 
                     val user = FirebaseAuth.getInstance().currentUser
                     user?.updatePassword(_binding!!.textMemberPassword.text.toString())?.addOnCompleteListener { task ->
@@ -167,11 +167,10 @@ class HomeFragment : Fragment() {
                         }
                     }
 
-                    Thread.sleep(1000)
                     requireActivity().runOnUiThread {
                         _binding!!.layoutMemberpassword.visibility =View.GONE
+                        mainActivity.progressbar(-1)
                     }
-                    mainActivity.progressbar()
                 }.start()
             }
         }
@@ -200,6 +199,8 @@ class HomeFragment : Fragment() {
 
     //取得資料庫暱稱與載具內容
     private fun getmember(){
+        val mainActivity = activity as MainActivity
+        mainActivity.progressbar(1)
         val request = Request.Builder()
             .url(url_query_member+"?uid="+Firebase.auth.currentUser?.uid.toString())
             .build()
@@ -213,7 +214,6 @@ class HomeFragment : Fragment() {
                         val responseBody = response.body?.string()
                         val gson = Gson()
                         val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
-                        println(jsonObject)
 
                         val nickname = jsonObject
                             .getAsJsonArray("data")[0]
@@ -239,6 +239,7 @@ class HomeFragment : Fragment() {
                 } else {
                     println("Request failed")
                 }
+                mainActivity.progressbar(-1)
             }
         })
     }
