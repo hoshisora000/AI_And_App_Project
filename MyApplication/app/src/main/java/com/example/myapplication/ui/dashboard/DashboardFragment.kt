@@ -42,7 +42,7 @@ class DashboardFragment : Fragment() {
             val mainActivity = activity as MainActivity
             mainActivity.progressbar(1)
             mainActivity.re_data_invoice()
-            Thread.sleep(1000)
+            Thread.sleep(500)
             re_btn(root)
         }
 
@@ -170,10 +170,9 @@ class DashboardFragment : Fragment() {
                 }
                 _binding!!.linearLayout.addView(btn_invoice[i])
             }
-            re_btn_UI()
-            val mainActivity = activity as MainActivity
-            mainActivity.progressbar(-1)
         }
+        re_btn_UI()
+        mainActivity.progressbar(-1)
     }
 
     //下拉式選單資料更新
