@@ -35,11 +35,13 @@ class AnalyzeFragment : Fragment() {
 
         val mainActivity = activity as MainActivity
 
+        //設定當前月份作為分析頁面初始月份
         requireActivity().runOnUiThread {
             binding.analyzeTime.setText((mainActivity.get_data_realtime().substring(0,4).toInt()-1911).toString()+"年"+mainActivity.get_data_realtime().substring(5,7)+"月")
             get_analyze_data()
         }
 
+        //上個月按鈕
         binding.analyzeBtleft.setOnClickListener{
             if(binding.analyzeTime.text.substring(4,6).toInt()-1 == 0){
                 binding.analyzeTime.setText((binding.analyzeTime.text.substring(0,3).toInt()-1).toString()+"年12月")
@@ -51,6 +53,7 @@ class AnalyzeFragment : Fragment() {
             get_analyze_data()
         }
 
+        //下個月按鈕
         binding.analyzeBtright.setOnClickListener{
             if(binding.analyzeTime.text.substring(4,6).toInt()+1 == 13){
                 binding.analyzeTime.setText((binding.analyzeTime.text.substring(0,3).toInt()+1).toString()+"年01月")
@@ -65,6 +68,7 @@ class AnalyzeFragment : Fragment() {
         return root
     }
 
+    //取得資料並更新頁面
     private fun get_analyze_data(){
         val formBody = FormBody.Builder()
             .add("uid", Firebase.auth.currentUser?.uid.toString())
@@ -179,6 +183,8 @@ class AnalyzeFragment : Fragment() {
             }
         })
     }
+
+    //繪製圓餅圖
     private fun setUpSelectionPieChart() {
 
         val analyzeValu1 = binding.analyzeValu1.text.substring(0,binding.analyzeValu1.length()-1).toFloat()

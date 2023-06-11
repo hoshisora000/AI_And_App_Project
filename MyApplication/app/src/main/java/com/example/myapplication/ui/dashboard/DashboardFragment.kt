@@ -34,7 +34,6 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         set_spinner(root)
 
         //更新按鈕

@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
+        //這冊頁面按鈕
         binding!!.butSignup.setOnClickListener {
             var intent = Intent(this, SignUp::class.java)
             startActivity(intent)
