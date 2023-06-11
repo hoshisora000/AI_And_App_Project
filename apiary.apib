@@ -301,14 +301,12 @@ HOST: https://hoshisora000.lionfree.net/api
 + Response 200(application/json)
 
         {
-            "data": {
-                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
-                "invoice_number": "ZZ12345678"
-            },
+            "data": [],
             "status": {
-                "code": "201",
-                "message": "Success",
-                "datetime": "2023-05-2200:50:38(+08:00)"
+                "amount": null,
+                "code": "200",
+                "message": "刪除成功",
+                "datetime": "2023-06-1117:28:11(+08:00)"
             }
         }
         
@@ -323,22 +321,109 @@ HOST: https://hoshisora000.lionfree.net/api
             }
         }
 
-+ Response 404(application/json)
++ Response 500(application/json)
 
         {
             "data": [],
             "status": {
-                "code": "404",
-                "message": "重複的發票號碼",
-                "datetime": "2023-05-2210:54:37(+08:00)"
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
+            }
+        }
+        
+        
+## 查詢時間 [/get_time.php]
+
+### 查詢時間 [GET]
+
+查詢時間。
+
++ Response 200(application/json)
+
+        {
+            "data": {
+                "day": "2023-06-11"
+            },
+            "status": {
+                "code": "200",
+                "message": "Success",
+                "datetime": "2023-06-11-17:30:12(+08:00)"
+            }
+        }
+
+## 發票查詢 [/query_invoice.php/{?uid}]
+
+### 發票查詢[GET]
+
+分析會員消費習慣。
+
+- Parameters
+  - uid: O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6(string) - 會員ID
+
++ Response 200(application/json) 
+
+        {
+            "data": [
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "AL54321986",
+                    "date": "2023-04-19",
+                    "time": "12:15:00",
+                    "money": "65"
+                },
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "GV32795473",
+                    "date": "2023-05-22",
+                    "time": "01:35:00",
+                    "money": "66"
+                },
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "LL73110635",
+                    "date": "2023-05-22",
+                    "time": "22:38:00",
+                    "money": "65"
+                },
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "NQ12345678",
+                    "date": "2023-05-12",
+                    "time": "21:31:00",
+                    "money": "100"
+                },
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "invoice_number": "ZR46856298",
+                    "date": "2023-05-02",
+                    "time": "12:09:00",
+                    "money": "98"
+                }
+            ],
+            "status": {
+                "amount": 5,
+                "code": "200",
+                "message": "Success",
+                "datetime": "2023-06-1117:48:50(+08:00)"
+            }
+        }
+
++ Response 400(application/json)
+
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏或資料格式錯誤(uid資料為空)",
+                "datetime": "2023-06-1101:10:27(+08:00)"
             }
         }
 
 + Response 500(application/json)
 
-    + Body
-
         {
+            "record": 0,
             "data": [],
             "status": {
                 "code": "500",
@@ -363,15 +448,14 @@ HOST: https://hoshisora000.lionfree.net/api
             "data": [
                 {
                     "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
-                    "nickname": "??",
-                    "mobile_barcode": "87878740"
+                    "nickname": "test",
+                    "mobile_barcode": "7777777"
                 }
             ],
             "status": {
-                "amount": 1,
-                "code": "0",
-                "message": "查詢成功",
-                "datetime": "2023-05-2913:35:52(+08:00)"
+                "code": "200",
+                "message": "Success",
+                "datetime": "2023-06-1117:50:52(+08:00)"
             }
         }
 
@@ -381,12 +465,10 @@ HOST: https://hoshisora000.lionfree.net/api
             "data": [],
             "status": {
                 "code": "404",
-                "message": "重複的發票號碼",
+                "message": "資料有缺漏或資料格式錯誤(uid資料為空)",
                 "datetime": "2023-05-2210:54:37(+08:00)"
             }
         }
-
-
 
 + Response 500(application/json)
 
@@ -398,10 +480,7 @@ HOST: https://hoshisora000.lionfree.net/api
                 "datetime": "2023-05-2214:23:33(+08:00)"
             }
         }
-    
-
         
-
 ## 修改會員資料 [/update_member_inf.php]
 
 ### 修改會員資料 [POST]
@@ -414,19 +493,41 @@ HOST: https://hoshisora000.lionfree.net/api
     + nickname (string, required) - 暱稱
     + mobile_barcode (string, required) - 手機條碼   
 
-
 + Response 200(application/json)
 
         {
-            "data": {
-                "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
-                "nickname": "OwO",
-                "mobile_barcode": "7777777"
-            },
+            "data": [
+                {
+                    "uid": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
+                    "nickname": "test",
+                    "mobile_barcode": "7777777"
+                }
+            ],
             "status": {
-                "amount": null,
-                "code": "0",
+                "code": "200",
                 "message": "Success",
-                "datetime": "2023-05-2914:34:12(+08:00)"
+                "datetime": "2023-06-1117:52:11(+08:00)"
+            }
+        }
+
++ Response 400(application/json)
+
+        {
+            "data": [],
+            "status": {
+                "code": "400",
+                "message": "資料有缺漏或資料格式錯誤(nickname資料為空)",
+                "datetime": "2023-06-1117:53:32(+08:00)"
+            }
+        }
+
++ Response 500(application/json)
+
+        {
+            "data": [],
+            "status": {
+                "code": "500",
+                "message": "內部伺服器錯誤",
+                "datetime": "2023-05-2214:23:33(+08:00)"
             }
         }
