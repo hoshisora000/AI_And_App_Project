@@ -102,28 +102,44 @@ if($accept){
         //結束程式
         exit();
     }
+    $midnight_money=0;
+    $morning_money=0;
+    $afternoon_money=0;
+    $night_money=0;
 
     $record = 0;
     //--------------查詢使用者的發票------------------//
-    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='00:00:00' AND `time`<= '05:59:59'";
+    $sql1 = "SELECT `uid`, `invoice_number`, `money` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='00:00:00' AND `time`<= '05:59:59'";
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
     $midnight = $amount; #凌晨-0:00~5:59
+    while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+        $midnight_money= (int)$row['money']+$midnight_money; 
+    }
 
-    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='06:00:00' AND `time`<= '11:59:59'";
+    $sql1 = "SELECT `uid`, `invoice_number`, `money` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='06:00:00' AND `time`<= '11:59:59'";
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
     $morning = $amount; #早上-6:00~11:59
+    while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+        $morning_money= (int)$row['money']+$morning_money; 
+    }
 
-    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='12:00:00' AND `time`<= '17:59:59'";
+    $sql1 = "SELECT `uid`, `invoice_number`, `money` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='12:00:00' AND `time`<= '17:59:59'";
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
     $afternoon = $amount; #下午-12:00~17:59
+    while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+        $afternoon_money= (int)$row['money']+$afternoon_money; 
+    }
 
-    $sql1 = "SELECT `uid`, `invoice_number`, `date` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='18:00:00' AND `time`<= '23:59:59'";
+    $sql1 = "SELECT `uid`, `invoice_number`, `money` FROM `member_invoice` WHERE `uid` = '" . $uid ."' AND `date`>='". $start_day ."' AND `date`<'". $end_day ."'AND  `time`>='18:00:00' AND `time`<= '23:59:59'";
     $result=$link->query($sql1); // 執行 SQL 查詢
     $amount = $result->num_rows; // 取得查詢結果的列數
     $night = $amount; #晚上-18:00~23:59
+    while ($row = $result->fetch_assoc()) { // 迴圈逐一取得資料列
+        $night_money= (int)$row['money']+$night_money; 
+    }
 
     $messageArr = array();
     $link->close(); // 關閉資料庫連結
@@ -131,9 +147,13 @@ if($accept){
     $record=$midnight+$morning +$afternoon+$night;
     $dataarray = array(
         "midnight" => $midnight,
+        "midnight_money" => $midnight_money,
         "morning" => $morning,
+        "morning_money" => $morning_money,
         "afternoon" => $afternoon,
-        "night" => $night
+        "afternoon_money" => $afternoon_money,
+        "night" => $night,
+        "night_money" => $night_money
     );
     // 呼叫函示產生回傳訊息
     $message = returnmsg($record,$dataarray, "200", "查詢成功");
