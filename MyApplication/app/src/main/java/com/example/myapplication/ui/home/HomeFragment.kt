@@ -10,10 +10,13 @@ import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.R
 import android.content.Intent
 import android.graphics.Bitmap
+import android.icu.text.RelativeDateTimeFormatter.Direction
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import com.example.myapplication.MainActivity
 import com.example.myapplication.SignUp
+import com.example.myapplication.ui.award.AwardFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -46,46 +49,16 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         auth = Firebase.auth
-        _binding!!.butSignup.setOnClickListener {
-            var intent = Intent(requireActivity(), SignUp::class.java)
-            startActivity(intent)
-        }
 
-        //更新UI介面
-        updateUI_home(Firebase.auth.currentUser)
+        getmember()
+        set_homecoast()
 
-        //跳轉住頁面
+        //登出按鈕
         _binding!!.butLogout.setOnClickListener {
             auth.signOut()
-            updateUI_home(Firebase.auth.currentUser)
-
             val mainActivity = activity as MainActivity
             mainActivity.re_data_invoice()
-        }
-
-        //登入按鈕
-        _binding!!.butLogin.setOnClickListener {
-            val email = _binding!!.editTextTextEmailAddress.text.toString()
-            val password = _binding!!.editTextTextPassword.text.toString()
-
-            if(email.isEmpty()){
-                showToast("請輸入帳號")
-            }else if(password.isEmpty()){
-                showToast("請輸入密碼")
-            }else{
-                auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{
-                    if (it.isSuccessful){
-                        val user = auth.currentUser
-                        updateUI_home(Firebase.auth.currentUser)
-
-                        val mainActivity = activity as MainActivity
-                        mainActivity.re_data_invoice()
-                    }else{
-                        showToast("登入失敗，帳號或密碼錯誤")
-                        updateUI_home(null)
-                    }
-                }
-            }
+            mainActivity.set_logout()
         }
 
         //手機載具頁面
@@ -119,7 +92,7 @@ class HomeFragment : Fragment() {
             }else{
                 Thread{
                     val mainActivity = activity as MainActivity
-                    mainActivity.progressbar()
+                    mainActivity.progressbar(1)
 
                     val formBody = FormBody.Builder()
                         .add("uid", Firebase.auth.currentUser?.uid.toString())
@@ -151,7 +124,7 @@ class HomeFragment : Fragment() {
                         _binding!!.layoutMember.visibility =View.GONE
                         _binding!!.textMember.setText(_binding!!.textMemberNickname.text.toString())
                     }
-                    mainActivity.progressbar()
+                    mainActivity.progressbar(-1)
                 }.start()
             }
         }
@@ -176,7 +149,7 @@ class HomeFragment : Fragment() {
             }else{
                 Thread{
                     val mainActivity = activity as MainActivity
-                    mainActivity.progressbar()
+                    mainActivity.progressbar(1)
 
                     val user = FirebaseAuth.getInstance().currentUser
                     user?.updatePassword(_binding!!.textMemberPassword.text.toString())?.addOnCompleteListener { task ->
@@ -194,11 +167,10 @@ class HomeFragment : Fragment() {
                         }
                     }
 
-                    Thread.sleep(1000)
                     requireActivity().runOnUiThread {
                         _binding!!.layoutMemberpassword.visibility =View.GONE
+                        mainActivity.progressbar(-1)
                     }
-                    mainActivity.progressbar()
                 }.start()
             }
         }
@@ -225,26 +197,10 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    //更新頁面UI
-    private fun updateUI_home(user:FirebaseUser?){
-        if(user != null){
-            _binding!!.linearLogin.visibility = View.GONE
-
-            _binding!!.butLogout.visibility = View.VISIBLE
-            _binding!!.textMember.visibility =View.VISIBLE
-
-            getmember()
-        }else{
-            _binding!!.linearLogin.visibility = View.VISIBLE
-
-            _binding!!.butLogout.visibility = View.GONE
-            _binding!!.textMember.visibility =View.GONE
-        }
-    }
-
-
     //取得資料庫暱稱與載具內容
     private fun getmember(){
+        val mainActivity = activity as MainActivity
+        mainActivity.progressbar(1)
         val request = Request.Builder()
             .url(url_query_member+"?uid="+Firebase.auth.currentUser?.uid.toString())
             .build()
@@ -258,7 +214,6 @@ class HomeFragment : Fragment() {
                         val responseBody = response.body?.string()
                         val gson = Gson()
                         val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
-                        println(jsonObject)
 
                         val nickname = jsonObject
                             .getAsJsonArray("data")[0]
@@ -274,6 +229,7 @@ class HomeFragment : Fragment() {
 
                         requireActivity().runOnUiThread {
                             _binding!!.textMember.setText(nickname)
+                            _binding!!.homeCode.setText(membercodabar)
                         }
 
                         set_member_codabar(membercodabar)
@@ -283,6 +239,7 @@ class HomeFragment : Fragment() {
                 } else {
                     println("Request failed")
                 }
+                mainActivity.progressbar(-1)
             }
         })
     }
@@ -324,5 +281,66 @@ class HomeFragment : Fragment() {
             _binding!!.imageBarcode.setImageBitmap(bitmap)
             _binding!!.textBarcodeNumber.text = value
         }
+    }
+
+    private fun set_homecoast(){
+        val mainActivity = activity as MainActivity
+        val formBody = FormBody.Builder()
+            .add("uid", Firebase.auth.currentUser?.uid.toString())
+            .add("year_month",(mainActivity.get_data_realtime().substring(0,4).toInt()-1911).toString()+mainActivity.get_data_realtime().substring(5,7))
+            .build()
+
+        val request = Request.Builder()
+            .url("https://hoshisora000.lionfree.net/api/analysis.php")
+            .post(formBody)
+            .build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    val gson = Gson()
+                    val jsonObject = gson.fromJson(responseBody, JsonObject::class.java)
+
+                    requireActivity().runOnUiThread {
+                        try{
+                            var cost = 0
+                            cost += jsonObject
+                                .getAsJsonObject("data")
+                                .asJsonObject
+                                .get("midnight_money")
+                                .asInt
+
+                            cost += jsonObject
+                                .getAsJsonObject("data")
+                                .asJsonObject
+                                .get("morning_money")
+                                .asInt
+
+                            cost += jsonObject
+                                .getAsJsonObject("data")
+                                .asJsonObject
+                                .get("afternoon_money")
+                                .asInt
+
+                            cost += jsonObject
+                                .getAsJsonObject("data")
+                                .asJsonObject
+                                .get("night_money")
+                                .asInt
+
+                            binding.homeCost.setText("NT$ "+cost.toString())
+                        }catch (e:Exception){
+
+                        }
+                    }
+                } else {
+                    println("Request failed")
+                }
+            }
+        })
     }
 }

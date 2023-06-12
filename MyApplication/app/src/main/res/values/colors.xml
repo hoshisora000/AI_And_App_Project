@@ -19,5 +19,9 @@
 
     <color name="background">#F1F1F1</color>
 
+    <color name="buttom1">#589588</color>
+    <color name="buttom2">#BE8B5F</color>
+    <color name="buttom3">#D89A94</color>
+    <color name="buttom4">#3D4041</color>
 
 </resources>
