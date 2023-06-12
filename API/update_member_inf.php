@@ -49,7 +49,7 @@ if($accept){
         "mobile_barcode" => $mobile_barcode
     );
 
-    $message = returnmsg($dataarray, "200", "Success",$amount); // 呼叫 returnmsg 函式，回傳訊息
+    $message = returnmsg($dataarray, "200", "更新完成"); // 呼叫 returnmsg 函式，回傳訊息
     http_response_code(200); // 設定 HTTP 狀態碼為 200
     echo json_encode($message); // 將回傳訊息轉換為 JSON 格式並輸出
 
@@ -68,14 +68,13 @@ if($accept){
 // -------------其他函式定義--------------//
 
 // 產生回傳訊息的函式
-function returnmsg($dataarray, $re_code, $re_msg,$amount)
+function returnmsg($dataarray, $re_code, $re_msg)
 {
 
     $messageArr["data"] = $dataarray; // 設定回傳訊息的資料部分為查詢結果的陣列
     $messageArr["status"] = array();
     $today = date('Y-m-dH:i:s(p)'); // 取得當前日期和時間
     $datetime = array(
-        "amount" => $amount,
         "code" => $re_code,
         "message" => $re_msg,
         "datetime" => $today
