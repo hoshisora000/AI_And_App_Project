@@ -19,7 +19,7 @@ $today = date('YmdHis'); // 取得當前日期和時間
     <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 
-    <script src="./js/number_show.js?ver=<?php echo $today ?>"></script>
+    <script src="./js/contact_show.js?ver=<?php echo $today ?>"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -64,33 +64,29 @@ $today = date('YmdHis'); // 取得當前日期和時間
                     <!---內容加在裡面-->
                     <div class="container my-5">
                         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-                            <h1 class="display-4 fw-bold lh-1">中獎號碼設定</h1>
+                            <h1 class="display-4 fw-bold lh-1">留言板訊息</h1>
 
-                            <div class="d-grid gap-2 col-6 mx-auto">
-                                <a href='./add_number.php' class='btn btn-primary btn-lg px-4 me-md-2'>新增資料</a>
-                            </div>
-
+                            <div class="col-md-3"></div>
                             <div class="text-center">
                                 <table id="example" class="table table-striped table-bordered responsive" width="100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">期數</th>
-                                            <th class="text-center">特別獎號碼</th>
-                                            <th class="text-center">特獎號碼</th>
-                                            <th class="text-center">頭獎號碼1</th>
-                                            <th class="text-center">頭獎號碼2</th>
-                                            <th class="text-center">頭獎號碼3</th>
-                                            <th class="text-center">修改/刪除</th>
+                                            <th class="text-center">訊息ID</th>
+                                            <th class="text-center">姓名</th>
+                                            <th class="text-center">電子信箱</th>
+                                            <th class="text-center">手機號碼</th>
+                                            <th class="text-center">訊息</th>
+                                            <th class="text-center">狀態</th>
                                         </tr>
                                     </thead>
                                 </table>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="./admin.php" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">返回</a>
-                            </div>
-                        </div>
-
+                        <a href="./admin.php" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">返回</a>
                     </div>
+                        </div>
+                    </div>
+
                 </div>
         </section>
     </main>

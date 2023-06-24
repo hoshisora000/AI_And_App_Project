@@ -4,6 +4,7 @@ session_start();
 if ($_SESSION["level"] != 9) {
 	header("Location:login.php?url=admin.php");
 }
+$today = date('YmdHis'); // 取得當前日期和時間
 ?>
 
 
@@ -18,7 +19,7 @@ if ($_SESSION["level"] != 9) {
     <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 
-    <script src="./js/member_show.js"></script>
+    <script src="./js/member_show.js?ver=<?php echo $today ?>"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -67,7 +68,7 @@ if ($_SESSION["level"] != 9) {
 
                             <div class="col-md-3"></div>
                             <div class="text-center">
-                                <table id="example" class="table table-striped table-bordered">
+                                <table id="example" class="table table-striped table-bordered responsive" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">會員ID</th>
@@ -78,11 +79,12 @@ if ($_SESSION["level"] != 9) {
                                     </thead>
                                 </table>
                             </div>
-                            <div class="col-md-3"></div>
-
-                        </div>
-
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="./admin.php" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">返回</a>
                     </div>
+                        </div>
+                    </div>
+
                 </div>
         </section>
     </main>

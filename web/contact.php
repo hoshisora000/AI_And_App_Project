@@ -129,7 +129,7 @@
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $message = $_POST['message'];
-    $today = date('Y-m-d-H:i:s(p)'); // 取得當前日期和時間
+    $today = date('YmdHis'); // 取得當前日期和時間
 
     $severname = "192.168.2.200"; //SQL位置
     $username = "hoshiso1_system"; //帳號

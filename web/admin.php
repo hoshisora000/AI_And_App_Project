@@ -51,6 +51,7 @@ if ($_SESSION["level"] != 9) {
                             <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
                                 <a href="./member_show.php" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">會員資料檢閱</a>
                                 <a href="./set_number.php" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">中獎號碼設定</a>
+                                <a href="./show_contact.php" class="btn btn-info btn-lg px-4 me-md-2 fw-bold">訪客留言</a>
                                 <a href="./logout.php" class="btn btn-outline-secondary btn-lg px-4">登出</a>
                             </div>
                         </div>

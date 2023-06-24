@@ -22,18 +22,13 @@ $(function() {
             }
         },
         responsive: true,
-        columnDefs: [
-            { "width": "20%", "targets": 0 },
-            { responsivePriority: 1, targets: [0] },
-            { responsivePriority: 2, targets: [-1] }
-        ],
-        "ajax": './ajax/number_show_ajax.php'
+        "ajax": './ajax/contact_show_ajax.php'
     });
-    $('tbody').on('click', '#m_btn_delete', function() {
+    $('tbody').on('click', '#m_btn_unread', function() {
         var id = tb2.row($(this).closest('tr')).data();
         var t_id = id[0]
         $.ajax({
-            url: "delete_number.php",
+            url: "contact_change_state.php",
             data: {
                 t_id,
             },
@@ -47,12 +42,5 @@ $(function() {
             }
         });
         tb2.ajax.reload();
-    });
-    $('tbody').on('click', '#m_btn_edit', function() {
-        var id = tb2.row($(this).closest('tr')).data();
-        var t_id = id[0];
-        var url = "edit_number.php";
-        url=url.concat("?id=",t_id);
-        window.location.href=url;
     });
 });
