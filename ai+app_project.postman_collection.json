@@ -109,6 +109,42 @@
 			"response": []
 		},
 		{
+			"name": "analysis.php",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uid",
+							"value": "hAonkFh8d3WLtpebxHtJKlQD5w92",
+							"type": "text"
+						},
+						{
+							"key": "year_month",
+							"value": "11205",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://hoshisora000.lionfree.net/api/analysis.php",
+					"protocol": "https",
+					"host": [
+						"hoshisora000",
+						"lionfree",
+						"net"
+					],
+					"path": [
+						"api",
+						"analysis.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "check_invoice.php",
 			"request": {
 				"method": "POST",
@@ -157,7 +193,7 @@
 					"formdata": []
 				},
 				"url": {
-					"raw": "https://hoshisora000.lionfree.net/api/check_winning.php?period=1120304&invoice_number=51055355",
+					"raw": "https://hoshisora000.lionfree.net/api/check_winning.php?period=1120304&invoice_number=AB53999145",
 					"protocol": "https",
 					"host": [
 						"hoshisora000",
@@ -175,7 +211,7 @@
 						},
 						{
 							"key": "invoice_number",
-							"value": "51055355"
+							"value": "AB53999145"
 						}
 					]
 				}
@@ -309,12 +345,12 @@
 					"formdata": [
 						{
 							"key": "uid",
-							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh677",
+							"value": "O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6",
 							"type": "text"
 						},
 						{
 							"key": "nickname",
-							"value": "OwO",
+							"value": "test",
 							"type": "text"
 						},
 						{
@@ -351,7 +387,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/D:/AI_And_App_Project/yoloV5/d/images/230529_1.jpg"
+							"src": "/D:/AI_And_App_Project/dataset/images/1.jpg"
 						}
 					]
 				},

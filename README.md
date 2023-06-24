@@ -14,18 +14,21 @@ https://aiappproject.docs.apiary.io/
 https://www.canva.com/design/DAFk3Octb3k/TLfsOVHlEc059iknjSmEgg/edit?utm_content=DAFk3Octb3k&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ## 功能簡介
-透過連線自訂API來實作發票APP的各項功能
 
-1.會員登入
+1.會員登入(基於firebase進行登入，並於資料庫儲存會員資料)
 
-2.取得資料庫內發票內容
+2.雲端資料庫存儲發票
 
 3.手動輸入發票
 
-4.掃描電子發票QR code 
+4.電子發票QR code快速輸入 
 
-5.AI辨傳統發票
+5.傳統發票AI辨識輸入
 
-6.消費分析
+6.發票兌獎功能
 
-7.API開發與應用
+7.消費分析
+
+8.API開發與應用
+
+9.網站開發與管理員後台介面
