@@ -15,7 +15,7 @@ https://www.canva.com/design/DAFk3Octb3k/TLfsOVHlEc059iknjSmEgg/edit?utm_content
 
 ## 功能簡介
 
-1.會員登入(基於firebase進行登入，並於資料庫儲存會員資料)
+1.會員登入
 
 2.雲端資料庫存儲發票
 
