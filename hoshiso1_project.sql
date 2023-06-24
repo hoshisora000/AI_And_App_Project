@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 192.168.2.200:3306
--- 產生時間： 2023 年 06 月 24 日 22:48
+-- 產生時間： 2023 年 06 月 25 日 02:16
 -- 伺服器版本： 10.6.13-MariaDB
 -- PHP 版本： 8.1.19
 
@@ -18,10 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫： `hoshiso1_project`
+-- 資料庫： `project_sql`
 --
-CREATE DATABASE IF NOT EXISTS `hoshiso1_project` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `hoshiso1_project`;
+CREATE DATABASE IF NOT EXISTS `project_sql` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `project_sql`;
 
 -- --------------------------------------------------------
 
@@ -29,22 +29,25 @@ USE `hoshiso1_project`;
 -- 資料表結構 `bulletin_board`
 --
 
-CREATE TABLE IF NOT EXISTS `bulletin_board` (
-  `id` varchar(11) NOT NULL,
+CREATE TABLE `bulletin_board` (
+  `id` varchar(14) NOT NULL,
   `name` varchar(20) NOT NULL,
   `email` varchar(40) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `message` text NOT NULL,
-  PRIMARY KEY (`id`)
+  `state` varchar(8) NOT NULL DEFAULT 'unread'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `bulletin_board`
 --
 
-INSERT INTO `bulletin_board` (`id`, `name`, `email`, `phone`, `message`) VALUES
-('1', '1', '1', '1', '1'),
-('2', '2', '2', '2', '2');
+INSERT INTO `bulletin_board` (`id`, `name`, `email`, `phone`, `message`, `state`) VALUES
+('20230625015852', 'æž—ç¥è¾°', 'hoshisora000@gmail.com', '0912345678', 'ç•™è¨€æ¿æ¸¬è©¦', 'read'),
+('20230625015911', 'æž—ç¥è¾°', 'hoshisora000@gmail.com', '0912345678', 'é€™æ¨£æ‡‰è©²å°±æœ‰å…§å®¹äº†å§', 'unread'),
+('20230625015940', 'æž—ç¥è¾°', 'hoshisora000@gmail.com', '0912345678', 'ç®¡ç†å“¡å¯ä»¥åœ¨ç®¡ç†ä»‹é¢å°çœ‹éŽçš„è¨Šæ¯æŒ‰ä¸‹å·²è®€å°±æœƒå³æ™‚åˆ·æ–°', 'read'),
+('20230625020008', 'æž—ç¥è¾°', 's0822132@gm.ncue.edu.tw', '0912345678', 'å¦‚æžœè€å¸«æƒ³è¦å˜—è©¦çš„è©±æˆ‘å€‘ç®¡ç†å“¡çš„å¸³è™Ÿæ˜¯adminï¼Œå¯†ç¢¼æ˜¯admin123', 'unread'),
+('20230625020503', 'æž—ç¥è¾°', 'hoshisora000@gmail.com', '0912345678', 'é™¤æ­¤ä¹‹å¤–ï¼Œåœ¨ç®¡ç†å“¡ä»‹é¢å¯ä»¥ç›´æŽ¥é»žæ“Šä¿¡ç®±å°±æœƒè·³è½‰åˆ°å¯„ä¿¡çš„ä»‹é¢', 'unread');
 
 -- --------------------------------------------------------
 
@@ -52,11 +55,10 @@ INSERT INTO `bulletin_board` (`id`, `name`, `email`, `phone`, `message`) VALUES
 -- 資料表結構 `member`
 --
 
-CREATE TABLE IF NOT EXISTS `member` (
-  `uid` varchar(60) NOT NULL,
+CREATE TABLE `member` (
+  `uid` varchar(45) NOT NULL,
   `nickname` varchar(10) NOT NULL,
-  `mobile_barcode` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`uid`)
+  `mobile_barcode` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -68,7 +70,7 @@ INSERT INTO `member` (`uid`, `nickname`, `mobile_barcode`) VALUES
 ('AjyC4CzqnKfSgo0LczuqxavveRH2', 'RR', ''),
 ('hAonkFh8d3WLtpebxHtJKlQD5w92', 'CHIH-HSUAN', '/-OEQAHR'),
 ('Jl1T46BWGZZdD3ktj490368EVN73', 'WSD', '/-HSUWOL'),
-('O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6', 'test', '7777777'),
+('O2g8sZF0nMh1ZJa', 'test', '7777777'),
 ('test1', 'test1', ''),
 ('test2', 'test2', ''),
 ('test4', 'test4', ''),
@@ -80,13 +82,12 @@ INSERT INTO `member` (`uid`, `nickname`, `mobile_barcode`) VALUES
 -- 資料表結構 `member_invoice`
 --
 
-CREATE TABLE IF NOT EXISTS `member_invoice` (
-  `uid` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+CREATE TABLE `member_invoice` (
+  `uid` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `invoice_number` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
-  `money` int(11) NOT NULL,
-  PRIMARY KEY (`uid`,`invoice_number`)
+  `money` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -110,11 +111,11 @@ INSERT INTO `member_invoice` (`uid`, `invoice_number`, `date`, `time`, `money`) 
 ('hAonkFh8d3WLtpebxHtJKlQD5w92', 'VR72558852', '2023-05-13', '02:21:00', 43),
 ('hAonkFh8d3WLtpebxHtJKlQD5w92', 'WH73647968', '2023-06-11', '07:36:00', 145692),
 ('hAonkFh8d3WLtpebxHtJKlQD5w92', 'ZA53447908', '2023-06-11', '15:31:00', 5234),
-('O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6', 'AL54321986', '2023-04-19', '12:15:00', 65),
-('O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6', 'GV32795473', '2023-05-22', '01:35:00', 66),
-('O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6', 'LL73110635', '2023-05-22', '22:38:00', 65),
-('O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6', 'NQ12345678', '2023-05-12', '21:31:00', 100),
-('O2g8sZF0nMh1ZJaq8M6xh6w5CnD2O2g8sZF0nMh1ZJaq8M6xh6', 'ZR46856298', '2023-05-02', '12:09:00', 98),
+('O2g8sZF0nMh1ZJa', 'AL54321986', '2023-04-19', '12:15:00', 65),
+('O2g8sZF0nMh1ZJa', 'GV32795473', '2023-05-22', '01:35:00', 66),
+('O2g8sZF0nMh1ZJa', 'LL73110635', '2023-05-22', '22:38:00', 65),
+('O2g8sZF0nMh1ZJa', 'NQ12345678', '2023-05-12', '21:31:00', 100),
+('O2g8sZF0nMh1ZJa', 'ZR46856298', '2023-05-02', '12:09:00', 98),
 ('u0lPWzCeDBhNvRGAYdOw80wVQ352', 'LJ93347024', '2023-04-12', '23:33:00', 468),
 ('u0lPWzCeDBhNvRGAYdOw80wVQ352', 'NN47360325', '2023-05-26', '01:01:00', 84);
 
@@ -124,14 +125,13 @@ INSERT INTO `member_invoice` (`uid`, `invoice_number`, `date`, `time`, `money`) 
 -- 資料表結構 `winning_numbers`
 --
 
-CREATE TABLE IF NOT EXISTS `winning_numbers` (
+CREATE TABLE `winning_numbers` (
   `period` int(7) NOT NULL,
   `super_special` varchar(8) NOT NULL,
   `special` varchar(8) NOT NULL,
   `head1` varchar(8) NOT NULL,
   `head2` varchar(8) NOT NULL,
-  `head3` varchar(8) NOT NULL,
-  PRIMARY KEY (`period`)
+  `head3` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -143,14 +143,32 @@ INSERT INTO `winning_numbers` (`period`, `super_special`, `special`, `head1`, `h
 (1120304, '20783987', '04135859', '94899145', '71143793', '41055355');
 
 --
--- 已傾印資料表的限制式
+-- 已傾印資料表的索引
 --
 
 --
--- 資料表的限制式 `member_invoice`
+-- 資料表索引 `bulletin_board`
+--
+ALTER TABLE `bulletin_board`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 資料表索引 `member`
+--
+ALTER TABLE `member`
+  ADD PRIMARY KEY (`uid`);
+
+--
+-- 資料表索引 `member_invoice`
 --
 ALTER TABLE `member_invoice`
-  ADD CONSTRAINT `member_invoice_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `member` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD PRIMARY KEY (`uid`,`invoice_number`);
+
+--
+-- 資料表索引 `winning_numbers`
+--
+ALTER TABLE `winning_numbers`
+  ADD PRIMARY KEY (`period`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
