@@ -3,12 +3,6 @@
 
 結合人工智慧以及APP程式設計製作的專題(發票助手)
 
-
-網站與管理員頁面請參閱：
-https://hoshisora000.lionfree.net/112-2project/
-
-(管理員帳號:admin，管理員密碼admin123)
-
 API說明文件請參閱：
 https://aiappproject.docs.apiary.io/
 
